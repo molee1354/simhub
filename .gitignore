@@ -1,0 +1,7 @@
+# directories
+.vscode/
+./*/.vscode/
+
+# files
+*.o
+

@@ -13,20 +13,14 @@ int main() {
         {7,8,0}
     };
     int** array2d_1 = (int**)malloc(sizeof(int*)*row);
-    for (int i=0, n=0; i<col; i++) {
-        array2d_1[i] = (int*)malloc(sizeof(int)*col);
-    }
     int** array2d_2 = (int**)malloc(sizeof(int*)*row);
     for (int i=0, n=0; i<col; i++) {
+        array2d_1[i] = (int*)malloc(sizeof(int)*col);
         array2d_2[i] = (int*)malloc(sizeof(int)*col);
     }
     for (int i=0; i<row; i++) {
         for (int j=0; j<row; j++) {
             array2d_1[i][j] = matNums1[i][j];
-        }
-    }
-    for (int i=0; i<row; i++) {
-        for (int j=0; j<row; j++) {
             array2d_2[i][j] = matNums1[i][j]+1;
         }
     }

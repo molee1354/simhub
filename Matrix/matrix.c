@@ -115,6 +115,16 @@ Matrix* multiplyMat( Matrix* mat1, Matrix* mat2 ) {
     return out;
 }
 
+Matrix* multiplyMatConst( Matrix* matrix, int constant ) {
+    for (int i = 0; i < matrix->rows; i++ ) {
+        for (int j = 0; j < matrix->cols; j++ ) {
+            matrix->elements[i][j] = matrix->elements[i][j]*constant;
+        }
+    }
+
+    return matrix;
+}
+
 void printMatrix( Matrix* matrix ) {
     printf("[");
     for (int i = 0; i<matrix->rows; i++) {

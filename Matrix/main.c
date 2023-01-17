@@ -46,7 +46,7 @@ void doSum() {
     free(newMat);
 }
 
-int doMult() {
+void doMult() {
     const int dim1 = 9;
     const int dim2 = 2;
     int matNums1[9][9] = {
@@ -106,8 +106,43 @@ int doMult() {
     free(newMat);
 }
 
+void doConstMult() {
+    const int dim1 = 9;
+    const int dim2 = 2;
+    int matNums1[9][9] = {
+        {1,2,3,1,2,3,1,2,3},
+        {1,2,3,1,2,3,1,2,3},
+        {1,2,3,1,2,3,1,2,3},
+        {1,2,3,1,2,3,1,2,3},
+        {1,2,3,0,2,3,1,2,3},
+        {1,2,3,1,2,3,1,2,3},
+        {1,2,3,1,2,0,1,2,3},
+        {1,2,3,1,2,3,1,2,3},
+        {1,2,3,1,2,3,1,2,3}
+    };
+
+    int** array2d_1 = (int**)malloc(sizeof(int*)*dim1);
+    for (int i = 0; i < dim1; i++) array2d_1[i] = (int*)malloc(sizeof(int)*dim1);
+    for (int i = 0; i < dim1; i++) {
+        for (int j = 0; j < dim1; j++) array2d_1[i][j] = matNums1[i][j];
+    }
+
+    Matrix* myMat1 = makeMatrix(9,9, array2d_1);
+
+    puts("\nMatrix 1");
+    printMatrix(myMat1);
+
+    puts("\nMatrix constant multiplication");
+    Matrix* newMat = multiplyMatConst(myMat1, 2);
+    printMatrix(newMat);
+
+    for (int i=0; i<dim1; i++) free(array2d_1[i]);
+    free(array2d_1);
+    free(myMat1);
+}
+
 int main() {
-    doMult();
+    doConstMult();
 
     return 0;
 }

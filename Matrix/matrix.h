@@ -22,6 +22,10 @@ Matrix* subtractMat( Matrix* mat1, Matrix* mat2 );
 Matrix* multiplyMat( Matrix* mat1, Matrix* mat2 );
 Matrix* multiplyMatConst( Matrix* matrix, int constant );
 
+Matrix* ones( int row, int col, int** matPointer );
+Matrix* zeros( int row, int col, int** matPointer );
+Matrix* eye( int size, int** matPointer );
+
 //TODO -> make this
 // Matrix* determinantMat( Matrix* matrix );
 // Matrix* inverseMat( Matrix* matrix );

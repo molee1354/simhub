@@ -125,6 +125,35 @@ Matrix* multiplyMatConst( Matrix* matrix, int constant ) {
     return matrix;
 }
 
+Matrix* ones( int row, int col, int** matPointer ) {
+    Matrix* out = makeMatrix(row, col, matPointer);
+    for (int i = 0; i<row; i++) {
+        for (int j = 0; j<col; j++) out->elements[i][j] = 1; 
+    }
+
+    return out;
+}
+
+Matrix* zeros( int row, int col, int** matPointer ) {
+    Matrix* out = makeMatrix(row, col, matPointer);
+    for (int i = 0; i<row; i++) {
+        for (int j = 0; j<col; j++) out->elements[i][j] = 0; 
+    }
+
+    return out;
+}
+
+Matrix* eye( int size, int** matPointer ) {
+    Matrix* out = makeMatrix( size, size, matPointer );
+    for (int i = 0; i<size; i++) {
+        for (int j = 0; j<size; j++) {
+            if (i == j) out->elements[i][j] = 1;
+            else out->elements[i][j] = 0;
+        }
+    }
+
+    return out;
+}
 void printMatrix( Matrix* matrix ) {
     printf("[");
     for (int i = 0; i<matrix->rows; i++) {

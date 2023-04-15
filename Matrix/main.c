@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<string.h>
 
 #include "matrix.h"
 
@@ -141,8 +142,63 @@ void doConstMult() {
     free(myMat1);
 }
 
-int main() {
-    doConstMult();
+void makeOnesZeros( char* arg ) {
+    const int dim1 = 3;
+    const int dim2 = 4;
+
+    int** array2d = (int**)malloc(sizeof(int*)*dim1);
+    for (int i = 0; i<dim1; i++) array2d[i] = (int*)malloc(sizeof(int)*dim2);
+
+    Matrix* newMat;
+    if ( !strcmp(arg, "ones")) {
+        newMat = ones(dim1, dim2, array2d);
+    } else {
+        newMat = zeros(dim1, dim2, array2d);
+    }
+    printMatrix(newMat);
+
+    for (int i = 0; i<dim1; i++) free(array2d[i]);
+    free(array2d);
+    free(newMat);
+}
+
+void doIdentity() {
+    const int size = 4;
+
+    int** array2d = (int**)malloc(sizeof(int*)*size);
+    for (int i = 0; i<size; i++) array2d[i] = (int*)malloc(sizeof(int)*size);
+
+    Matrix* newMat = eye(size, array2d);
+    printMatrix(newMat);
+
+    for (int i = 0; i<size; i++) free(array2d[i]);
+    free(array2d);
+    free(newMat);
+}
+
+int main( int argc, char* argv[] ) {
+    if (argc > 2) {
+        printf("Too many arguments provided.\n");
+        return 0;
+    }
+    if (argc < 2) {
+        printf("No arguments provided.\n");
+        return 0;
+    }
+
+    if ( !strcmp("constmult", argv[1]) ) {
+        doConstMult();
+    } else if ( !strcmp("matmult", argv[1]) ) {
+        doMult();
+    } else if ( !strcmp("matsum", argv[1]) ) {
+        doSum();
+    } else if ( !strcmp("ones", argv[1]) || !strcmp("zeros", argv[1]) ) {
+        makeOnesZeros(argv[1]);
+    } else if ( !strcmp("eye", argv[1]) ) {
+        doIdentity();
+    } else {
+        printf("Invalid input.\n");
+    }
 
     return 0;
 }

@@ -19,7 +19,7 @@ int** initMatrix( int row, int col, int array2d[][col] ) {
     return out;
 }
 
-Matrix* makeMatrix( int row, int col, int** matPointer ) {
+Matrix* makeMatrix( int row, int col, float** matPointer ) {
 
     Matrix* out = (Matrix*)malloc(sizeof(Matrix*));
     out->elements = matPointer;
@@ -48,9 +48,9 @@ Matrix* addMat( Matrix* mat1, Matrix* mat2 ) {
         return (Matrix*)NULL;
     }
 
-    int** outPtr = (int**)malloc(sizeof(int*)*mat1->rows);
+    float** outPtr = (float**)malloc(sizeof(float*)*mat1->rows);
     for (int i = 0; i < mat1->rows; i++) {
-        outPtr[i] = (int*)malloc(sizeof(int)*mat1->cols);
+        outPtr[i] = (float*)malloc(sizeof(float)*mat1->cols);
     }
     Matrix* out = makeMatrix( mat1->rows, mat1->cols, outPtr );
     for (int i = 0; i<mat1->rows; i++) {
@@ -71,9 +71,9 @@ Matrix* subtractMat( Matrix* mat1, Matrix* mat2 ) {
         return (Matrix*)NULL;
     }
 
-    int** outPtr = (int**)malloc(sizeof(int*)*mat1->rows);
+    float** outPtr = (float**)malloc(sizeof(float*)*mat1->rows);
     for (int i = 0; i < mat1->rows; i++) {
-        outPtr[i] = (int*)malloc(sizeof(int)*mat1->cols);
+        outPtr[i] = (float*)malloc(sizeof(float)*mat1->cols);
     }
     Matrix* out = makeMatrix( mat1->rows, mat1->cols, outPtr );
     for (int i = 0; i<mat1->rows; i++) {
@@ -94,9 +94,9 @@ Matrix* multiplyMat( Matrix* mat1, Matrix* mat2 ) {
         return (Matrix*)NULL;
     }
 
-    int** outPtr = (int**)malloc(sizeof(int*)*mat2->rows);
+    float** outPtr = (float**)malloc(sizeof(float*)*mat2->rows);
     for (int i = 0; i < mat1->rows; i++) {
-        outPtr[i] = (int*)malloc(sizeof(int)*mat1->cols);
+        outPtr[i] = (float*)malloc(sizeof(float)*mat1->cols);
     }
 
     Matrix* out = makeMatrix( mat1->rows, mat2->cols, outPtr );
@@ -125,7 +125,7 @@ Matrix* multiplyMatConst( Matrix* matrix, int constant ) {
     return matrix;
 }
 
-Matrix* ones( int row, int col, int** matPointer ) {
+Matrix* ones( int row, int col, float** matPointer ) {
     Matrix* out = makeMatrix(row, col, matPointer);
     for (int i = 0; i<row; i++) {
         for (int j = 0; j<col; j++) out->elements[i][j] = 1; 
@@ -134,7 +134,7 @@ Matrix* ones( int row, int col, int** matPointer ) {
     return out;
 }
 
-Matrix* zeros( int row, int col, int** matPointer ) {
+Matrix* zeros( int row, int col, float** matPointer ) {
     Matrix* out = makeMatrix(row, col, matPointer);
     for (int i = 0; i<row; i++) {
         for (int j = 0; j<col; j++) out->elements[i][j] = 0; 
@@ -143,7 +143,7 @@ Matrix* zeros( int row, int col, int** matPointer ) {
     return out;
 }
 
-Matrix* eye( int size, int** matPointer ) {
+Matrix* eye( int size, float** matPointer ) {
     Matrix* out = makeMatrix( size, size, matPointer );
     for (int i = 0; i<size; i++) {
         for (int j = 0; j<size; j++) {
@@ -154,12 +154,21 @@ Matrix* eye( int size, int** matPointer ) {
 
     return out;
 }
+
+void swapRows( Matrix* matrix, int i, int j, int n ) {
+    int k;
+    
+}
+Matrix* inverseMat( Matrix* matrix ) {
+    
+}
+
 void printMatrix( Matrix* matrix ) {
     printf("[");
     for (int i = 0; i<matrix->rows; i++) {
         printf("[");
         for (int j = 0; j<matrix->cols; j++) {
-            printf("%d ",matrix->elements[i][j]);
+            printf("%.3f ",matrix->elements[i][j]);
         }
         if (i < matrix->rows-1) printf("\b]\n"); else printf("\b]");
     }

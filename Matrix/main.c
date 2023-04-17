@@ -8,16 +8,16 @@ void doSum() {
     const int row = 3;
     const int col = 3;
 
-    int matNums1[3][3] = {
+    float matNums1[3][3] = {
         {1,2,3},
         {4,5,6},
         {7,8,0}
     };
-    int** array2d_1 = (int**)malloc(sizeof(int*)*row);
-    int** array2d_2 = (int**)malloc(sizeof(int*)*row);
+    float** array2d_1 = (float**)malloc(sizeof(float*)*row);
+    float** array2d_2 = (float**)malloc(sizeof(float*)*row);
     for (int i=0, n=0; i<col; i++) {
-        array2d_1[i] = (int*)malloc(sizeof(int)*col);
-        array2d_2[i] = (int*)malloc(sizeof(int)*col);
+        array2d_1[i] = (float*)malloc(sizeof(float)*col);
+        array2d_2[i] = (float*)malloc(sizeof(float)*col);
     }
     for (int i=0; i<row; i++) {
         for (int j=0; j<row; j++) {
@@ -50,7 +50,7 @@ void doSum() {
 void doMult() {
     const int dim1 = 9;
     const int dim2 = 2;
-    int matNums1[9][9] = {
+    float matNums1[9][9] = {
         {1,2,3,1,2,3,1,2,3},
         {1,2,3,1,2,3,1,2,3},
         {1,2,3,1,2,3,1,2,3},
@@ -61,7 +61,7 @@ void doMult() {
         {1,2,3,1,2,3,1,2,3},
         {1,2,3,1,2,3,1,2,3}
     };
-    int matNums2[9][2] = {
+    float matNums2[9][2] = {
         {7,8},
         {7,8},
         {7,8},
@@ -73,14 +73,14 @@ void doMult() {
         {7,8}
     };
 
-    int** array2d_1 = (int**)malloc(sizeof(int*)*dim1);
-    for (int i = 0; i < dim1; i++) array2d_1[i] = (int*)malloc(sizeof(int)*dim1);
+    float** array2d_1 = (float**)malloc(sizeof(float*)*dim1);
+    for (int i = 0; i < dim1; i++) array2d_1[i] = (float*)malloc(sizeof(float)*dim1);
     for (int i = 0; i < dim1; i++) {
         for (int j = 0; j < dim1; j++) array2d_1[i][j] = matNums1[i][j];
     }
 
-    int** array2d_2 = (int**)malloc(sizeof(int*)*dim1);
-    for (int i = 0; i < dim1; i++) array2d_2[i] = (int*)malloc(sizeof(int)*dim2);
+    float** array2d_2 = (float**)malloc(sizeof(float*)*dim1);
+    for (int i = 0; i < dim1; i++) array2d_2[i] = (float*)malloc(sizeof(float)*dim2);
     for (int i = 0; i < dim1; i++) {
         for (int j = 0; j < dim2; j++) array2d_2[i][j] = matNums2[i][j];
     }
@@ -110,7 +110,7 @@ void doMult() {
 void doConstMult() {
     const int dim1 = 9;
     const int dim2 = 2;
-    int matNums1[9][9] = {
+    float matNums1[9][9] = {
         {1,2,3,1,2,3,1,2,3},
         {1,2,3,1,2,3,1,2,3},
         {1,2,3,1,2,3,1,2,3},
@@ -122,8 +122,8 @@ void doConstMult() {
         {1,2,3,1,2,3,1,2,3}
     };
 
-    int** array2d_1 = (int**)malloc(sizeof(int*)*dim1);
-    for (int i = 0; i < dim1; i++) array2d_1[i] = (int*)malloc(sizeof(int)*dim1);
+    float** array2d_1 = (float**)malloc(sizeof(float*)*dim1);
+    for (int i = 0; i < dim1; i++) array2d_1[i] = (float*)malloc(sizeof(float)*dim1);
     for (int i = 0; i < dim1; i++) {
         for (int j = 0; j < dim1; j++) array2d_1[i][j] = matNums1[i][j];
     }
@@ -146,8 +146,8 @@ void makeOnesZeros( char* arg ) {
     const int dim1 = 3;
     const int dim2 = 4;
 
-    int** array2d = (int**)malloc(sizeof(int*)*dim1);
-    for (int i = 0; i<dim1; i++) array2d[i] = (int*)malloc(sizeof(int)*dim2);
+    float** array2d = (float**)malloc(sizeof(float*)*dim1);
+    for (int i = 0; i<dim1; i++) array2d[i] = (float*)malloc(sizeof(float)*dim2);
 
     Matrix* newMat;
     if ( !strcmp(arg, "ones")) {
@@ -165,8 +165,8 @@ void makeOnesZeros( char* arg ) {
 void doIdentity() {
     const int size = 4;
 
-    int** array2d = (int**)malloc(sizeof(int*)*size);
-    for (int i = 0; i<size; i++) array2d[i] = (int*)malloc(sizeof(int)*size);
+    float** array2d = (float**)malloc(sizeof(float*)*size);
+    for (int i = 0; i<size; i++) array2d[i] = (float*)malloc(sizeof(float)*size);
 
     Matrix* newMat = eye(size, array2d);
     printMatrix(newMat);

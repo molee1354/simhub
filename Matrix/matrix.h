@@ -5,13 +5,13 @@ typedef struct Matrix {
     int matSize[2]; // 0 --> row, 1 --> col
     int rows;
     int cols;
-    int** elements;
+    float** elements;
 } Matrix;
 
 //TODO -> fix this
 int** initMatrix( int row, int col, int array2d[][col] );
 
-Matrix* makeMatrix( int row, int col, int** matPointer );
+Matrix* makeMatrix( int row, int col, float** matPointer );
 
 int* getSize( Matrix* matrix );
 int getElement( Matrix* matrix);
@@ -22,13 +22,13 @@ Matrix* subtractMat( Matrix* mat1, Matrix* mat2 );
 Matrix* multiplyMat( Matrix* mat1, Matrix* mat2 );
 Matrix* multiplyMatConst( Matrix* matrix, int constant );
 
-Matrix* ones( int row, int col, int** matPointer );
-Matrix* zeros( int row, int col, int** matPointer );
-Matrix* eye( int size, int** matPointer );
+Matrix* ones( int row, int col, float** matPointer );
+Matrix* zeros( int row, int col, float** matPointer );
+Matrix* eye( int size, float** matPointer );
 
 //TODO -> make this
 // Matrix* determinantMat( Matrix* matrix );
-// Matrix* inverseMat( Matrix* matrix );
+Matrix* inverseMat( Matrix* matrix );
 // Matrix* refMat( Matrix* matrix );
 // Matrix* rrefMat( Matrix* matrix );
 

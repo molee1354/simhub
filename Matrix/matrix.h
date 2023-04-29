@@ -27,7 +27,7 @@ Matrix* zeros( int row, int col, float** matPointer );
 Matrix* eye( int size, float** matPointer );
 
 //TODO -> make this
-// Matrix* determinantMat( Matrix* matrix );
+// float determinantMat( Matrix* matrix );
 Matrix* inverseMat( Matrix* matrix );
 // Matrix* refMat( Matrix* matrix );
 // Matrix* rrefMat( Matrix* matrix );

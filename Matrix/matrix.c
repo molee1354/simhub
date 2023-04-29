@@ -35,6 +35,10 @@ int* getSize( Matrix* matrix ) {
     return matrix->matSize;
 }
 
+void freeMatrix( Matrix* matPointer ) {
+
+}
+
 void printSize( Matrix* matrix ) {
     printf("[row,col] --> [%d,%d]\n", matrix->rows, matrix->cols);
 }
@@ -113,7 +117,7 @@ Matrix* multiplyMat( Matrix* mat1, Matrix* mat2 ) {
     }
 
     return out;
-}
+} 
 
 Matrix* multiplyMatConst( Matrix* matrix, int constant ) {
     for (int i = 0; i < matrix->rows; i++ ) {
@@ -155,12 +159,33 @@ Matrix* eye( int size, float** matPointer ) {
     return out;
 }
 
+// helper function to swap rows within a matrix
 void swapRows( Matrix* matrix, int i, int j, int n ) {
     int k;
-    
+    float temp;
+    for (k = 0; k<n; k++) {
+        temp = matrix->elements[i][k];
+        matrix->elements[i][k] = matrix->elements[j][k];
+        matrix->elements[j][k] = temp;
+    }
 }
+
 Matrix* inverseMat( Matrix* matrix ) {
-    
+    const int size = matrix->rows;
+    float ratio;
+    int i, j, k, n;
+
+    float** array2d = (float**)malloc(sizeof(float*)*size);
+    for (int i = 0; i<size; i++) array2d[i] = (float*)malloc(sizeof(float)*size);
+    Matrix* eyeMatrix = eye( size, array2d );
+
+    for (int i = 0; i < size; i++) {
+        if (matrix->elements[i][i] == 0) {
+            for (j = i+1; j<size; j++) {
+                return 0;
+            }
+        }
+    }
 }
 
 void printMatrix( Matrix* matrix ) {

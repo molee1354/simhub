@@ -1,19 +1,19 @@
-#include<stdlib.h>
-#include<stdio.h>
-#include<unistd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
 
 #include "projectile.h"
 
 // define environment
-#define GROUND 0.0
+#define GROUND 0.
 #define GRAVITY 9.81
 #define PI 3.14159
 
 // define projectile properties
-#define RADIUS 0.1
-#define COEF_RESTITUTION 0.77
+#define RADIUS .1
+#define COEF_RESTITUTION .77
 
-// call values by index
+// value calling index
 #define INIT_X 0
 #define INIT_Y 1
 #define INIT_VX 2
@@ -25,10 +25,18 @@
 #define TIME 8
 #define NUMPARAMS 9
 
+// functions
+#define VSQUARE(vx, vy) ((vx*vx) + (vy*vy)) 
+
+/* float inline VMAG(vx, vy){ */
+/*     return sqrt( (vx*vx) + (vy*vy) ); */
+/* } */
+
+
 /*
 Creating the projectile object
 */
-float* makeProjectile( float x0, float y0, float vx0, float vy0 ) {
+float* makeProjectile( float x0, float y0, float vx0, float vy0, float init_t ) {
     float* out = (float*)malloc( sizeof(float)*NUMPARAMS );
 
     out[INIT_X] = x0;
@@ -41,7 +49,7 @@ float* makeProjectile( float x0, float y0, float vx0, float vy0 ) {
     out[CUR_VX] = vx0;
     out[CUR_VY] = vy0;
     
-    out[TIME] = 0;
+    out[TIME] = init_t;
 
     return out;
 }
@@ -54,7 +62,7 @@ void update_x( float time, float* proj ) {
 }
 
 void update_y( float time, float* proj ) {
-    proj[CUR_Y] = -(1/2)*GRAVITY*time*time + proj[CUR_VY]*time + proj[INIT_Y];
+    proj[CUR_Y] = -(.5)*GRAVITY*time*time + proj[INIT_VY]*time + proj[INIT_Y];
 }
 
 void update_vx( float time, float* proj ) {
@@ -71,21 +79,44 @@ int updateState( float time, float* proj ) {
     update_vy(time, proj);
     update_vx(time, proj);
 
-    proj[TIME] = time;
+    proj[TIME] = time; //parametric velocity equation for projectile motion
 
-    // stopping when the projectile hits the ground
-    if (proj[CUR_Y] < GROUND) return 1;
+    // stopping condition
+    if (proj[CUR_Y]-RADIUS < GROUND && proj[CUR_VY] < 0.) {
+        puts("reached ground");
+
+        // if the current KE is less than 10% of the initial KE -> stop
+        if (VSQUARE( proj[INIT_VY], proj[INIT_VX] )*.1 > VSQUARE( proj[CUR_VY],proj[CUR_VX] )) {
+            puts("small KE");
+            return 1;
+        } else {
+            proj[CUR_VY] = -1*proj[CUR_VY]*COEF_RESTITUTION;
+            proj[INIT_VY] = proj[CUR_VY];
+            puts("bounce");
+            return 0;
+        }
+    }
     else return 0;
 }
 
 void printHeader( float time, float* proj ) {
     printf("\nProjectile simulation starting at time %f\n", time);
+
+    // launch parameters
     printf("with initial launch parameters : \n");
     printf("\tInitial Position [x,y] : [ %.3f, %.3f ]\n", proj[INIT_X], proj[INIT_Y]);
     printf("\tInitial Velocity [x,y] : [ %.3f, %.3f ]\n", proj[INIT_VX], proj[INIT_VY]);
-    printf("\nand physical parameters\n");
+
+    // environmental parameters
+    printf("\nenvironmental parameters : \n");
     printf("\tGravity : %f\n", GRAVITY);
     printf("\tGround altitude : %f\n", GROUND);
+
+    // physical properties of the projectile
+    printf("\nphysical parameters : \n");
+    printf("\tRadius : %f\n", RADIUS);
+    printf("\tCoefficient of restitution : %f\n", COEF_RESTITUTION);
+
     sleep(1);
 
     printf("\n\n%5s%15s%15s%15s%15s\n\n", "TIME", "pos x", "pos y", "vel x", "vel y");
@@ -98,12 +129,21 @@ void printData( float time, float* proj ) {
 
 void writeHeader( FILE *file, float time, float* proj ) {
     fprintf(file, "\nProjectile simulation starting at time %f\n", time);
+
+    // launch parameters
     fprintf(file, "with initial launch parameters : \n");
     fprintf(file, "\tInitial Position [x,y] : [ %.3f, %.3f ]\n", proj[INIT_X], proj[INIT_Y]);
     fprintf(file, "\tInitial Velocity [x,y] : [ %.3f, %.3f ]\n", proj[INIT_VX], proj[INIT_VY]);
-    fprintf(file, "\nand physical parameters\n");
+
+    // environmental parameters
+    fprintf(file, "\nenvironmental parameters : \n");
     fprintf(file, "\tGravity : %f\n", GRAVITY);
     fprintf(file, "\tGround altitude : %f\n", GROUND);
+
+    // physical properties of the projectile
+    fprintf(file, "\nphysical parameters : \n");
+    fprintf(file, "\tRadius : %f\n", RADIUS);
+    fprintf(file, "\tCoefficient of restitution : %f\n", COEF_RESTITUTION);
     fprintf(file, "\n\n%5s%15s%15s%15s%15s\n\n", "TIME", "pos x", "pos y", "vel x", "vel y");
 }
 

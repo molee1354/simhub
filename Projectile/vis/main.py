@@ -5,7 +5,7 @@ import numpy as np
 def fetch_data( filename: str ) -> dict:
     with open( filename, 'r' ) as file:
         lines = file.readlines()
-        arr = [line.strip().split() for line in lines][13:]
+        arr = [line.strip().split() for line in lines][17:]
 
         data = [ [float(n) for n in line] 
                           for line in arr ]

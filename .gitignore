@@ -1,7 +1,6 @@
 # directories
 .vscode/
 ./*/.vscode/
-./texting/
 
 # files
 *.o

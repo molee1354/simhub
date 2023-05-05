@@ -11,8 +11,8 @@ int main() {
 
     float* proj = makeProjectile( init_x, init_y, init_vx, init_vy );
 
-    int end = 100;
-    int t = 0;
+    float end = 100.;
+    float t = 0.;
     printHeader(t, proj);
     while ( t < end ) {
         if ( updateState(t, proj) ) {
@@ -20,7 +20,7 @@ int main() {
             return 0;
         } else {
             printData(t, proj);
-            t++;
+            t += 0.01;
         }
     }
 

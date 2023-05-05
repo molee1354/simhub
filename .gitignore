@@ -1,6 +1,7 @@
 # directories
 .vscode/
 ./*/.vscode/
+venv/
 
 # files
 *.o
@@ -8,6 +9,5 @@
 # reference files
 ./Matrix/invert.c
 
-# virtual environments
-./Projectile/vis/venv/
+# data files
 ./Projectile/dump

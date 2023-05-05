@@ -7,6 +7,11 @@
 // define environment
 #define GROUND 0.0
 #define GRAVITY 9.81
+#define PI 3.14159
+
+// define projectile properties
+#define RADIUS 0.1
+#define COEF_RESTITUTION 0.77
 
 // call values by index
 #define INIT_X 0
@@ -86,6 +91,22 @@ void printHeader( float time, float* proj ) {
     printf("\n\n%5s%15s%15s%15s%15s\n\n", "TIME", "pos x", "pos y", "vel x", "vel y");
     
 }
+
 void printData( float time, float* proj ) {
     printf("%5.2f%15.3f%15.3f%15.3f%15.3f\n", proj[TIME], proj[CUR_X], proj[CUR_Y], proj[CUR_VX], proj[CUR_VY]);
+}
+
+void writeHeader( FILE *file, float time, float* proj ) {
+    fprintf(file, "\nProjectile simulation starting at time %f\n", time);
+    fprintf(file, "with initial launch parameters : \n");
+    fprintf(file, "\tInitial Position [x,y] : [ %.3f, %.3f ]\n", proj[INIT_X], proj[INIT_Y]);
+    fprintf(file, "\tInitial Velocity [x,y] : [ %.3f, %.3f ]\n", proj[INIT_VX], proj[INIT_VY]);
+    fprintf(file, "\nand physical parameters\n");
+    fprintf(file, "\tGravity : %f\n", GRAVITY);
+    fprintf(file, "\tGround altitude : %f\n", GROUND);
+    fprintf(file, "\n\n%5s%15s%15s%15s%15s\n\n", "TIME", "pos x", "pos y", "vel x", "vel y");
+}
+
+void writeData( FILE *file, float time, float* proj ) {
+    fprintf(file, "%5.2f%15.3f%15.3f%15.3f%15.3f\n", proj[TIME], proj[CUR_X], proj[CUR_Y], proj[CUR_VX], proj[CUR_VY]);
 }

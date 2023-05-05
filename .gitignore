@@ -9,3 +9,6 @@
 # reference files
 ./Matrix/invert.c
 
+# virtual environments
+./Projectile/vis/venv/
+./Projectile/dump

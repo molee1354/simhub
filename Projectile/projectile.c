@@ -90,6 +90,12 @@ int updateState( float time, float* proj ) {
             puts("small KE");
             return 1;
         } else {
+            /*
+             * TODO there seems to be an issue with not passing `proj` by
+             * its reference, so the updates to the CUR_Y values seem to 
+             * be behaving in a weird way
+             */
+
             proj[CUR_VY] = -1*proj[CUR_VY]*COEF_RESTITUTION;
             proj[INIT_VY] = proj[CUR_VY];
             puts("bounce");

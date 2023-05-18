@@ -1,5 +1,10 @@
-import matplotlib.pyplot as plt
-import numpy as np
+import os
+
+try:
+    import matplotlib.pyplot as plt
+    import numpy as np
+except ModuleNotFoundError:
+    os.system("pip3 install -r requirements.txt")
 
 
 def fetch_data( filename: str ) -> dict:
@@ -25,8 +30,7 @@ def fetch_data( filename: str ) -> dict:
     }
 
 
-def main() -> None:
-    filename = "../dump"
+def plot_data( filename: str) -> None:
     data = fetch_data(filename)
     
     plt.plot(
@@ -38,6 +42,11 @@ def main() -> None:
     plt.ylabel("y pos")
     plt.grid()
     plt.show()
+
+
+def main() -> None:
+    filename = "../dump"
+    plot_data( filename )
 
 
 if __name__ == "__main__":

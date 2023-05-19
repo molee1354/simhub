@@ -78,8 +78,9 @@ int updateState( float time, float* proj ) {
     update_y(time, proj);
     update_vy(time, proj);
     update_vx(time, proj);
-
-    proj[TIME] = time; //parametric velocity equation for projectile motion
+    
+    //parametric velocity equation for projectile motion 
+    proj[TIME] = time;
 
     // stopping condition
     if (proj[CUR_Y]-RADIUS < GROUND && proj[CUR_VY] < 0.) {

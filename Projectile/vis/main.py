@@ -13,7 +13,7 @@ def fetch_data( filename: str ) -> dict:
         arr = [line.strip().split() for line in lines][17:]
 
         data = [ [float(n) for n in line] 
-                          for line in arr ]
+                for line in arr ]
 
         times = np.array([ datapoint[0] for datapoint in data ])
         pos_xs = np.array([ datapoint[1] for datapoint in data ])
@@ -22,21 +22,21 @@ def fetch_data( filename: str ) -> dict:
         vel_ys = np.array([ datapoint[4] for datapoint in data ])
 
     return {
-        "times" : times,
-        "pos_xs" : pos_xs,
-        "pos_ys" : pos_ys,
-        "vel_xs" : vel_xs,
-        "vel_ys" : vel_ys
-    }
+            "times" : times,
+            "pos_xs" : pos_xs,
+            "pos_ys" : pos_ys,
+            "vel_xs" : vel_xs,
+            "vel_ys" : vel_ys
+            }
 
 
 def plot_data( filename: str) -> None:
     data = fetch_data(filename)
-    
+
     plt.plot(
-        data["pos_xs"],
-        data["pos_ys"]
-    )
+            data["pos_xs"],
+            data["pos_ys"]
+            )
     plt.title("Projectile Trajectory")
     plt.xlabel("x pos")
     plt.ylabel("y pos")

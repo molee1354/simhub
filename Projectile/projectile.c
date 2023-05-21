@@ -99,6 +99,7 @@ int updateState( float time, float* proj ) {
 
             proj[CUR_VY] = -1*proj[CUR_VY]*COEF_RESTITUTION;
             proj[INIT_VY] = proj[CUR_VY];
+
             puts("bounce");
             return 0;
         }
@@ -130,10 +131,6 @@ void printHeader( float time, float* proj ) {
     
 }
 
-void printData( float time, float* proj ) {
-    printf("%5.2f%15.3f%15.3f%15.3f%15.3f\n", proj[TIME], proj[CUR_X], proj[CUR_Y], proj[CUR_VX], proj[CUR_VY]);
-}
-
 void writeHeader( FILE *file, float time, float* proj ) {
     fprintf(file, "\nProjectile simulation starting at time %f\n", time);
 
@@ -154,6 +151,11 @@ void writeHeader( FILE *file, float time, float* proj ) {
     fprintf(file, "\n\n%5s%15s%15s%15s%15s\n\n", "TIME", "pos x", "pos y", "vel x", "vel y");
 }
 
+void printData( float time, float* proj ) {
+    printf("%5.2f%15.3f%15.3f%15.3f%15.3f\n", proj[TIME], proj[CUR_X], proj[CUR_Y], proj[CUR_VX], proj[CUR_VY]);
+}
+
 void writeData( FILE *file, float time, float* proj ) {
     fprintf(file, "%5.2f%15.3f%15.3f%15.3f%15.3f\n", proj[TIME], proj[CUR_X], proj[CUR_Y], proj[CUR_VX], proj[CUR_VY]);
 }
+

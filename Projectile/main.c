@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<math.h>
 
 #include "projectile.h"
 
@@ -13,6 +14,7 @@ int main() {
     // simulation start and end parameters
     float end = 100.;
     float t = 0.;
+    float freq = 5.; // stdout print frequency
 
     FILE *out;
     out = fopen("./dump", "w");
@@ -24,16 +26,24 @@ int main() {
     float* proj = makeProjectile( init_x, init_y, init_vx, init_vy, t );
 
     printHeader(t, proj);
+
+    // recording initial data
+    printData(t, proj);
+    writeData(out, t, proj);
     while ( t < end ) {
         if ( updateState(t, proj) ) {
             printData(t, proj);
+            writeData(out, t, proj);
             return 0;
         } else {
-            printData(t, proj);
+            writeData(out, t, proj);
+            if ( fmod(t, freq) == 0. ) printData(t, proj);
+
             t += 0.01;
         }
     }
 
     free(proj);
+    fclose(out);
     return 0;
 }

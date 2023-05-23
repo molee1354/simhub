@@ -3,22 +3,26 @@
 #include<math.h>
 
 #include "projectile.h"
+#include "simparams.h"
 
+/*
+ * TODO -> make it so that simulation parameters can be defined in 
+ *      a single, simulation file.
+ */
 int main() {
     // setting initial values
-    float init_x = 0.;
-    float init_y = 0.;
-    float init_vx = 10.0;
-    float init_vy = 70.0;
+    float init_x = START_X_POS;
+    float init_y = START_Y_POS;
+    float init_vx = START_X_VEL;
+    float init_vy = START_Y_VEL;
 
-    // simulation start and end parameters
-    int end = 10000;
-    int freq = 100; // stdout print frequency
-    int counter = 0;
-    float t = 0.;
+    int counter = SIM_START;
+    int end = SIM_END;
+    int freq = SIM_FREQ; // stdout print frequency
+    float t = SIM_START_T;
 
     FILE *out;
-    out = fopen("./dump", "w");
+    out = fopen(DATA_OUT, "w");
     if (out == NULL) {
         puts("File error");
         exit(1);

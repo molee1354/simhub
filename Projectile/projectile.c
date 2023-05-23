@@ -3,15 +3,7 @@
 #include <unistd.h>
 
 #include "projectile.h"
-
-// define environment
-#define GROUND 0.
-#define GRAVITY 9.81
-#define PI 3.14159
-
-// define projectile properties
-#define RADIUS .1
-#define COEF_RESTITUTION .77
+#include "simparams.h"
 
 // value calling index
 #define SIMINIT_T     0

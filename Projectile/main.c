@@ -56,7 +56,7 @@ int main() {
         }
         counter++;
     }
-
+    printf("\nSimulation ran with %d steps\n", counter);
     free(proj);
     fclose(out);
     return 0;

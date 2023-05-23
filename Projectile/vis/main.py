@@ -45,7 +45,7 @@ def plot_data( filename: str) -> None:
 
 
 def main() -> None:
-    filename = "../dump"
+    filename = "../dump.out"
     plot_data( filename )
 
 

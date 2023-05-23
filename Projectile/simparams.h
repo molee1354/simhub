@@ -9,13 +9,13 @@
 
 // setting initial values
 #define START_X_POS       0.
-#define START_Y_POS       10.
+#define START_Y_POS       50.
 #define START_X_VEL       21.0
-#define START_Y_VEL       70.0
+#define START_Y_VEL       0.
 
 // simulation start and end parameters
 #define SIM_START         0
-#define SIM_END           100000
+#define SIM_END           10000
 #define SIM_FREQ          100 // stdout print frequency
 #define SIM_START_T       0.
 

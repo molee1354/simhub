@@ -17,7 +17,7 @@ class Projectile:
     def __fetch_data(self) -> dict:
         with open( self.filename, 'r' ) as file:
             lines = file.readlines()
-            arr = [line.strip().split() for line in lines][17:]
+            arr = [line.strip().split() for line in lines][21:]
 
             data = [ [float(n) for n in line] 
                     for line in arr ]

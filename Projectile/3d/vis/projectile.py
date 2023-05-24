@@ -69,7 +69,9 @@ class Animator(Projectile):
 
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(projection='3d')
+
         self.trajectory, = self.ax.plot([],[],[], lw=2)
+
         self.ax.set_xlim((0,max(self.data["pos_xs"])))
         self.ax.set_ylim((0,max(self.data["pos_zs"])))
         self.ax.set_zlim((0,max(self.data["pos_ys"]))) # -> vertical axis

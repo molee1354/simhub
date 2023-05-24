@@ -38,6 +38,17 @@
 // functions
 #define VSQUARE(vx, vy, vz) ((vx*vx) + (vy*vy) + (vz*vz)) 
 
+// box variables
+#define BOX_X_LB     (SIM_BOX_ORIGIN_X - SIM_BOX_WIDTH)*.5
+#define BOX_X_HB     (SIM_BOX_ORIGIN_X + SIM_BOX_WIDTH)*.5
+
+#define BOX_Y_LB     SIM_BOX_ORIGIN_Y
+#define BOX_Y_HB     SIM_BOX_ORIGIN_X + SIM_BOX_HEIGHT
+
+#define BOX_Z_LB     (SIM_BOX_ORIGIN_Z - SIM_BOX_DEPTH)*.5
+#define BOX_Z_HB     (SIM_BOX_ORIGIN_Z + SIM_BOX_DEPTH)*.5
+
+
 /*
    Creating the projectile object
    */

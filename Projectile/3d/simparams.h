@@ -1,6 +1,6 @@
 // define environment
 #define GROUND            0.
-#define GRAVITY           9.81
+#define GRAVITY           0.
 #define PI                3.14159
 
 // define projectile properties
@@ -9,11 +9,11 @@
 
 // setting initial values
 #define START_X_POS       0.
-#define START_Y_POS       0.
+#define START_Y_POS       100.
 #define START_Z_POS       0.
 
 #define START_X_VEL       10.
-#define START_Y_VEL       70.
+#define START_Y_VEL       -10.
 #define START_Z_VEL       10.
 
 // simulation start and end parameters
@@ -27,3 +27,11 @@
 
 // TODO
 // make walls the projectile can bounce off of
+// box origin at bottom-center
+#define SIM_BOX_ENABLE      1
+#define SIM_BOX_ORIGIN_X    0.
+#define SIM_BOX_ORIGIN_Y    0.
+#define SIM_BOX_ORIGIN_Z    50.
+#define SIM_BOX_WIDTH       50.
+#define SIM_BOX_DEPTH       50.
+#define SIM_BOX_ROOF        -1. //set -1 for no height

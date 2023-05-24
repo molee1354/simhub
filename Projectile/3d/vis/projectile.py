@@ -70,26 +70,23 @@ class Animator(Projectile):
         self.fig = plt.figure()
         self.ax = self.fig.add_subplot(projection='3d')
 
-        self.trajectory, = self.ax.plot([],[],[], lw=2)
+        self.trajectory, = self.ax.plot([],[],[], lw=1)
+        self.disc, = self.ax.plot([],[],[], linestyle="", marker='o')
 
         self.ax.set_xlim((0,max(self.data["pos_xs"])))
         self.ax.set_ylim((0,max(self.data["pos_zs"])))
         self.ax.set_zlim((0,max(self.data["pos_ys"]))) # -> vertical axis
 
-    def __init_trajectory(self):
-        self.trajectory.set_data([],[])
-        self.trajectory.set_3d_properties([])
-        return self.trajectory,
-
-    def __update_trajectory(self, iter: int, trajectory):
+    def __update_trajectory(self, iter: int, trajectory, disc):
         trajectory.set_data( self.data["pos_xs"][:iter], self.data["pos_zs"][:iter] )
         trajectory.set_3d_properties( self.data["pos_ys"][:iter] )
-        return trajectory,
+        disc.set_data( self.data["pos_xs"][iter], self.data["pos_zs"][iter] )
+        disc.set_3d_properties( self.data["pos_ys"][iter] )
+        return trajectory, disc
 
     def animate_data(self) -> None:
         _ = animation.FuncAnimation(self.fig, self.__update_trajectory,
-                                    init_func=self.__init_trajectory,
-                                    fargs=(self.trajectory,),
+                                    fargs=(self.trajectory, self.disc),
                                     frames=len(self.data["pos_xs"]),
                                     interval=.2,
                                     blit=True)

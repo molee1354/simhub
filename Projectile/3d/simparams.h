@@ -25,3 +25,5 @@
 // output file
 #define DATA_OUT          "dump.out"
 
+// TODO
+// make walls the projectile can bounce off of

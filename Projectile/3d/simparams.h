@@ -1,6 +1,6 @@
 // define environment
 #define GROUND            0.
-#define GRAVITY           0.
+#define GRAVITY           9.81
 #define PI                3.14159
 
 // define projectile properties

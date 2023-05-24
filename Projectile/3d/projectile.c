@@ -230,14 +230,10 @@ void writeHeader( FILE *file, float time, float* proj ) {
     else {
         fprintf(file,"\tBox height: %f", SIM_BOX_HEIGHT);
     }
-    sleep(1);
-
     fprintf(file,"\n\n%5s%12s%12s%12s%12s%12s%12s\n\n",
             "TIME",
             "pos x", "pos y", "pos z",
             "vel x", "vel y", "vel z");
-
-    sleep(2);
 }
 
 void printData( float time, float* proj ) {

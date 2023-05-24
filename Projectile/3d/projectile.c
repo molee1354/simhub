@@ -150,9 +150,9 @@ void printHeader( float time, float* proj ) {
 
     // launch parameters
     printf("with initial launch parameters : \n");
-    printf("\tInitial Position [x,y] : [ %.3f, %.3f, %.3f ]\n", 
+    printf("\tInitial Position [x,y,z] : [ %.3f, %.3f, %.3f ]\n", 
             proj[INIT_X], proj[INIT_Y], proj[INIT_Z]);
-    printf("\tInitial Velocity [x,y] : [ %.3f, %.3f, %.3f ]\n", 
+    printf("\tInitial Velocity [vx,vy,vz] : [ %.3f, %.3f, %.3f ]\n", 
             proj[INIT_VX], proj[INIT_VY], proj[INIT_VZ]);
 
     // environmental parameters
@@ -180,7 +180,7 @@ void writeHeader( FILE *file, float time, float* proj ) {
     fprintf(file, "with initial launch parameters : \n");
     fprintf(file,"\tInitial Position [x,y,z] : [ %.3f, %.3f, %.3f ]\n", 
             proj[INIT_X], proj[INIT_Y], proj[INIT_Z]);
-    fprintf(file,"\tInitial Velocity [x,y,z] : [ %.3f, %.3f, %.3f ]\n", 
+    fprintf(file,"\tInitial Velocity [vx,vy,vz] : [ %.3f, %.3f, %.3f ]\n", 
             proj[INIT_VX], proj[INIT_VY], proj[INIT_VZ]);
 
     // environmental parameters

@@ -43,12 +43,12 @@ class Plotter(Projectile):
         super().__init__(filename)
 
     def plot_data(self) -> None:
-        fig, ax = plt.subplot()
+        fig, ax = plt.subplots()
         ax.plot(
                 self.data["pos_xs"],
-                self.data["pos_zs"],
+                self.data["pos_ys"],
                 )
-        fig.title("Projectile Trajectory")
+        ax.set_title("Projectile Trajectory")
         ax.set_xlabel("x pos")
         ax.set_ylabel("y pos")
 
@@ -60,21 +60,17 @@ class Animator(Projectile):
     def __init__(self, filename: str) -> None:
         super().__init__(filename)
 
-        self.fig = plt.figure()
-        self.ax = self.fig.add_subplot(projection='3d')
+        self.fig, self.ax = plt.subplots()
 
-        self.trajectory, = self.ax.plot([],[],[], lw=1)
-        self.disc, = self.ax.plot([],[],[], linestyle="", marker='o')
+        self.trajectory, = self.ax.plot([],[], lw=1)
+        self.disc, = self.ax.plot([],[], linestyle="", marker='o')
 
         self.ax.set_xlim((0,max(self.data["pos_xs"])))
-        self.ax.set_ylim((0,max(self.data["pos_zs"])))
-        self.ax.set_zlim((0,max(self.data["pos_ys"]))) # -> vertical axis
+        self.ax.set_ylim((0,max(self.data["pos_ys"])))
 
     def __update_trajectory(self, iter: int, trajectory, disc):
-        trajectory.set_data( self.data["pos_xs"][:iter], self.data["pos_zs"][:iter] )
-        trajectory.set_3d_properties( self.data["pos_ys"][:iter] )
-        disc.set_data( self.data["pos_xs"][iter], self.data["pos_zs"][iter] )
-        disc.set_3d_properties( self.data["pos_ys"][iter] )
+        trajectory.set_data( self.data["pos_xs"][:iter], self.data["pos_ys"][:iter] )
+        disc.set_data( self.data["pos_xs"][iter], self.data["pos_ys"][iter] )
         return trajectory, disc
 
     def animate_data(self) -> None:

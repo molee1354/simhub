@@ -14,7 +14,7 @@
 
 #define START_X_VEL       10.
 #define START_Y_VEL       70.
-#define START_Z_VEL       10.
+#define START_Z_VEL       0.
 
 // simulation start and end parameters
 #define SIM_START         0
@@ -31,9 +31,9 @@
 #define SIM_BOX_ENABLE      1
 #define SIM_BOX_ORIGIN_X    0.
 #define SIM_BOX_ORIGIN_Y    0.
-#define SIM_BOX_ORIGIN_Z    50.
-#define SIM_BOX_WIDTH       50.
-#define SIM_BOX_DEPTH       50.
+#define SIM_BOX_ORIGIN_Z    0.
+#define SIM_BOX_WIDTH       250.       //x
+#define SIM_BOX_DEPTH       250.       //z
 
 #define SIM_BOX_OPEN        1  // 1 for open box, 0 for closed box
 #define SIM_BOX_INF         0  // 1 for infinite wall height

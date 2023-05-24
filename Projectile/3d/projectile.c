@@ -163,6 +163,15 @@ int updateState( float time, float* proj ) {
     // parametric velocity equation for projectile motion 
     proj[TIME] = time;
 
+    /*
+     * Since right now they are all if, else-if statements, only one of them
+     * gets triggered at a single point. Ideally, we want multiple conditions
+     * to be true so that "diagonal" movement is also possible .
+     *      right now : only 1 component changing for motion 
+     *      target : more than 1 component of motion changing
+     *
+     */
+
     // when projectile reaches ground
     if (proj[CUR_Y]-RADIUS < GROUND && 
             MV_DECR( proj[PREV_Y], proj[CUR_Y], GROUND )) {

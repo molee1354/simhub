@@ -1,0 +1,7 @@
+function sim() {
+    if [[ $1 == "plot" ]]; then
+        python3 ./vis/main.py dump.out
+    elif [[ $1 == "anim" ]]; then
+        echo "no anim implementation yet"
+    fi
+}

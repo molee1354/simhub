@@ -1,4 +1,5 @@
 import os
+import sys
 
 try:
     import matplotlib.pyplot as plt
@@ -45,8 +46,7 @@ def plot_data( filename: str) -> None:
 
 
 def main() -> None:
-    filename = "../dump.out"
-    plot_data( filename )
+    plot_data( sys.argv[1] )
 
 
 if __name__ == "__main__":

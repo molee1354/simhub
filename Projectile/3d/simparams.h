@@ -34,4 +34,7 @@
 #define SIM_BOX_ORIGIN_Z    50.
 #define SIM_BOX_WIDTH       50.
 #define SIM_BOX_DEPTH       50.
-#define SIM_BOX_ROOF        -1. //set -1 for no height
+
+#define SIM_BOX_OPEN        1  // 1 for open box, 0 for closed box
+#define SIM_BOX_INF         0  // 1 for infinite wall height
+#define SIM_BOX_HEIGHT      50.

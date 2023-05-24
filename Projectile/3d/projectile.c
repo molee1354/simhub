@@ -138,6 +138,19 @@ void update_vy( float time, float* proj ) {
     proj[CUR_VY] = -GRAVITY*time + proj[INIT_VY];
 }
 
+void initializeState( float time, float* proj ) {
+        // set the current state as the initial state
+        proj[INIT_X] = proj[CUR_X];
+        proj[INIT_Z] = proj[CUR_Z];
+        // proj[INIT_Y] = GROUND+RADIUS;
+        proj[INIT_Y] = proj[CUR_Y];
+
+        proj[INIT_VX] = proj[CUR_VX];
+        proj[INIT_VZ] = proj[CUR_VZ];
+        proj[INIT_VY] = proj[CUR_VY];
+
+        proj[SIMINIT_T] += time;
+}
 int updateState( float time, float* proj ) {
     update_x(time, proj);
     update_y(time, proj);
@@ -147,11 +160,13 @@ int updateState( float time, float* proj ) {
     update_vy(time, proj);
     update_vz(time, proj);
 
-    //parametric velocity equation for projectile motion 
+    // parametric velocity equation for projectile motion 
     proj[TIME] = time;
 
     // when projectile reaches ground
-    if (proj[CUR_Y]-RADIUS < GROUND && proj[CUR_VY] < 0.) {
+    if (proj[CUR_Y]-RADIUS < GROUND && 
+            MV_DECR( proj[PREV_Y], proj[CUR_Y], GROUND )) {
+        // stop case isn't triggered?
 
         // bounce case
         proj[CUR_VY] = -1.0*proj[CUR_VY] * COEF_RESTITUTION;
@@ -163,16 +178,79 @@ int updateState( float time, float* proj ) {
            ) {
             return -1;
         }
-        // set the current state as the initial state
-        proj[INIT_X] = proj[CUR_X];
-        proj[INIT_Z] = proj[CUR_Z];
-        proj[INIT_Y] = GROUND+RADIUS;
+        initializeState(time, proj);
 
-        proj[INIT_VX] = proj[CUR_VX];
-        proj[INIT_VZ] = proj[CUR_VZ];
-        proj[INIT_VY] = proj[CUR_VY];
+        return 1;
+    // left wall
+    } else if (proj[CUR_X]-RADIUS < BOX_X_LB &&
+            MV_DECR( proj[PREV_X], proj[CUR_X], BOX_X_LB)) {
 
-        proj[SIMINIT_T] += time;
+        // bounce case
+        proj[CUR_VX] = -1.0*proj[CUR_VX] * COEF_RESTITUTION;
+
+        // stopping condition if KE < 5% of initial KE
+        if (
+                VSQUARE(proj[CUR_VX], proj[CUR_VY], proj[CUR_VZ]) <
+                VSQUARE(proj[SIMINIT_VX], proj[SIMINIT_VY], proj[SIMINIT_VZ])*.05
+           ) {
+            return -1;
+        }
+        initializeState(time, proj);
+
+        return 1;
+
+    // right wall
+    } else if (proj[CUR_X]+RADIUS > BOX_X_HB &&
+            MV_INCR( proj[PREV_X], proj[CUR_X], BOX_X_HB)) {
+
+        // bounce case
+        proj[CUR_VX] = -1.0*proj[CUR_VX] * COEF_RESTITUTION;
+
+        // stopping condition if KE < 5% of initial KE
+        if (
+                VSQUARE(proj[CUR_VX], proj[CUR_VY], proj[CUR_VZ]) <
+                VSQUARE(proj[SIMINIT_VX], proj[SIMINIT_VY], proj[SIMINIT_VZ])*.05
+           ) {
+            return -1;
+        }
+        initializeState(time, proj);
+
+        return 1;
+
+    // down wall
+    } else if (proj[CUR_Z]-RADIUS < BOX_Z_LB &&
+            MV_DECR( proj[PREV_Z], proj[CUR_Z], BOX_Z_LB)) {
+
+        // bounce case
+        proj[CUR_VZ] = -1.0*proj[CUR_VZ] * COEF_RESTITUTION;
+
+        // stopping condition if KE < 5% of initial KE
+        if (
+                VSQUARE(proj[CUR_VX], proj[CUR_VY], proj[CUR_VZ]) <
+                VSQUARE(proj[SIMINIT_VX], proj[SIMINIT_VY], proj[SIMINIT_VZ])*.05
+           ) {
+            return -1;
+        }
+        initializeState(time, proj);
+
+        return 1;
+
+    // up wall
+    } else if (proj[CUR_Z]+RADIUS > BOX_Z_HB &&
+            MV_INCR( proj[PREV_Z], proj[CUR_Z], BOX_Z_HB)) {
+
+        // bounce case
+        proj[CUR_VZ] = -1.0*proj[CUR_VZ] * COEF_RESTITUTION;
+
+        // stopping condition if KE < 5% of initial KE
+        if (
+                VSQUARE(proj[CUR_VX], proj[CUR_VY], proj[CUR_VZ]) <
+                VSQUARE(proj[SIMINIT_VX], proj[SIMINIT_VY], proj[SIMINIT_VZ])*.05
+           ) {
+            return -1;
+        }
+        initializeState(time, proj);
+
         return 1;
     }
     else return 0;

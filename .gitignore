@@ -1,6 +1,7 @@
 # directories
 .vscode/
 ./*/.vscode/
+__pycache__/
 venv/
 
 # files
@@ -10,4 +11,4 @@ venv/
 ./Matrix/invert.c
 
 # data files
-./Projectile/dump
+./Projectile/*/dump.out

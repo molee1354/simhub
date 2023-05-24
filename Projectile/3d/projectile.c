@@ -32,11 +32,21 @@
 #define CUR_VY        18
 #define CUR_VZ        19
 
-#define TIME          20
-#define NUMPARAMS     21
+#define PREV_X        20
+#define PREV_Y        21
+#define PREV_Z        22
+
+#define PREV_VX       23
+#define PREV_VY       24
+#define PREV_VZ       25
+
+#define TIME          26
+#define NUMPARAMS     27
 
 // functions
-#define VSQUARE(vx, vy, vz) ((vx*vx) + (vy*vy) + (vz*vz)) 
+#define VSQUARE(vx, vy, vz) ((vx*vx) + (vy*vy) + (vz*vz))
+#define MV_INCR(prev, curr, p) ( (p-curr) < (p-prev) )
+#define MV_DECR(prev, curr, p) ( (p-prev) < (p-curr) )
 
 // box variables
 #define BOX_X_LB     (SIM_BOX_ORIGIN_X - SIM_BOX_WIDTH)*.5
@@ -87,6 +97,10 @@ float* makeProjectile(
     out[CUR_VY] = vy0;
     out[CUR_VZ] = vz0;
 
+    out[PREV_VX] = vx0;
+    out[PREV_VY] = vy0;
+    out[PREV_VZ] = vz0;
+
     out[TIME] = init_t;
     out[SIMINIT_T] = init_t;
 
@@ -94,25 +108,33 @@ float* makeProjectile(
 }
 
 /*
-   Updating the state of the projectile
-   */
+ *  Updating the state of the projectile
+ *  --> each update_*() function stores the previous state
+ *      so that dx, dy, dvy, etc may be computed 
+ */
 void update_x( float time, float* proj ) {
+    proj[PREV_X] = proj[CUR_X];
     proj[CUR_X] = proj[CUR_VX]*time + proj[INIT_X];
 }
 void update_z( float time, float* proj ) {
+    proj[PREV_Z] = proj[CUR_Z];
     proj[CUR_Z] = proj[CUR_VZ]*time + proj[INIT_Z];
 }
 void update_y( float time, float* proj ) {
+    proj[PREV_Y] = proj[CUR_Y];
     proj[CUR_Y] = -(.5)*GRAVITY*time*time + proj[INIT_VY]*time + proj[INIT_Y];
 }
 
 void update_vx( float time, float* proj ) {
+    proj[PREV_VX] = proj[CUR_VX];
     proj[CUR_VX] = proj[INIT_VX]; // no drag implementation
 }
 void update_vz( float time, float* proj ) {
+    proj[PREV_VZ] = proj[CUR_VZ];
     proj[CUR_VZ] = proj[INIT_VZ]; // no drag implementation
 }
 void update_vy( float time, float* proj ) {
+    proj[PREV_VY] = proj[CUR_VY];
     proj[CUR_VY] = -GRAVITY*time + proj[INIT_VY];
 }
 
@@ -237,14 +259,14 @@ void writeHeader( FILE *file, float time, float* proj ) {
 }
 
 void printData( float time, float* proj ) {
-        printf("%5.2f%12.3f%12.3f%12.3f%12.3f%12.3f%12.3f\n",
+        printf("%5.2f%12.4f%12.4f%12.4f%12.4f%12.4f%12.4f\n",
                 proj[SIMINIT_T],
                 proj[CUR_X], proj[CUR_Y], proj[CUR_Z],
                 proj[CUR_VX], proj[CUR_VY], proj[CUR_VZ]);
 }
 
 void writeData( FILE *file, float time, float* proj ) {
-        fprintf(file, "%5.2f%12.3f%12.3f%12.3f%12.3f%12.3f%12.3f\n",
+        fprintf(file, "%5.2f%12.4f%12.4f%12.4f%12.4f%12.4f%12.4f\n",
                 proj[SIMINIT_T],
                 proj[CUR_X], proj[CUR_Y], proj[CUR_Z],
                 proj[CUR_VX], proj[CUR_VY], proj[CUR_VZ]);

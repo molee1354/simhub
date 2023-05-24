@@ -9,8 +9,8 @@
 
 // setting initial values
 #define START_X_POS       0.
-#define START_Y_POS       50.
-#define START_X_VEL       21.0
+#define START_Y_POS       10.
+#define START_X_VEL       10.0
 #define START_Y_VEL       0.
 
 // simulation start and end parameters

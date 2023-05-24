@@ -89,15 +89,16 @@ int updateState( float time, float* proj ) {
         // bounce case
         proj[CUR_VY] = -1.0*proj[CUR_VY] * COEF_RESTITUTION;
 
-        // stopping condition
+        // stopping condition if KE < 5% of initial KE
         if ( VSQUARE(proj[CUR_VX], proj[CUR_VY]) < 
                 VSQUARE(proj[SIMINIT_VX], proj[SIMINIT_VY])*.05 ) {
             return -1;
         }
         // set the current state as the initial state
-        proj[INIT_VY] = proj[CUR_VY];
         proj[INIT_VX] = proj[CUR_VX];
+        proj[INIT_VY] = proj[CUR_VY];
         proj[INIT_X] = proj[CUR_X];
+        proj[INIT_Y] = GROUND+RADIUS;
 
         proj[SIMINIT_T] += time;
         return 1;

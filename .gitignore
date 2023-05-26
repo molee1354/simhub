@@ -4,6 +4,7 @@
 __pycache__/
 .env*/
 venv/
+simulation/
 
 # files
 *.o

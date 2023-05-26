@@ -1,7 +1,24 @@
+
+# setting up the simulation environment
+
+# binaries, versions, and directories
+ENV_DIR="./.env"
+
 PY_BIN=$(which python3)
 PY_VER=$(python3 --version | grep -Eo "3\.[0-9]+")
-PY_DIR="./pyenv"
-PY_VENV_DIR="./${PY_DIR}/pyvenv-${PY_VER}"
+PY_VENV_DIR="./${ENV_DIR}/pyvenv-${PY_VER}"
+
+# commands to run simulation
+source "${ENV_DIR}/simfunc.sh"
+
+# function to activate virtual environment
+function activate_venv() {
+    source "${PY_VENV_DIR}/bin/activate"
+    pip3 install -r "${ENV_DIR}/requirements.txt"
+
+    printf "Set Python interpreter to \n[%s]\n" $(which python3)
+    printf "Set Python Pip to \n[%s]\n" $(which pip3)
+}
 
 if [[ -d "${PY_VENV_DIR}" ]]; then
     printf "The intended Python virtual environment already exists\n"
@@ -21,12 +38,4 @@ sleep 1
 $PY_BIN -m venv "${PY_VENV_DIR}"
 
 activate_venv
-
-function activate_venv() {
-    source "${PY_VENV_DIR}/bin/activate"
-    pip3 install -r "${PY_DIR}/requirements.txt"
-
-    printf "Set Python interpreter to \n[%s]\n" $(which python3)
-    printf "Set Python Pip to \n[%s]\n" $(which pip3)
-}
 

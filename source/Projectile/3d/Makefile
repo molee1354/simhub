@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -lm -I.
-DEPS = projectile.h
-OBJ = projectile.o main.o
+DEPS = compute.h
+OBJ = compute.o outputs.o main.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)

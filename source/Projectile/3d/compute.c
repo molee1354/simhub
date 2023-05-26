@@ -2,46 +2,9 @@
 #include <stdio.h>
 #include <unistd.h>
 
-#include "projectile.h"
-#include "simparams.h"
-
-// value calling index
-#define SIMINIT_T     0
-
-#define SIMINIT_X     1
-#define SIMINIT_Y     2
-#define SIMINIT_Z     3
-
-#define SIMINIT_VX    4
-#define SIMINIT_VY    5
-#define SIMINIT_VZ    6
-
-#define INIT_X        7
-#define INIT_Y        8
-#define INIT_Z        9
-
-#define INIT_VX       10   
-#define INIT_VY       11
-#define INIT_VZ       12
-
-#define CUR_X         13
-#define CUR_Y         14
-#define CUR_Z         15
-
-#define CUR_VX        17
-#define CUR_VY        18
-#define CUR_VZ        19
-
-#define PREV_X        20
-#define PREV_Y        21
-#define PREV_Z        22
-
-#define PREV_VX       23
-#define PREV_VY       24
-#define PREV_VZ       25
-
-#define TIME          26
-#define NUMPARAMS     27
+#include "compute.h"
+#include "obj.h"
+#include "sim.input"
 
 // functions
 #define VSQUARE(vx, vy, vz) ((vx*vx) + (vy*vy) + (vz*vz))
@@ -263,99 +226,5 @@ int updateState( float time, float* proj ) {
         return 1;
     }
     else return 0;
-}
-
-void printHeader( float time, float* proj ) {
-    printf("\nProjectile simulation starting at time %f\n", time);
-
-    // launch parameters
-    printf("with initial launch parameters : \n");
-    printf("\tInitial Position [x,y,z] : [ %.3f, %.3f, %.3f ]\n", 
-            proj[INIT_X], proj[INIT_Y], proj[INIT_Z]);
-    printf("\tInitial Velocity [vx,vy,vz] : [ %.3f, %.3f, %.3f ]\n", 
-            proj[INIT_VX], proj[INIT_VY], proj[INIT_VZ]);
-
-    // environmental parameters
-    printf("\nenvironmental parameters : \n");
-    printf("\tGravity : %f\n", GRAVITY);
-    printf("\tGround altitude : %f\n", GROUND);
-
-    // physical properties of the projectile
-    printf("\nphysical parameters : \n");
-    printf("\tRadius : %f\n", RADIUS);
-    printf("\tCoefficient of restitution : %f\n", COEF_RESTITUTION);
-
-    // physical boundary parameters
-    printf("\nphysical boundary parameters : \n");
-    printf("\tBox Origin (center of bottom face) [x,y,z]: [ %.3f, %.3f, %.3f ]\n",
-            SIM_BOX_ORIGIN_X, SIM_BOX_ORIGIN_Y, SIM_BOX_ORIGIN_Z);
-    
-    if (SIM_BOX_OPEN) printf("\tBox type : OPEN\n");
-    else printf("\tBox type : CLOSED\n");
-
-    if (SIM_BOX_INF) printf("\tBox height : INFINITE\n");
-    else {
-        printf("\tBox height: %f", SIM_BOX_HEIGHT);
-    }
-    sleep(1);
-
-    printf("\n\n%5s%12s%12s%12s%12s%12s%12s\n\n",
-            "TIME",
-            "pos x", "pos y", "pos z",
-            "vel x", "vel y", "vel z");
-
-    sleep(2);
-}
-
-void writeHeader( FILE *file, float time, float* proj ) {
-    fprintf(file,"\nProjectile simulation starting at time %f\n", time);
-
-    // launch parameters
-    fprintf(file,"with initial launch parameters : \n");
-    fprintf(file,"\tInitial Position [x,y,z] : [ %.3f, %.3f, %.3f ]\n", 
-            proj[INIT_X], proj[INIT_Y], proj[INIT_Z]);
-    fprintf(file,"\tInitial Velocity [vx,vy,vz] : [ %.3f, %.3f, %.3f ]\n", 
-            proj[INIT_VX], proj[INIT_VY], proj[INIT_VZ]);
-
-    // environmental parameters
-    fprintf(file,"\nenvironmental parameters : \n");
-    fprintf(file,"\tGravity : %f\n", GRAVITY);
-    fprintf(file,"\tGround altitude : %f\n", GROUND);
-
-    // physical properties of the projectile
-    fprintf(file,"\nphysical parameters : \n");
-    fprintf(file,"\tRadius : %f\n", RADIUS);
-    fprintf(file,"\tCoefficient of restitution : %f\n", COEF_RESTITUTION);
-
-    // physical boundary parameters
-    fprintf(file,"\nphysical boundary parameters : \n");
-    fprintf(file,"\tBox Origin (center of bottom face) [x,y,z]: [ %.3f, %.3f, %.3f ]\n",
-            SIM_BOX_ORIGIN_X, SIM_BOX_ORIGIN_Y, SIM_BOX_ORIGIN_Z);
-    
-    if (SIM_BOX_OPEN) fprintf(file,"\tBox type : OPEN\n");
-    else fprintf(file,"\tBox type : CLOSED\n");
-
-    if (SIM_BOX_INF) fprintf(file,"\tBox height : INFINITE\n");
-    else {
-        fprintf(file,"\tBox height: %f", SIM_BOX_HEIGHT);
-    }
-    fprintf(file,"\n\n%5s%12s%12s%12s%12s%12s%12s\n\n",
-            "TIME",
-            "pos x", "pos y", "pos z",
-            "vel x", "vel y", "vel z");
-}
-
-void printData( float time, float* proj ) {
-        printf("%5.2f%12.4f%12.4f%12.4f%12.4f%12.4f%12.4f\n",
-                proj[SIMINIT_T],
-                proj[CUR_X], proj[CUR_Y], proj[CUR_Z],
-                proj[CUR_VX], proj[CUR_VY], proj[CUR_VZ]);
-}
-
-void writeData( FILE *file, float time, float* proj ) {
-        fprintf(file, "%5.2f%12.4f%12.4f%12.4f%12.4f%12.4f%12.4f\n",
-                proj[SIMINIT_T],
-                proj[CUR_X], proj[CUR_Y], proj[CUR_Z],
-                proj[CUR_VX], proj[CUR_VY], proj[CUR_VZ]);
 }
 

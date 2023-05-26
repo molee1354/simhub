@@ -1,5 +1,5 @@
-#ifndef _projectile_h
-#define _projectile_h
+#ifndef _compute_h
+#define _compute_h
 
 #include <stdio.h>
 

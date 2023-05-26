@@ -1,3 +1,6 @@
+#ifndef _sim_param
+#define _sim_param
+
 // define environment
 #define GROUND            0.
 #define GRAVITY           9.81
@@ -38,3 +41,5 @@
 #define SIM_BOX_OPEN        1  // 1 for open box, 0 for closed box
 #define SIM_BOX_INF         0  // 1 for infinite wall height
 #define SIM_BOX_HEIGHT      50.
+
+#endif

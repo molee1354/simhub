@@ -4,7 +4,7 @@ SIM_CALL=$1
 SIM_DIR="./simulation"
 
 if [[ -d "$SIM_DIR" ]]; then
-    rm -rf ${SIM_DIR}/*
+    rm -rf ${SIM_DIR}
 fi
 
 mkdir ${SIM_DIR}

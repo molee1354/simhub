@@ -1,7 +1,7 @@
 CC = gcc
-CFLAGS = -lm -I.
-DEPS = projectile.h
-OBJ = projectile.o main.o
+CFLAGS = -I.
+DEPS = linkedlist.h
+OBJ = linkedlist.o main.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -12,4 +12,3 @@ main: $(OBJ)
 clean:
 	rm -f *.o
 	rm main
-	rm *.out

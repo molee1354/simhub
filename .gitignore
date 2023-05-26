@@ -2,6 +2,7 @@
 .vscode/
 ./*/.vscode/
 __pycache__/
+pyvenv*/
 venv/
 
 # files

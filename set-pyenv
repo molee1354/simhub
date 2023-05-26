@@ -1,0 +1,32 @@
+PY_BIN=$(which python3)
+PY_VER=$(python3 --version | grep -Eo "3\.[0-9]+")
+PY_DIR="./pyenv"
+PY_VENV_DIR="./${PY_DIR}/pyvenv-${PY_VER}"
+
+if [[ -d "${PY_VENV_DIR}" ]]; then
+    printf "The intended Python virtual environment already exists\n"
+    echo -n "Would you like to use the existing virtual environment? [Y/n] : "
+    read -r input
+    if [[ ${input} == "n"  ]]; then
+        return 0
+    else
+        activate_venv
+        return 0
+    fi
+fi
+
+printf "Detected default python version : %s\n" ${PY_VER}
+sleep 1
+
+$PY_BIN -m venv "${PY_VENV_DIR}"
+
+activate_venv
+
+function activate_venv() {
+    source "${PY_VENV_DIR}/bin/activate"
+    pip3 install -r "${PY_DIR}/requirements.txt"
+
+    printf "Set Python interpreter to \n[%s]\n" $(which python3)
+    printf "Set Python Pip to \n[%s]\n" $(which pip3)
+}
+

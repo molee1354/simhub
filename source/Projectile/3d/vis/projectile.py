@@ -17,7 +17,7 @@ class Projectile:
     def __fetch_data(self) -> dict:
         with open( self.filename, 'r' ) as file:
             lines = file.readlines()
-            arr = [line.strip().split() for line in lines][17:]
+            arr = [line.strip().split() for line in lines][21:]
 
             data = [ [float(n) for n in line] 
                     for line in arr ]
@@ -73,8 +73,10 @@ class Animator(Projectile):
         self.trajectory, = self.ax.plot([],[],[], lw=1)
         self.disc, = self.ax.plot([],[],[], linestyle="", marker='o')
 
-        self.ax.set_xlim((0,max(self.data["pos_xs"])))
-        self.ax.set_ylim((0,max(self.data["pos_zs"])))
+        self.ax.set_xlim((-.5*max(self.data["pos_xs"]),
+                          max(self.data["pos_xs"])))
+        self.ax.set_ylim((-.5*max(self.data["pos_zs"]),
+                          max(self.data["pos_zs"])))
         self.ax.set_zlim((0,max(self.data["pos_ys"]))) # -> vertical axis
 
     def __update_trajectory(self, iter: int, trajectory, disc):

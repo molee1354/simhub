@@ -2,13 +2,9 @@
 #include<stdlib.h>
 #include<math.h>
 
-#include "projectile.h"
-#include "simparams.h"
+#include "compute.h"
+#include "sim.input"
 
-/*
- * TODO -> make it so that simulation parameters can be defined in 
- *      a single, simulation file.
- */
 int main() {
     // setting initial values
     float init_x = START_X_POS;

@@ -1,5 +1,5 @@
-#ifndef _projectile_h
-#define _projectile_h
+#ifndef _compute_h
+#define _compute_h
 
 #include <stdio.h>
 
@@ -9,9 +9,8 @@ void update_x( float time, float* proj );
 void update_y( float time, float* proj );
 void update_vx( float time, float* proj );
 void update_vy( float time, float* proj );
-float get_ke( float v1, float v2 );
-
 int updateState( float time, float* proj );
+
 void printHeader( float time, float* proj );
 void printData( float time, float* proj );
 

@@ -11,19 +11,15 @@ mkdir ${SIM_DIR}
 case "${SIM_CALL}" in
     matrix)
         cp -r ./source/Matrix/* ${SIM_DIR}
-        cd ${SIM_DIR} && make
         ;;
     linkedlist)
         cp -r ./source/LinkedList/* ${SIM_DIR}
-        cd ${SIM_DIR} && make
         ;;
     projectile-3d)
         cp -r ./source/Projectile/3d/* ${SIM_DIR}
-        cd ${SIM_DIR} && make
         ;;
     projectile-2d)
         cp -r ./source/Projectile/2d/* ${SIM_DIR}
-        cd ${SIM_DIR} && make
         ;;
     *)
         if [[ -z "${SIM_CALL}" ]]; then

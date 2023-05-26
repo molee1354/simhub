@@ -2,7 +2,13 @@ function sim() {
     case $1 in
         run)
             cd ./simulation
+            make
             ./main
+            cd ../
+            ;;
+        make)
+            cd ./simulation
+            make
             cd ../
             ;;
         anim)

@@ -15,6 +15,13 @@ class Projectile:
         self.data = self.__fetch_data()
 
     def __fetch_data(self) -> dict:
+        if not os.path.exists(self.filename):
+            raise FileNotFoundError(
+                    f"Input file \"{self.filename}\" not found! " \
+                            "Make sure to run the \"sim-run\" command " \
+                            "to compile and run the simulation."
+                            )
+
         with open( self.filename, 'r' ) as file:
             lines = file.readlines()
             arr = [line.strip().split() for line in lines][21:]

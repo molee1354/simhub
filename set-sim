@@ -3,6 +3,7 @@
 SIM_CALL=$1
 SIM_DIR="./simulation"
 
+# delete ./simulation directory if it already exists
 if [[ -d "$SIM_DIR" ]]; then
     rm -rf ${SIM_DIR}
 fi

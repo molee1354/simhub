@@ -6,32 +6,12 @@
 #include "sim.input"
 
 
-/*
-Matrix* makeMatrix( int row, int col, float** matPointer ) {
-
-    Matrix* out = (Matrix*)malloc(sizeof(Matrix*));
-    out->elements = matPointer;
-    out->matSize[0] = row;
-    out->matSize[1] = col;
-    out->rows = row;
-    out->cols = col;
-
-    return out;
-}
-
-typedef struct Board {
-    int** boardMatrix;
-    const int numRows;
-    const int numCols;
-} Board;
-
-*/
 Board* generateRandomBoard( int numRows, int numCols ) {
-    // make sure to malloc out these pointers well
+    // malloc free implemented by a separate function
     Board* out = (Board*)malloc( sizeof(Board*) );
     int** boardMatrix = (int**)malloc( sizeof(int*)*numRows );
     for (int i = 0; i<numCols; i++) {
-        boardMatrix[i] = (int*)malloc( sizeof(int*)*numCols )
+        boardMatrix[i] = (int*)malloc( sizeof(int*)*numCols );
     }
         
     // generating a random seed for the random board generation
@@ -55,8 +35,8 @@ Board* generateRandomBoard( int numRows, int numCols ) {
     return out;
 }
 
-int countNeighbors( int rowIdx, int colIdx, Board* currentBoard ) {
-  currentBoard->boardMatrix
+int countNeighbors( Board* currentBoard, int rowIdx, int colIdx ) {
+    currentBoard->boardMatrix;
 }
 
 Board* generateNext( Board* currentBoard ) {
@@ -64,5 +44,20 @@ Board* generateNext( Board* currentBoard ) {
 }
 
 void printBoard( Board* board ) {
-  
+    for (int i=0; i<board->numRows; i++) {
+        for (int j=0; j<board->numCols; j++) {
+            // printf("%d ", board->boardMatrix[i][j]);
+            if (board->boardMatrix[i][j]==1) printf("■ ");
+            else printf("□ ");
+        }
+        puts("");
+    }
+}
+
+void freeBoard( Board* board ) {
+    for (int i=0; i<board->numRows; i++) {
+        free(board->boardMatrix[i]);
+    }
+    free(board->boardMatrix);
+    free(board);
 }

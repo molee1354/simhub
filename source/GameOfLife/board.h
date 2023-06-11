@@ -6,8 +6,8 @@
  */
 typedef struct Board {
     int** boardMatrix;
-    const int numRows;
-    const int numCols;
+    int numRows;
+    int numCols;
 } Board;
 
 /*
@@ -23,7 +23,7 @@ Board* generateRandomBoard( int numRows, int numCols );
 /*
  * counting the live neighbors at a given index
  */
-int countNeighbors( int rowIdx, int colIdx, Board* currentBoard );
+int countNeighbors( Board* currentBoard, int rowIdx, int colIdx );
 
 /*
  * Take in the current board and generating the next state of the board
@@ -35,6 +35,10 @@ Board* generateNext( Board* currentBoard );
  */
 void printBoard( Board* board );
 
+/*
+ * Freeing allocated memory
+ */
+void freeBoard( Board* board );
 #endif
 
 // reference:

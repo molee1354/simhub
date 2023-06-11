@@ -12,4 +12,3 @@ main: $(OBJ)
 clean:
 	rm -f *.o
 	rm main
-	rm *.out

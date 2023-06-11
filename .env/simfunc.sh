@@ -2,8 +2,10 @@ function sim() {
     SIM_DIR="./simulation"
 
     case $1 in
+
         call)
             SIM_CALL=$2
+
             # delete ./simulation directory if it already exists
             if [[ -d "$SIM_DIR" ]]; then
                 rm -rf ${SIM_DIR}
@@ -13,20 +15,24 @@ function sim() {
             case "${SIM_CALL}" in
                 matrix)
                     cp -r ./source/Matrix/* ${SIM_DIR}
+                    printf "%s called in %s.\n" ${SIM_CALL} ${SIM_DIR}
                     ;;
                 linkedlist)
                     cp -r ./source/LinkedList/* ${SIM_DIR}
+                    printf "%s called in %s.\n" ${SIM_CALL} ${SIM_DIR}
                     ;;
                 projectile-3d)
                     cp -r ./source/Projectile/3d/* ${SIM_DIR}
+                    printf "%s called in %s.\n" ${SIM_CALL} ${SIM_DIR}
                     ;;
                 projectile-2d)
                     cp -r ./source/Projectile/2d/* ${SIM_DIR}
+                    printf "%s called in %s.\n" ${SIM_CALL} ${SIM_DIR}
                     ;;
                 *)
                     if [[ -z "${SIM_CALL}" ]]; then
                         echo "Enter a simulation name"
-                        exit 0
+                        return
                     fi
                     echo "No such simulation found"
                     ;;

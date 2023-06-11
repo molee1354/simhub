@@ -1,29 +1,61 @@
 function sim() {
+    SIM_DIR="./simulation"
+
     case $1 in
+        call)
+            SIM_CALL=$2
+            # delete ./simulation directory if it already exists
+            if [[ -d "$SIM_DIR" ]]; then
+                rm -rf ${SIM_DIR}
+            fi
+            
+            mkdir ${SIM_DIR}
+            case "${SIM_CALL}" in
+                matrix)
+                    cp -r ./source/Matrix/* ${SIM_DIR}
+                    ;;
+                linkedlist)
+                    cp -r ./source/LinkedList/* ${SIM_DIR}
+                    ;;
+                projectile-3d)
+                    cp -r ./source/Projectile/3d/* ${SIM_DIR}
+                    ;;
+                projectile-2d)
+                    cp -r ./source/Projectile/2d/* ${SIM_DIR}
+                    ;;
+                *)
+                    if [[ -z "${SIM_CALL}" ]]; then
+                        echo "Enter a simulation name"
+                        exit 0
+                    fi
+                    echo "No such simulation found"
+                    ;;
+            esac
+            ;;
         run)
-            cd ./simulation
+            cd ${SIM_DIR}
             make
             ./main
             cd ../
             ;;
         make)
-            cd ./simulation
+            cd ${SIM_DIR}
             make
             cd ../
             ;;
         anim)
-            if [[ ! -d "./simulation/vis/" ]]; then
+            if [[ ! -d "${SIM_DIR}/vis/" ]]; then
                 echo "No visualization module found in current simulation!"
                 return 0
             fi
-            python3 ./simulation/vis/animate.py ./simulation/dump.out
+            python3 ${SIM_DIR}/vis/animate.py ${SIM_DIR}/dump.out
             ;;
         plot)
-            if [[ ! -d "./simulation/vis/" ]]; then
+            if [[ ! -d "${SIM_DIR}/vis/" ]]; then
                 echo "No visualization module found in current simulation!"
                 return 0
             fi
-            python3 ./simulation/vis/plot.py ./simulation/dump.out
+            python3 ${SIM_DIR}/vis/plot.py ${SIM_DIR}/dump.out
 
             ;;
         *)

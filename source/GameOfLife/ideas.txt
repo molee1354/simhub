@@ -1,0 +1,27 @@
+Problem:
+
+    vis:
+        can't live update with the current ./vis method
+        current method:
+            make 'dump.out' --> and then visualize this with python
+            we can use this but we can't use live update / infinite simulation
+
+    files we need:
+        sim.input: inital parameters / macros (take input from ui)
+            - box size (width, height)
+            - simulation time (finite for now)
+        board.c/h: class Board(params){ currState: , size: , }
+            - some_method( Board* objectname, args ) {}
+            - generateNext( *above* ){ #call countNeighbors }
+            - countNeighbors()
+            - 
+        main.c: 
+            - Run generateNext(), store board + step #
+            - Write all board states in dump.out
+
+  user intervention:
+      * Random vs. User generated board button
+      * Speed knob: delay between generateNext()
+      * Zoom functions (task for later)
+        - Zoom knob: zoom in and out from entire board
+        - Click-and-drag: navigate the board (assuming zoomed in)

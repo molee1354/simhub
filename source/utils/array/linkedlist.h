@@ -12,6 +12,7 @@ typedef struct LinkedList {
 } List;
 
 List* makeList();
+void freeList( List* list );
 
 void prepend( List* list, int num );
 void append( List* list, int num );

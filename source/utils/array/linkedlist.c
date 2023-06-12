@@ -21,6 +21,12 @@ List* makeList() {
     return linkedlist;
 }
 
+void freeList( List* list ) {
+    free(list->head);
+    free(list->tail);
+    free(list);
+}
+
 void prepend( List* list, int num ) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->data = num;
@@ -41,6 +47,7 @@ void append( List* list, int num ) {
 
 void deleteHead( List* list ) {
     list->head->next = list->head->next->next;
+    free(list->head->next);
 }
 
 void deleteTail( List* list ) {
@@ -104,6 +111,10 @@ void listRepr( List* list ) {
 }
 
 void printList( List* list ) {
+    if ( getLength(list)==0 ) {
+        puts("[ ]");
+        return;
+    }
     Node* currentNode = list->head->next;
 
     printf("[");

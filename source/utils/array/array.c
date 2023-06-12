@@ -118,6 +118,46 @@ void append_c( Array* list, char num ) {
     list->tail = newNode;
 }
 
+/*
+int getElement( List* list, int index ) {
+    int count = 0;
+    Node* currentNode = list->head->next;
+
+    while (count < index) {
+        currentNode = currentNode->next;
+        count++;
+    }
+
+    return currentNode->data;
+} */
+int getElement_i( Array* array, int index ) {
+    int count = 0;
+    iNode* currentNode = (iNode*)array->head;
+    while (count < index) {
+        currentNode = currentNode->next;
+        count++;
+    }
+    return currentNode->data;
+}   
+double getElement_d( Array* array, int index ) {
+    int count = 0;
+    dNode* currentNode = (dNode*)array->head;
+    while (count < index) {
+        currentNode = currentNode->next;
+        count++;
+    }
+    return currentNode->data;
+}   
+char getElement_c( Array* array, int index ) {
+    int count = 0;
+    cNode* currentNode = (cNode*)array->head;
+    while (count < index) {
+        currentNode = currentNode->next;
+        count++;
+    }
+    return currentNode->data;
+}   
+
 void deleteHead_i( Array* array ) {
     iNode* temp = ((iNode*)array->head)->next;
     ((iNode*)array->head)->next = temp->next;
@@ -140,37 +180,28 @@ void deleteHead( Array* array ){
 }
 
 void deleteTail_i(Array* array) {
-    iNode* currentNode = (iNode*)array->head;
-    while (currentNode->next != NULL) {
-        if (currentNode->next->next == NULL) {
-            free(currentNode->next);
-            currentNode->next = NULL;
-            return;
-        }
+    iNode* currentNode = ((iNode*)array->head)->next;
+    while (currentNode->next->next != NULL) {
         currentNode = currentNode->next;
     }
+    currentNode->next = NULL;
+    free(currentNode->next);
 }
 void deleteTail_d(Array* array) {
-    dNode* currentNode = (dNode*)array->head;
-    while (currentNode->next != NULL) {
-        if (currentNode->next->next == NULL) {
-            free(currentNode->next);
-            currentNode->next = NULL;
-            return;
-        }
+    dNode* currentNode = ((dNode*)array->head)->next;
+    while (currentNode->next->next != NULL) {
         currentNode = currentNode->next;
     }
+    currentNode->next = NULL;
+    free(currentNode->next);
 }
 void deleteTail_c(Array* array) {
-    cNode* currentNode = (cNode*)array->head;
-    while (currentNode->next != NULL) {
-        if (currentNode->next->next == NULL) {
-            free(currentNode->next);
-            currentNode->next = NULL;
-            return;
-        }
+    cNode* currentNode = ((cNode*)array->head)->next;
+    while (currentNode->next->next != NULL) {
         currentNode = currentNode->next;
     }
+    currentNode->next = NULL;
+    free(currentNode->next);
 }
 void deleteTail( Array* array ){
     if (array->dtype == sizeof(int))    deleteTail_i(array);
@@ -179,7 +210,7 @@ void deleteTail( Array* array ){
 }
 
 void freeArray_i( Array* array ) {
-    while ( ((iNode*)array->head)->next != array->tail) {
+    while ( ((iNode*)array->head)->next->next != NULL ) {
         deleteHead_i(array);
         continue;
     }
@@ -247,20 +278,7 @@ int getLength( Array* array ){
     if (array->dtype == sizeof(char))   return getLength_c(array);
 }
 
-/*
-int getElement( List* list, int index ) {
-    int count = 0;
-    Node* currentNode = list->head->next;
-
-    while (count < index) {
-        currentNode = currentNode->next;
-        count++;
-    }
-
-    return currentNode->data;
-}
-
-int findIndex( List* list, int num ) {
+/*int findIndex( List* list, int num ) {
     int idx = 0;
     Node* currentNode = list->head->next;
 
@@ -279,39 +297,39 @@ int findIndex( List* list, int num ) {
 
 void listRepr_i( Array* array ) {
     iNode* currentNode = ((iNode*)array->head)->next;
-    printf("Head -> ");
+    printf("Head->");
     if (currentNode == array->tail) {
         puts("Tail");
         return;
     }
     while (currentNode->next != NULL) {
-        printf("%d -> ",currentNode->data);
+        printf("%d->",currentNode->data);
         currentNode = currentNode->next;
     }
     puts("Tail");
 }
 void listRepr_d( Array* array ) {
     dNode* currentNode = ((dNode*)array->head)->next;
-    printf("Head -> ");
+    printf("Head->");
     if (currentNode == array->tail) {
         puts("Tail");
         return;
     }
     while (currentNode->next != NULL) {
-        printf("%f -> ",currentNode->data);
+        printf("%f->",currentNode->data);
         currentNode = currentNode->next;
     }
     puts("Tail");
 }
 void listRepr_c( Array* array ) {
     cNode* currentNode = ((cNode*)array->head)->next;
-    printf("Head -> ");
+    printf("Head->");
     if (currentNode == array->tail) {
         puts("Tail");
         return;
     }
     while (currentNode->next != NULL) {
-        printf("%c -> ",currentNode->data);
+        printf("%c->",currentNode->data);
         currentNode = currentNode->next;
     }
     puts("Tail");

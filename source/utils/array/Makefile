@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -I.
-DEPS = linkedlist.h
-OBJ = linkedlist.o main.o
+DEPS = array.h
+OBJ = array.o main.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)

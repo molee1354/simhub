@@ -1,23 +1,32 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-#include "linkedlist.h"
+#include "array.h"
+
+#define TYPE int
 
 int main() {
-    List* myList = makeList();
+    Array* myArray = makeArray(sizeof(TYPE));
+    puts("array created");
 
-    printf("List Length at first : %d\n",getLength(myList));
-    printf("List repr \n");
-    listRepr(myList);
-    printList(myList);
-    for (int i = 10; i>0; i--) append(myList, i);
+    int length = getLength( myArray );
+    printArray( myArray );
+    printf("length %d\n", length);
 
-    printList(myList);
-    int idx = 2;
-    printf("List[%d] : %d\n", idx, getElement(myList, idx));
+    for (int i = 65; i<80; i++) {
+        append(myArray, (TYPE)i);
+        printf("append : %d\n", i);
+    }
+    // append(myArray, (TYPE)69);
+    printf("Array length : %d\n", getLength( myArray ));
+    deleteTail( myArray );
+    puts("deleteTail()");
+    printArray( myArray );
+    printf("Array length : %d\n", getLength( myArray ));
 
-    printf("Index of 3 : %d\n", findIndex(myList, 3));
+    printArray( myArray );
+    printf("Array length : %d\n", getLength( myArray ));
 
-    freeList( myList );
+    freeArray( myArray );
     return 0;
 }

@@ -1,11 +1,15 @@
 #include<stdio.h>
 #include<stdlib.h>
+
 #include "linkedlist.h"
 
 int main() {
     List* myList = makeList();
 
     printf("List Length at first : %d\n",getLength(myList));
+    printf("List repr \n");
+    listRepr(myList);
+    printList(myList);
     for (int i = 10; i>0; i--) append(myList, i);
 
     printList(myList);
@@ -14,6 +18,6 @@ int main() {
 
     printf("Index of 3 : %d\n", findIndex(myList, 3));
 
-    free(myList);
+    freeList( myList );
     return 0;
 }

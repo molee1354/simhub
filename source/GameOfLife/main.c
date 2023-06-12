@@ -9,6 +9,7 @@ int main() {
 
     printBoard(newBoard);
 
+    // check with valgrind for any memory leaks
     freeBoard(newBoard);
 
     return 0;

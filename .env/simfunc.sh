@@ -23,11 +23,15 @@ function sim() {
                     ;;
                 projectile-3d)
                     cp -r ./source/Projectile/3d/* ${SIM_DIR}
-                    printf "%s called in %s.\n" ${SIM_CALL} ${SIM_DIR}
+                    printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
                     ;;
                 projectile-2d)
                     cp -r ./source/Projectile/2d/* ${SIM_DIR}
-                    printf "%s called in %s.\n" ${SIM_CALL} ${SIM_DIR}
+                    printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
+                    ;;
+                gameoflife)
+                    cp -r ./source/GameOfLife/* ${SIM_DIR}
+                    printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
                     ;;
                 *)
                     if [[ -z "${SIM_CALL}" ]]; then

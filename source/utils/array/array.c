@@ -118,18 +118,6 @@ void append_c( Array* list, char num ) {
     list->tail = newNode;
 }
 
-/*
-int getElement( List* list, int index ) {
-    int count = 0;
-    Node* currentNode = list->head->next;
-
-    while (count < index) {
-        currentNode = currentNode->next;
-        count++;
-    }
-
-    return currentNode->data;
-} */
 int getElement_i( Array* array, int index ) {
     int count = 0;
     iNode* currentNode = (iNode*)array->head;
@@ -157,6 +145,37 @@ char getElement_c( Array* array, int index ) {
     }
     return currentNode->data;
 }   
+
+int findIndex_i( Array* array, int num ) {
+    iNode* currentNode = ((iNode*)array->head)->next;
+    int idx = 0;
+    while (currentNode->data != num || currentNode->next != NULL) {
+        if (currentNode->data == num) return idx;
+        currentNode = currentNode->next;
+        idx++;
+    }
+    return getLength(array)-1;
+}
+int findIndex_d( Array* array, double num ) {
+    dNode* currentNode = ((dNode*)array->head)->next;
+    int idx = 0;
+    while (currentNode->data != num || currentNode->next != NULL) {
+        if (currentNode->data == num) return idx;
+        currentNode = currentNode->next;
+        idx++;
+    }
+    return getLength(array)-1;
+}
+int findIndex_c( Array* array, char num ) {
+    cNode* currentNode = ((cNode*)array->head)->next;
+    int idx = 0;
+    while (currentNode->data != num || currentNode->next != NULL) {
+        if (currentNode->data == num) return idx;
+        currentNode = currentNode->next;
+        idx++;
+    }
+    return getLength(array)-1;
+}
 
 void deleteHead_i( Array* array ) {
     iNode* temp = ((iNode*)array->head)->next;
@@ -280,23 +299,6 @@ int getLength( Array* array ){
     if (array->dtype == sizeof(double)) return getLength_d(array);
     if (array->dtype == sizeof(char))   return getLength_c(array);
 }
-
-/*int findIndex( List* list, int num ) {
-    int idx = 0;
-    Node* currentNode = list->head->next;
-
-    do {
-        if (currentNode->data == num) {
-            return idx;
-        }
-        currentNode = currentNode->next;
-        idx++;
-    } while (currentNode->data != num || currentNode->next != NULL);
-
-    return list->tail->data;
-}
-
-*/
 
 void listRepr_i( Array* array ) {
     iNode* currentNode = ((iNode*)array->head)->next;

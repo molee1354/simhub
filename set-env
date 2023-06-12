@@ -16,8 +16,8 @@ function activate_venv() {
     source "${PY_VENV_DIR}/bin/activate"
     pip3 install -r "${ENV_DIR}/requirements.txt"
 
-    printf "Set Python interpreter to \n[%s]\n" $(which python3)
-    printf "Set Python Pip to \n[%s]\n" $(which pip3)
+    printf "\nSet Python interpreter to \n[%s]\n" $(which python3)
+    printf "Set Python Pip to \n[%s]\n\n" $(which pip3)
 }
 
 if [[ -d "${PY_VENV_DIR}" ]]; then

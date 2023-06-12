@@ -60,7 +60,7 @@ void append_c( Array* array, char num );
  * Getting an element from a given index
  */
 int getElement_i( Array* array, int index );
-double getElement_f( Array* array, int index );
+double getElement_d( Array* array, int index );
 char getElement_c( Array* array, int index );
 #define getElement(arr, i) _Generic( (i), \
                                 int: getElement_i, \
@@ -71,7 +71,7 @@ char getElement_c( Array* array, int index );
  * Finding an index from a given element
  */
 int findIndex_i( Array* array, int num );
-int findIndex_f( Array* array, double num );
+int findIndex_d( Array* array, double num );
 int findIndex_c( Array* array, char num );
 #define findIndex(arr, i) _Generic( (i), \
                                 int: findIndex_i, \

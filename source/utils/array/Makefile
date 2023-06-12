@@ -1,9 +1,7 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g
-SRCDIR = src
-TESTDIR = tests
-BINDIR = bin
-OBJDIR = obj
+CFLAGS = -I.
+DEPS = array.h
+OBJ = array.o main.o
 
 SRC = $(wildcard $(SRCDIR)/*.c)
 OBJ = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRC))

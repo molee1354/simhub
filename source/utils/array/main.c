@@ -47,7 +47,12 @@ int main() {
     printf("Array length : %d\n", getLength( myArray ));
     listRepr( myArray );
 
-    printf("\ngetElement() at 3: %d\n", getElement( myArray, 3 ));
+    const int pos = 3;
+    printf("\ngetElement() at %d: %d\n", pos, getElement( myArray, pos ));
+    printArray( myArray );
+
+    const int target = 71;
+    printf("\nfindIndex() of %d: %d\n", target, findIndex( myArray, target ));
     printArray( myArray );
 
     puts("\nfreeArray()");

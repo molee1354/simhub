@@ -5,6 +5,11 @@
 
 #define TYPE int
 
+/* TODO:
+ * write out functions that can test the different array operations
+ * and make sure they cover edge cases.
+ */
+
 int main() {
     Array* myArray = makeArray(sizeof(TYPE));
     puts("array created");

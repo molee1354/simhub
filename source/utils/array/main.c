@@ -15,18 +15,27 @@ int main() {
 
     for (int i = 65; i<80; i++) {
         append(myArray, (TYPE)i);
-        printf("append : %d\n", i);
+        printArray( myArray );
     }
     // append(myArray, (TYPE)69);
     printf("Array length : %d\n", getLength( myArray ));
+
+    puts("\ndeleteTail()");
     deleteTail( myArray );
-    puts("deleteTail()");
-    printArray( myArray );
     printf("Array length : %d\n", getLength( myArray ));
+    listRepr( myArray );
 
-    printArray( myArray );
+    puts("\ndeleteTail()");
+    deleteTail( myArray );
     printf("Array length : %d\n", getLength( myArray ));
+    listRepr( myArray );
 
+    /* puts("deleteHead()");
+    deleteHead( myArray );
+    printf("Array length : %d\n", getLength( myArray ));
+    printArray( myArray ); */
+
+    puts("\nfreeArray()");
     freeArray( myArray );
     return 0;
 }

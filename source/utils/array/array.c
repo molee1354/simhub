@@ -133,7 +133,7 @@ int getElement( List* list, int index ) {
 int getElement_i( Array* array, int index ) {
     int count = 0;
     iNode* currentNode = (iNode*)array->head;
-    while (count < index) {
+    while (count <= index) {
         currentNode = currentNode->next;
         count++;
     }
@@ -142,7 +142,7 @@ int getElement_i( Array* array, int index ) {
 double getElement_d( Array* array, int index ) {
     int count = 0;
     dNode* currentNode = (dNode*)array->head;
-    while (count < index) {
+    while (count <= index) {
         currentNode = currentNode->next;
         count++;
     }
@@ -151,7 +151,7 @@ double getElement_d( Array* array, int index ) {
 char getElement_c( Array* array, int index ) {
     int count = 0;
     cNode* currentNode = (cNode*)array->head;
-    while (count < index) {
+    while (count <= index) {
         currentNode = currentNode->next;
         count++;
     }
@@ -184,24 +184,27 @@ void deleteTail_i(Array* array) {
     while (currentNode->next->next != NULL) {
         currentNode = currentNode->next;
     }
-    currentNode->next = NULL;
     free(currentNode->next);
+    currentNode->next = NULL;
+    array->tail = currentNode;
 }
 void deleteTail_d(Array* array) {
     dNode* currentNode = ((dNode*)array->head)->next;
     while (currentNode->next->next != NULL) {
         currentNode = currentNode->next;
     }
-    currentNode->next = NULL;
     free(currentNode->next);
+    currentNode->next = NULL;
+    array->tail = currentNode;
 }
 void deleteTail_c(Array* array) {
     cNode* currentNode = ((cNode*)array->head)->next;
     while (currentNode->next->next != NULL) {
         currentNode = currentNode->next;
     }
-    currentNode->next = NULL;
     free(currentNode->next);
+    currentNode->next = NULL;
+    array->tail = currentNode;
 }
 void deleteTail( Array* array ){
     if (array->dtype == sizeof(int))    deleteTail_i(array);

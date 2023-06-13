@@ -6,19 +6,15 @@
 /*
  * Different node types based on datatype
  */
-typedef struct iNode {    int data; struct iNode* next; } iNode;
-typedef struct dNode { double data; struct dNode* next; } dNode;
-typedef struct cNode {   char data; struct cNode* next; } cNode;
+typedef struct IntNode iNode;
+typedef struct DoubleNode dNode;
+typedef struct CharNode cNode;
 
 /*
  * struct to hold the array
  * the `head` and `tail` pointers will be cast to its types later.
  */
-typedef struct LinkedList {
-    void* head;
-    void* tail;
-    size_t dtype;
-} Array;
+typedef struct LinkedList Array;
 
 /*
  * creates an array of dtype

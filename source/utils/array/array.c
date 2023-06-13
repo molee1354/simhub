@@ -146,7 +146,7 @@ char getElement_c( Array* array, int index ) {
     return currentNode->data;
 }   
 
-int findIndex_i( Array* array, int num ) {
+int getIndex_i( Array* array, int num ) {
     iNode* currentNode = ((iNode*)array->head)->next;
     int idx = 0;
     while (currentNode->data != num || currentNode->next != NULL) {
@@ -156,7 +156,7 @@ int findIndex_i( Array* array, int num ) {
     }
     return getLength(array)-1;
 }
-int findIndex_d( Array* array, double num ) {
+int getIndex_d( Array* array, double num ) {
     dNode* currentNode = ((dNode*)array->head)->next;
     int idx = 0;
     while (currentNode->data != num || currentNode->next != NULL) {
@@ -166,7 +166,7 @@ int findIndex_d( Array* array, double num ) {
     }
     return getLength(array)-1;
 }
-int findIndex_c( Array* array, char num ) {
+int getIndex_c( Array* array, char num ) {
     cNode* currentNode = ((cNode*)array->head)->next;
     int idx = 0;
     while (currentNode->data != num || currentNode->next != NULL) {
@@ -181,16 +181,19 @@ void deleteHead_i( Array* array ) {
     iNode* temp = ((iNode*)array->head)->next;
     ((iNode*)array->head)->next = temp->next;
     free(temp);
+    temp = NULL;
 }
 void deleteHead_d( Array* array ) {
     dNode* temp = ((dNode*)array->head)->next;
     ((dNode*)array->head)->next = temp->next;
     free(temp);
+    temp = NULL;
 }
 void deleteHead_c( Array* array ) {
     cNode* temp = ((cNode*)array->head)->next;
     ((cNode*)array->head)->next = temp->next;
     free(temp);
+    temp = NULL;
 }
 void deleteHead( Array* array ){
     if (array->dtype == sizeof(int))    deleteHead_i(array);
@@ -237,8 +240,13 @@ void freeArray_i( Array* array ) {
         continue;
     }
     free(array->head);
+    array->head = NULL;
+
     free(array->tail);
+    array->tail = NULL;
+
     free(array);
+    array = NULL;
 }
 void freeArray_d( Array* array ) {
     while ( ((dNode*)array->head)->next != array->tail) {
@@ -246,8 +254,13 @@ void freeArray_d( Array* array ) {
         continue;
     }
     free(array->head);
+    array->head = NULL;
+
     free(array->tail);
+    array->tail = NULL;
+
     free(array);
+    array = NULL;
 }
 void freeArray_c( Array* array ) {
     while ( ((cNode*)array->head)->next != array->tail) {
@@ -255,8 +268,13 @@ void freeArray_c( Array* array ) {
         continue;
     }
     free(array->head);
+    array->head = NULL;
+
     free(array->tail);
+    array->tail = NULL;
+
     free(array);
+    array = NULL;
 }
 void freeArray( Array* array ){
     if (array->dtype == sizeof(int))    freeArray_i(array);

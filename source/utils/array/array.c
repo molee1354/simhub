@@ -315,7 +315,7 @@ int getLength( Array* array ){
     if (array->dtype == sizeof(char))   return getLength_c(array);
 }
 
-void listRepr_i( Array* array ) {
+int listRepr_i( Array* array ) {
     iNode* currentNode = ((iNode*)array->head)->next;
     printf("Head->");
     if (currentNode == array->tail) {
@@ -327,8 +327,9 @@ void listRepr_i( Array* array ) {
         currentNode = currentNode->next;
     }
     puts("Tail");
+    return 0;
 }
-void listRepr_d( Array* array ) {
+int listRepr_d( Array* array ) {
     dNode* currentNode = ((dNode*)array->head)->next;
     printf("Head->");
     if (currentNode == array->tail) {
@@ -340,8 +341,9 @@ void listRepr_d( Array* array ) {
         currentNode = currentNode->next;
     }
     puts("Tail");
+    return 0;
 }
-void listRepr_c( Array* array ) {
+int listRepr_c( Array* array ) {
     cNode* currentNode = ((cNode*)array->head)->next;
     printf("Head->");
     if (currentNode == array->tail) {
@@ -353,11 +355,12 @@ void listRepr_c( Array* array ) {
         currentNode = currentNode->next;
     }
     puts("Tail");
+    return 0;
 }
-void listRepr( Array* array ) {
-    if (array->dtype == sizeof(int))    listRepr_i(array);
-    if (array->dtype == sizeof(double)) listRepr_d(array);
-    if (array->dtype == sizeof(char))   listRepr_c(array);
+int listRepr( Array* array ) {
+    if (array->dtype == sizeof(int))    return listRepr_i(array);
+    if (array->dtype == sizeof(double)) return listRepr_d(array);
+    if (array->dtype == sizeof(char))   return listRepr_c(array);
 }
 
 void printArray_i( Array* array ) {

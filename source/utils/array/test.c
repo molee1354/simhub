@@ -4,6 +4,7 @@
 #include "test.h"
 #include "array.h"
 
+
 // test result tracker
 static int testSuccess = 0;
 static int testFail = 0;
@@ -492,6 +493,31 @@ int TEST_deleteTail_c( Array* array, char dtype ) {
     } else {TEST_SUCCESS();}
     return 0;
 }
+
+int TEST_listRepr_i( Array* array, int dtype ) {
+    puts("testing listRepr_i(Array* array)...");
+    printf("\t*       array representation : "); printArray(array);
+    printf("\t* linked list representation : ");
+    if (!listRepr(array)) { TEST_SUCCESS(); }
+    else { TEST_FAIL("listRepr_i did not exit successfully"); }
+    return 0;
+}
+int TEST_listRepr_d( Array* array, double dtype ) {
+    puts("testing listRepr_d(Array* array)...");
+    printf("\t*       array representation : "); printArray(array);
+    printf("\t* linked list representation : ");
+    if (!listRepr(array)) { TEST_SUCCESS(); }
+    else { TEST_FAIL("listRepr_d did not exit successfully"); }
+    return 0;
+}
+int TEST_listRepr_c( Array* array, char dtype ) {
+    puts("testing listRepr_c(Array* array)...");
+    printf("\t*       array representation : "); printArray(array);
+    printf("\t* linked list representation : ");
+    if (!listRepr(array)) { TEST_SUCCESS(); }
+    else { TEST_FAIL("listRepr_c did not exit successfully"); }
+    return 0;
+}
 /* int TEST_tests(void) {
     Array* myArray = makeArray(sizeof(TYPE));
     puts("array created");
@@ -563,14 +589,18 @@ Array* makeTestArray_c() {
 }
 
 int main() {
+    /* The failure in one of these tests won't stop the program */
     TEST_makeArray(INT);
     TEST_makeArray(DOUBLE);
     TEST_makeArray(CHAR);
 
+    /* Initializing arrays to do the tests on */
     Array* testArray_i = makeTestArray(INT);
     Array* testArray_d = makeTestArray(DOUBLE);
     Array* testArray_c = makeTestArray(CHAR);
 
+    /* the `get` type functions must be tested before any append/prepend
+    function tests are done */
     TEST_getLength(testArray_i, INT);
     TEST_getLength(testArray_d, DOUBLE);
     TEST_getLength(testArray_c, CHAR);
@@ -599,11 +629,15 @@ int main() {
     TEST_deleteTail(testArray_d, DOUBLE);
     TEST_deleteTail(testArray_c, CHAR);
 
+    TEST_listRepr(testArray_i, INT);
+    TEST_listRepr(testArray_d, DOUBLE);
+    TEST_listRepr(testArray_c, CHAR);
+
     TEST_freeArray(testArray_i, INT);
     TEST_freeArray(testArray_d, DOUBLE);
     TEST_freeArray(testArray_c, CHAR);
 
-    printf("[RESULT] : %d out of %d tests successful.\n\n", testSuccess, testSuccess+testFail);
+    printf("[RESULT] : %d out of %d tests passed.\n\n", testSuccess, testSuccess+testFail);
 
     return 0;
 }

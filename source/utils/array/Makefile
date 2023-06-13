@@ -1,7 +1,8 @@
 CC = gcc
 CFLAGS = -I.
-DEPS = linkedlist.h
-OBJ = linkedlist.o main.o
+DEPS = array.h
+TEST = array.o test.o
+OBJ = array.o main.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -9,6 +10,14 @@ OBJ = linkedlist.o main.o
 main: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
+test: $(TEST)
+	$(CC) -o $@ $^ $(CFLAGS)
+
 clean:
-	rm -f *.o
-	rm main
+	@ rm -f *.o;\
+	if [ -e "main" ]; then\
+		rm main;\
+	fi;\
+    if [ -e "test" ]; then\
+		rm test;\
+	fi

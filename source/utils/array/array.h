@@ -60,9 +60,9 @@ void append_c( Array* array, char num );
  * Getting an element from a given index
  *     -> no multiple dispatch since the return types are different
  */
-int getElement_i( Array* array, int index );
+int    getElement_i( Array* array, int index );
 double getElement_d( Array* array, int index );
-char getElement_c( Array* array, int index );
+char   getElement_c( Array* array, int index );
 
 
 /*
@@ -108,9 +108,12 @@ void printArray_d( Array* array );
 void printArray_c( Array* array );
 void printArray( Array* array );
 
-void listRepr_i( Array* array );
-void listRepr_d( Array* array );
-void listRepr_c( Array* array );
-void listRepr( Array* array );
+/*
+ * listRepr() type writers return int to check for errors
+ */
+int listRepr_i( Array* array );
+int listRepr_d( Array* array );
+int listRepr_c( Array* array );
+int listRepr( Array* array );
 
 #endif

@@ -58,14 +58,12 @@ void append_c( Array* array, char num );
 
 /*
  * Getting an element from a given index
+ *     -> no multiple dispatch since the return types are different
  */
 int getElement_i( Array* array, int index );
 double getElement_d( Array* array, int index );
 char getElement_c( Array* array, int index );
-#define getElement(arr, i) _Generic( (i), \
-                                int: getElement_i, \
-                               char: getElement_c, \
-                             double: getElement_d )(arr, i)
+
 
 /*
  * Finding an index from a given element

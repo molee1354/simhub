@@ -1,6 +1,7 @@
 CC = gcc
 CFLAGS = -I.
 DEPS = array.h
+TEST = array.o test.o
 OBJ = array.o main.o
 
 SRC = $(wildcard $(SRCDIR)/*.c)
@@ -36,6 +37,9 @@ $(OBJDIR):
 
 $(BINDIR):
 	mkdir -p $(BINDIR)
+
+test: $(TEST)
+	$(CC) -o $@ $^ $(CFLAGS)
 
 clean:
 	rm -f $(OBJ) $(TEST_OBJ) $(TARGET) $(TEST_TARGET)

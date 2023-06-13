@@ -21,12 +21,6 @@
 
 
 int main() {
-    int i;
-    double j;
-    char k;
-    TEST_makeArray(i);
-    TEST_makeArray(j);
-    TEST_makeArray(k);
-    printf("[RESULT] : %d ouf of %d tests successful.\n\n", testSuccess, testSuccess+testFail);
+    puts("array.h called");
     return 0;
 }

@@ -29,10 +29,10 @@ Array* makeArray( size_t dtype );
 /*
  * Safely(!) getting rid of the array.
  */
-void freeArray_i( Array* array );
-void freeArray_d( Array* array );
-void freeArray_c( Array* array );
-void freeArray( Array* array );
+int freeArray_i( Array* array );
+int freeArray_d( Array* array );
+int freeArray_c( Array* array );
+int freeArray( Array* array );
 
 /*
  * Adding a value to the beginning of an array
@@ -70,13 +70,13 @@ char getElement_c( Array* array, int index );
 /*
  * Finding an index from a given element
  */
-int findIndex_i( Array* array, int num );
-int findIndex_d( Array* array, double num );
-int findIndex_c( Array* array, char num );
-#define findIndex(arr, i) _Generic( (i), \
-                                int: findIndex_i, \
-                               char: findIndex_c, \
-                             double: findIndex_d )(arr, i)
+int getIndex_i( Array* array, int num );
+int getIndex_d( Array* array, double num );
+int getIndex_c( Array* array, char num );
+#define getIndex(arr, i) _Generic( (i), \
+                                int: getIndex_i, \
+                               char: getIndex_c, \
+                             double: getIndex_d )(arr, i)
 
 /*
  * Deleting the respective node in the array. 

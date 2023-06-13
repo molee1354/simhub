@@ -274,9 +274,9 @@ int freeArray_c( Array* array ) {
     return 0;
 }
 int freeArray( Array* array ){
-    if (array->dtype == sizeof(int))    freeArray_i(array);
-    if (array->dtype == sizeof(double)) freeArray_d(array);
-    if (array->dtype == sizeof(char))   freeArray_c(array);
+    if (array->dtype == sizeof(int))    return freeArray_i(array);
+    if (array->dtype == sizeof(double)) return freeArray_d(array);
+    if (array->dtype == sizeof(char))   return freeArray_c(array);
 }
 
 int getLength_i( Array* array ) {
@@ -336,7 +336,7 @@ void listRepr_d( Array* array ) {
         return;
     }
     while (currentNode->next != NULL) {
-        printf("%f->",currentNode->data);
+        printf("%.2f->",currentNode->data);
         currentNode = currentNode->next;
     }
     puts("Tail");
@@ -381,10 +381,10 @@ void printArray_d( Array* array ) {
         return;
     }
     while (currentNode->next->next != NULL) {
-        printf("%f, ",currentNode->data);
+        printf("%.2f, ",currentNode->data);
         currentNode = currentNode->next;
     }
-    printf("%f]\n", currentNode->data);
+    printf("%.2f]\n", currentNode->data);
 }
 void printArray_c( Array* array ) {
     cNode* currentNode = ((cNode*)array->head)->next;

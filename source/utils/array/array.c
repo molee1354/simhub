@@ -1,9 +1,14 @@
-// singly linked list implementation
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
 #include "array.h"
+
+// defining the data types as opaque
+typedef struct IntNode    { int    data; struct IntNode*    next; } iNode;
+typedef struct DoubleNode { double data; struct DoubleNode* next; } dNode;
+typedef struct CharNode   { char   data; struct CharNode*   next; } cNode;
+
+typedef struct LinkedList { void* head; void* tail; size_t dtype; } Array;
 
 
 Array* makeArray(size_t dtype) {
@@ -320,7 +325,7 @@ int listRepr_i( Array* array ) {
     printf("Head->");
     if (currentNode == array->tail) {
         puts("Tail");
-        return;
+        return 0;
     }
     while (currentNode->next != NULL) {
         printf("%d->",currentNode->data);
@@ -334,7 +339,7 @@ int listRepr_d( Array* array ) {
     printf("Head->");
     if (currentNode == array->tail) {
         puts("Tail");
-        return;
+        return 0;
     }
     while (currentNode->next != NULL) {
         printf("%.2f->",currentNode->data);
@@ -348,7 +353,7 @@ int listRepr_c( Array* array ) {
     printf("Head->");
     if (currentNode == array->tail) {
         puts("Tail");
-        return;
+        return 0;
     }
     while (currentNode->next != NULL) {
         printf("%c->",currentNode->data);

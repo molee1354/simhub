@@ -16,12 +16,23 @@ typedef struct CharNode   { char   data; struct CharNode*   next; } cNode;
  */
 typedef struct LinkedList { void* head; void* tail; size_t dtype; } Array;
 
-
 /*
  * creates an array of dtype
  *  -> cast the head annd tail nodes to the right datatype node
  */
 Array* makeArray( size_t dtype );
+
+/*
+ * converts a normal C array into an array object of the
+ * same size
+ */
+Array* toArray_i( int* nArray, int size );
+Array* toArray_d( double* nArray, int size );
+Array* toArray_c( char* nArray, int size );
+#define toArray(arr, elem) _Generic( (arr), \
+                                int*: toArray_i, \
+                               char*: toArray_c, \
+                             double*: toArray_d )(arr, elem)
 
 /*
  * Safely(!) getting rid of the array.

@@ -72,6 +72,61 @@ int TEST_makeArray_c(void) {
     return 0;
 }
 
+int TEST_toArray_i(void) {
+    puts("testing toArray_i(sizeof(int))...");
+    Array* testArray = toArray_i( ref_testArray_i, ref_len );
+    printf("\t*   test Array : "); 
+    printf("[");
+    for (int i=0; i<ref_len-1; i++) {printf("%d, ", ref_testArray_i[i]);}
+    printf("%d]\n", ref_testArray_i[ref_len-1]);
+    printf("\t* normal Array : "); printArray(testArray);
+    if (testArray == NULL) {
+        TEST_FAIL("testArray is NULL!");
+        return 0;
+    } 
+    else {
+        TEST_SUCCESS();
+        freeArray(testArray);
+    }
+    return 0;
+}
+int TEST_toArray_d(void) {
+    puts("testing toArray_d(sizeof(double))...");
+    Array* testArray = toArray_d( ref_testArray_d, ref_len );
+    printf("\t*   test Array : "); 
+    printf("[");
+    for (int i=0; i<ref_len-1; i++) {printf("%.2f, ", ref_testArray_d[i]);}
+    printf("%.2f]\n", ref_testArray_d[ref_len-1]);
+    printf("\t* normal Array : "); printArray(testArray);
+    if (testArray == NULL) {
+        TEST_FAIL("testArray is NULL!");
+        return 0;
+    } 
+    else {
+        TEST_SUCCESS();
+        freeArray(testArray);
+    }
+    return 0;
+}
+int TEST_toArray_c(void) {
+    puts("testing toArray_c(sizeof(char))...");
+    Array* testArray = toArray_c( ref_testArray_c, ref_len );
+    printf("\t*   test Array : "); 
+    printf("[");
+    for (int i=0; i<ref_len-1; i++) {printf("%c, ", ref_testArray_c[i]);}
+    printf("%c]\n", ref_testArray_c[ref_len-1]);
+    printf("\t* normal Array : "); printArray(testArray);
+    if (testArray == NULL) {
+        TEST_FAIL("testArray is NULL!");
+        return 0;
+    } 
+    else {
+        TEST_SUCCESS();
+        freeArray(testArray);
+    }
+    return 0;
+}
+
 int TEST_freeArray_i(Array* array, int num) {
     puts("testing freeArray_i(Array* array)...");
     if (!freeArray(array)) { TEST_SUCCESS(); } 
@@ -593,6 +648,10 @@ int main() {
     TEST_makeArray(INT);
     TEST_makeArray(DOUBLE);
     TEST_makeArray(CHAR);
+
+    TEST_toArray(INT);
+    TEST_toArray(DOUBLE);
+    TEST_toArray(CHAR);
 
     /* Initializing arrays to do the tests on */
     Array* testArray_i = makeTestArray(INT);

@@ -26,6 +26,17 @@ int TEST_makeArray_c(void);
                              double: TEST_makeArray_d )()
 
 /*
+ * Testing the toArray() function
+ */
+int TEST_toArray_i(void);
+int TEST_toArray_d(void);
+int TEST_toArray_c(void);
+#define TEST_toArray(x) _Generic( (x), \
+                                int: TEST_toArray_i, \
+                               char: TEST_toArray_c, \
+                             double: TEST_toArray_d )()
+
+/*
  * Testing the freeArray() function
  */
 int TEST_freeArray_i( Array* array, int num );

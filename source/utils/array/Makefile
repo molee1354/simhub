@@ -11,7 +11,8 @@ main: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 test: $(TEST)
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS);\
+	./test
 
 clean:
 	@ rm -f *.o;\

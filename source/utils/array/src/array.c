@@ -3,13 +3,6 @@
 #include <stddef.h>
 #include "array.h"
 
-// defining the data types as opaque
-typedef struct IntNode    { int    data; struct IntNode*    next; } iNode;
-typedef struct DoubleNode { double data; struct DoubleNode* next; } dNode;
-typedef struct CharNode   { char   data; struct CharNode*   next; } cNode;
-
-typedef struct LinkedList { void* head; void* tail; size_t dtype; } Array;
-
 
 Array* makeArray(size_t dtype) {
     Array* array = (Array*)malloc(sizeof(Array));
@@ -73,27 +66,6 @@ Array* makeArray(size_t dtype) {
     return array;
 }
 
-void prepend_i( Array* list, int num ) {
-    iNode* newNode = (iNode*)malloc(sizeof(iNode));
-
-    newNode->data = num;
-    newNode->next = ((iNode*)list->head)->next;
-    ((iNode*)list->head)->next = newNode;
-}
-void prepend_d( Array* list, double num ) {
-    dNode* newNode = (dNode*)malloc(sizeof(dNode));
-
-    newNode->data = num;
-    newNode->next = ((dNode*)list->head)->next;
-    ((dNode*)list->head)->next = newNode;
-}
-void prepend_c( Array* list, char num ) {
-    cNode* newNode = (cNode*)malloc(sizeof(cNode));
-
-    newNode->data = num;
-    newNode->next = ((cNode*)list->head)->next;
-    ((cNode*)list->head)->next = newNode;
-}
 
 void append_i( Array* list, int num ) {
     iNode* newNode = (iNode*)malloc(sizeof(iNode));

@@ -14,11 +14,13 @@ function sim() {
             mkdir ${SIM_DIR}
             case "${SIM_CALL}" in
                 utils-matrix)
-                    cp -r ./source/utils/matrix/* ${SIM_DIR}
+                    rsync -a ./source/utils/matrix/* ${SIM_DIR} \
+                        --exclude tests/
                     printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
                     ;;
                 utils-array)
-                    cp -r ./source/utils/array/* ${SIM_DIR}
+                    rsync -a ./source/utils/array/* ${SIM_DIR} \
+                        --exclude tests/
                     printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
                     ;;
                 projectile-3d)

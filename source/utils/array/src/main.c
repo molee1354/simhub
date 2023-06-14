@@ -2,7 +2,6 @@
 #include<stdlib.h>
 
 #include "array.h"
-#include "test.h"
 
 
 /* TODO:

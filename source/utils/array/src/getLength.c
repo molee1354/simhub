@@ -34,4 +34,5 @@ int getLength( Array* array ){
     if (array->dtype == sizeof(int))    return getLength_i(array);
     if (array->dtype == sizeof(double)) return getLength_d(array);
     if (array->dtype == sizeof(char))   return getLength_c(array);
+    return 1;
 }

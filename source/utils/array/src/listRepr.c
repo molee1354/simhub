@@ -47,4 +47,5 @@ int listRepr( Array* array ) {
     if (array->dtype == sizeof(int))    return listRepr_i(array);
     if (array->dtype == sizeof(double)) return listRepr_d(array);
     if (array->dtype == sizeof(char))   return listRepr_c(array);
+    return 1;
 }

@@ -6,7 +6,8 @@ BINDIR = bin
 
 SRC = $(wildcard $(SRCDIR)/*.c)
 OBJ = $(patsubst $(SRCDIR)/%.c,$(BINDIR)/%.o,$(SRC))
-TARGET = $(BINDIR)/main
+# TARGET = $(BINDIR)/main
+TARGET = ./main $(BINDIR)/main
 
 TEST_SRC = $(wildcard $(TESTDIR)/*.c)
 TEST_OBJ = $(patsubst $(TESTDIR)/%.c,$(BINDIR)/%.o,$(TEST_SRC))

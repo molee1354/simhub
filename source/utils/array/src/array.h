@@ -4,17 +4,17 @@
 #include <stddef.h>
 
 /*
- * Different node types based on datatype
+ * Structs defined in the "guard.h" file to keep opacity
+ * Nodes defined for different types.
  */
-typedef struct IntNode    { int    data; struct IntNode*    next; } iNode;
-typedef struct DoubleNode { double data; struct DoubleNode* next; } dNode;
-typedef struct CharNode   { char   data; struct CharNode*   next; } cNode;
+typedef struct IntNode     iNode;
+typedef struct DoubleNode  dNode;
+typedef struct CharNode    cNode;
 
 /*
- * struct to hold the array
- * the `head` and `tail` pointers will be cast to its types later.
+ * Array object is a linked list
  */
-typedef struct LinkedList { void* head; void* tail; size_t dtype; } Array;
+typedef struct LinkedList  Array;
 
 /*
  * creates an array of dtype

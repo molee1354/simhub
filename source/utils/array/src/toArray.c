@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "array.h"
+#include "guard.h"
 
 Array* toArray_i( int* nArray, int size ) {
     Array* array = makeArray(sizeof(int));

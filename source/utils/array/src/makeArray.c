@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include "array.h"
+#include "guard.h"
 
 Array* makeArray(size_t dtype) {
     Array* array = (Array*)malloc(sizeof(Array));

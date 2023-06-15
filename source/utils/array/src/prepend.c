@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "array.h"
+#include "guard.h"
 
 void prepend_i( Array* list, int num ) {
     iNode* newNode = (iNode*)malloc(sizeof(iNode));

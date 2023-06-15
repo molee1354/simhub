@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "array.h"
+#include "guard.h"
 
 void deleteTail_i(Array* array) {
     iNode* currentNode = ((iNode*)array->head)->next;

@@ -21,5 +21,15 @@
 
 int main() {
     puts("array.h called");
+
+    Array* this = makeArray(sizeof(int));
+    append(this, 1);
+    append(this, 1);
+    append(this, 1);
+    append(this, 1);
+
+    printArray(this);
+
     return 0;
+
 }

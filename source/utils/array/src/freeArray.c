@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include "array.h"
+#include "guard.h"
 
 int freeArray_i( Array* array ) {
     while ( ((iNode*)array->head)->next->next != NULL ) {

@@ -6,12 +6,43 @@ typedef struct Matrix {
     int rows;
     int cols;
     float** elements;
+} Obsolete;
+
+/*
+ * New Stuff
+ */
+typedef struct BetterMatrix {
+    Array** rowsNcols; // all the rows and columns as arrays
+    int matSize[2];
+    int rows;
+    int cols;
+    double (*getFrom)(char*);
 } Matrix;
+
+/*
+ * Function to make a new matrix
+ *     -> takes in a static array if float** and creates a matrix off of it
+ *     -> arguments could be: ( int rows, int* cols, double** nMatrix )
+ *         -> here `int* cols` is the number of elements per row (each row has x columns)
+ *         -> it still can be (int numRows, int numCols, double** nMatrix) since
+ *              matrices don't have varying row lengths.
+ *     -> must assign a function pointer to the *getFrom thing
+ *         -> syntax:
+ *         ...
+ *         Matrix* out = (Matrix*)malloc(sizeof(Matrix));
+ *         out->rows = numRows;
+ *         out->cols = numCols;
+ *         out->getFrom = &functionName;
+ *         ...
+ *
+ */
+
+/* new stuff above */
 
 //TODO -> fix this
 int** initMatrix( int row, int col, int array2d[][col] );
 
-Matrix* makeMatrix( int row, int col, float** matPointer );
+Matrix* old_makeMatrix( int row, int col, float** matPointer );
 
 int* getSize( Matrix* matrix );
 int getElement( Matrix* matrix);

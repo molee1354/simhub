@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "array.h"
+// #include "../src/array.h"
 
 #ifndef _test_h
 #define _test_h
+
+#include "array.h"
 
 #define TYPE int
 
@@ -102,6 +104,16 @@ int TEST_getIndex_c( Array* array, char num );
                                char: TEST_getIndex_c, \
                              double: TEST_getIndex_d )(arr, elem)
 
+/*
+ * Testing the setValue() function
+ */
+int TEST_setValue_i( Array* array, int num, int idx );
+int TEST_setValue_d( Array* array, double num, int idx );
+int TEST_setValue_c( Array* array, char num, int idx );
+#define TEST_setValue(arr, num, idx) _Generic( (num), \
+                                int: TEST_setValue_i, \
+                               char: TEST_setValue_c, \
+                             double: TEST_setValue_d )(arr, num, idx)
 /*
  * Testing the getElement() function
  */

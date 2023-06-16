@@ -3,6 +3,7 @@
 
 #include "test.h"
 #include "array.h"
+#include "../src/array.h"
 
 
 // test result tracker
@@ -26,10 +27,16 @@ const char   ref_addItem_c = '+';
 #define    CHAR      ref_addItem_c
 
 // test values for find-type functions
-const int  targ_idx = 3;
+const int    swap_idx = 7;
+const int    targ_idx = 3;
+
 const int    targ_i = 3;
 const double targ_d = 3;
 const char   targ_c = 'd';
+
+const int    swap_targ_i = 99;
+const double swap_targ_d = 99.;
+const char   swap_targ_c = '*';
 
 
 int TEST_makeArray_i(void) {
@@ -37,7 +44,7 @@ int TEST_makeArray_i(void) {
     Array* testArray = makeArray(sizeof(int));
     if (testArray == NULL) {
         TEST_FAIL("testArray is NULL!");
-        return 0;
+        return 1;
     } 
     else {
         TEST_SUCCESS();
@@ -50,7 +57,7 @@ int TEST_makeArray_d(void) {
     Array* testArray = makeArray(sizeof(double));
     if (testArray == NULL) {
         TEST_FAIL("testArray is NULL!");
-        return 0;
+        return 1;
     } 
     else {
         TEST_SUCCESS();
@@ -63,7 +70,7 @@ int TEST_makeArray_c(void) {
     Array* testArray = makeArray(sizeof(char));
     if (testArray == NULL) {
         TEST_FAIL("testArray is NULL!");
-        return 0;
+        return 1;
     } 
     else {
         TEST_SUCCESS();
@@ -82,7 +89,7 @@ int TEST_toArray_i(void) {
     printf("\t* normal Array : "); printArray(testArray);
     if (testArray == NULL) {
         TEST_FAIL("testArray is NULL!");
-        return 0;
+        return 1;
     } 
     else {
         TEST_SUCCESS();
@@ -100,7 +107,7 @@ int TEST_toArray_d(void) {
     printf("\t* normal Array : "); printArray(testArray);
     if (testArray == NULL) {
         TEST_FAIL("testArray is NULL!");
-        return 0;
+        return 1;
     } 
     else {
         TEST_SUCCESS();
@@ -118,7 +125,7 @@ int TEST_toArray_c(void) {
     printf("\t* normal Array : "); printArray(testArray);
     if (testArray == NULL) {
         TEST_FAIL("testArray is NULL!");
-        return 0;
+        return 1;
     } 
     else {
         TEST_SUCCESS();
@@ -130,19 +137,28 @@ int TEST_toArray_c(void) {
 int TEST_freeArray_i(Array* array, int num) {
     puts("testing freeArray_i(Array* array)...");
     if (!freeArray(array)) { TEST_SUCCESS(); } 
-    else { TEST_FAIL("freeArray_i(Array* array) did not return 0"); }
+    else {
+        TEST_FAIL("freeArray_c(Array* array) did not return 0");
+        return 1;
+    }
     return 0;
 }
 int TEST_freeArray_d(Array* array, double num) {
     puts("testing freeArray_d(Array* array)...");
     if (!freeArray(array)) { TEST_SUCCESS(); } 
-    else { TEST_FAIL("freeArray_d(Array* array) did not return 0"); }
+    else {
+        TEST_FAIL("freeArray_c(Array* array) did not return 0");
+        return 1;
+    }
     return 0;
 }
 int TEST_freeArray_c(Array* array, char num) {
     puts("testing freeArray_c(Array* array)...");
     if (!freeArray(array)) { TEST_SUCCESS(); } 
-    else { TEST_FAIL("freeArray_c(Array* array) did not return 0"); }
+    else {
+        TEST_FAIL("freeArray_c(Array* array) did not return 0");
+        return 1;
+    }
     return 0;
 }
 
@@ -153,7 +169,10 @@ int TEST_getLength_i( Array* array, int dtype ) {
     printf("\t* ref length (constant)   : %d\n", ref_len);
     printf("\t* getLength(Array* array) : %d\n", getLength(array));
     if (getLength(array)==ref_len) { TEST_SUCCESS(); }
-    else { TEST_FAIL("getLength(Array* array) did not return the correct length"); }
+    else {
+        TEST_FAIL("getLength(Array* array) did not return the correct length");
+        return 1;
+    }
     return 0;
 }
 int TEST_getLength_d( Array* array, double dtype ) {
@@ -162,7 +181,10 @@ int TEST_getLength_d( Array* array, double dtype ) {
     printf("\t* ref length (constant)   : %d\n", ref_len);
     printf("\t* getLength(Array* array) : %d\n", getLength(array));
     if (getLength(array)==ref_len) { TEST_SUCCESS(); }
-    else { TEST_FAIL("getLength(Array* array) did not return the correct length"); }
+    else {
+        TEST_FAIL("getLength(Array* array) did not return the correct length");
+        return 1;
+    }
     return 0;
 }
 int TEST_getLength_c( Array* array, char dtype ) {
@@ -171,7 +193,10 @@ int TEST_getLength_c( Array* array, char dtype ) {
     printf("\t* ref length (constant)   : %d\n", ref_len);
     printf("\t* getLength(Array* array) : %d\n", getLength(array));
     if (getLength(array)==ref_len) { TEST_SUCCESS(); }
-    else { TEST_FAIL("getLength(Array* array) did not return the correct length"); }
+    else {
+        TEST_FAIL("getLength(Array* array) did not return the correct length");
+        return 1;
+    }
     return 0;
 }
 
@@ -190,8 +215,10 @@ int TEST_append_i( Array* array, int num ) {
 
     if ( post<=pre ) {
         TEST_FAIL("append did not change the length of the array");
+        return 1;
     } else if (getElement_i(array, post-1) != num ) {
         TEST_FAIL("append did not add the element to the end of the array");
+        return 1;
     } else {TEST_SUCCESS();}
     return 0;
 }
@@ -210,8 +237,10 @@ int TEST_append_d( Array* array, double num ) {
 
     if ( post<=pre ) {
         TEST_FAIL("append did not change the length of the array");
+        return 1;
     } else if (getElement_d(array, post-1) != num ) {
         TEST_FAIL("append did not add the element to the end of the array");
+        return 1;
     } else {TEST_SUCCESS();}
     return 0;
 }
@@ -230,8 +259,10 @@ int TEST_append_c( Array* array, char num ) {
 
     if ( post<=pre ) {
         TEST_FAIL("append did not change the length of the array");
+        return 1;
     } else if (getElement_c(array, post-1) != num ) {
         TEST_FAIL("append did not add the element to the end of the array");
+        return 1;
     } else {TEST_SUCCESS();}
     return 0;
 }
@@ -251,8 +282,10 @@ int TEST_prepend_i( Array* array, int num ) {
 
     if ( post<=pre ) {
         TEST_FAIL("prepend did not change the length of the array");
+        return 1;
     } else if (getElement_i(array, 0) != num ) {
         TEST_FAIL("prepend did not add the element to the beginning of the array");
+        return 1;
     } else {TEST_SUCCESS();}
     return 0;
 }
@@ -271,8 +304,10 @@ int TEST_prepend_d( Array* array, double num ) {
 
     if ( post<=pre ) {
         TEST_FAIL("prepend did not change the length of the array");
+        return 1;
     } else if (getElement_d(array, 0) != num ) {
         TEST_FAIL("prepend did not add the element to the beginning of the array");
+        return 1;
     } else {TEST_SUCCESS();}
     return 0;
 }
@@ -291,8 +326,10 @@ int TEST_prepend_c( Array* array, char num ) {
 
     if ( post<=pre ) {
         TEST_FAIL("prepend did not change the length of the array");
+        return 1;
     } else if (getElement_c(array, 0) != num ) {
         TEST_FAIL("prepend did not add the element to the beginning of the array");
+        return 1;
     } else {TEST_SUCCESS();}
     return 0;
 }
@@ -313,8 +350,8 @@ int TEST_getElement_i( Array* array, int index, int dtype ) {
     printf("\t*      test array [%d] : %d\n", index, arrEle);
     if ( refEle != arrEle ) {
         TEST_FAIL("getElement did not index the correct element");
+        return 1;
     } else { TEST_SUCCESS(); }
-
     return 0;
 }
 int TEST_getElement_d( Array* array, int index, double dtype ) {
@@ -333,8 +370,8 @@ int TEST_getElement_d( Array* array, int index, double dtype ) {
     printf("\t*      test array [%d] : %.2f\n", index, arrEle);
     if ( refEle != arrEle ) {
         TEST_FAIL("getElement did not index the correct element");
+        return 1;
     } else { TEST_SUCCESS(); }
-
     return 0;
 }
 int TEST_getElement_c( Array* array, int index, char dtype ) {
@@ -353,10 +390,9 @@ int TEST_getElement_c( Array* array, int index, char dtype ) {
     printf("\t*      test array [%d] : %c\n", index, arrEle);
     if ( refEle != arrEle ) {
         TEST_FAIL("getElement did not index the correct element");
+        return 1;
     } else { TEST_SUCCESS(); }
-
     return 0;
-
 }
 
 int TEST_getIndex_i( Array* array, int num ) {
@@ -373,8 +409,8 @@ int TEST_getIndex_i( Array* array, int num ) {
     printf("\t* index of %d with getIndex_i : [%d]\n", num, arrIdx);
     if ( refIdx != arrIdx ) {
         TEST_FAIL("getElement did not index the correct element");
+        return 1;
     } else { TEST_SUCCESS(); }
-
     return 0;
 }
 int TEST_getIndex_d( Array* array, double num ) {
@@ -391,8 +427,8 @@ int TEST_getIndex_d( Array* array, double num ) {
     printf("\t* index of %.2f with getIndex_i : [%d]\n", num, arrIdx);
     if ( refIdx != arrIdx ) {
         TEST_FAIL("getElement did not index the correct element");
+        return 1;
     } else { TEST_SUCCESS(); }
-
     return 0;
 }
 int TEST_getIndex_c( Array* array, char num ) {
@@ -409,8 +445,66 @@ int TEST_getIndex_c( Array* array, char num ) {
     printf("\t* index of %c with getIndex_i : [%d]\n", num, arrIdx);
     if ( refIdx != arrIdx ) {
         TEST_FAIL("getElement did not index the correct element");
+        return 1;
     } else { TEST_SUCCESS(); }
+    return 0;
+}
 
+int TEST_setValue_i( Array* array, int num, int idx ) {
+    printf("testing setValue_i(Array* array, int num, int idx) for num %d at idx [%d]\n", num, idx);
+    printf("\t*     test array : ");
+    printArray(array);
+    int prevEle = getElement_i(array, idx);
+    setValue_i(array, num, idx);
+    int postEle = getElement_i(array, idx);
+    printf("\t* modified array : ");
+    printArray(array);
+
+    if ( prevEle == postEle ) {
+        TEST_FAIL("setValue did not change the value");
+        return 1;
+    } else if ( getElement_i(array, idx)!=num ) {
+        TEST_FAIL("setValue did not change to the right value");
+        return 1;
+    } else { TEST_SUCCESS(); }
+    return 0;
+}
+int TEST_setValue_d( Array* array, double num, int idx ) {
+    printf("testing setValue_d(Array* array, double num, int idx) for num %.2f at idx [%d]\n", num, idx);
+    printf("\t*     test array : ");
+    printArray(array);
+    double prevEle = getElement_d(array, idx);
+    setValue_d(array, num, idx);
+    double postEle = getElement_d(array, idx);
+    printf("\t* modified array : ");
+    printArray(array);
+
+    if ( prevEle == postEle ) {
+        TEST_FAIL("setValue did not change the value");
+        return 1;
+    } else if ( getElement_d(array, idx)!=num ) {
+        TEST_FAIL("setValue did not change to the right value");
+        return 1;
+    } else { TEST_SUCCESS(); }
+    return 0;
+}
+int TEST_setValue_c( Array* array, char num, int idx ) {
+    printf("testing setValue_c(Array* array, char num, int idx) for num %c at idx [%d]\n", num, idx);
+    printf("\t*     test array : ");
+    printArray(array);
+    char prevEle = getElement_c(array, idx);
+    setValue_c(array, num, idx);
+    char postEle = getElement_c(array, idx);
+    printf("\t* modified array : ");
+    printArray(array);
+
+    if ( prevEle == postEle ) {
+        TEST_FAIL("setValue did not change the value");
+        return 1;
+    } else if ( getElement_c(array, idx)!=num ) {
+        TEST_FAIL("setValue did not change to the right value");
+        return 1;
+    } else { TEST_SUCCESS(); }
     return 0;
 }
 
@@ -431,8 +525,10 @@ int TEST_deleteHead_i( Array* array, int dtype ) {
 
     if ( post>=pre ) {
         TEST_FAIL("deleteHead did not change the length of the array");
+        return 1;
     } else if (prevHead == postHead ) {
         TEST_FAIL("deleteHead did not delete the element to the beginning of the array");
+        return 1;
     } else {TEST_SUCCESS();}
     return 0;
 
@@ -454,8 +550,10 @@ int TEST_deleteHead_d( Array* array, double dtype ) {
 
     if ( post>=pre ) {
         TEST_FAIL("deleteHead did not change the length of the array");
+        return 1;
     } else if (prevHead == postHead ) {
         TEST_FAIL("deleteHead did not delete the element to the beginning of the array");
+        return 1;
     } else {TEST_SUCCESS();}
     return 0;
 }
@@ -476,8 +574,10 @@ int TEST_deleteHead_c( Array* array, char dtype ) {
 
     if ( post>=pre ) {
         TEST_FAIL("deleteHead did not change the length of the array");
+        return 1;
     } else if (prevHead == postHead ) {
         TEST_FAIL("deleteHead did not delete the element to the beginning of the array");
+        return 1;
     } else {TEST_SUCCESS();}
     return 0;
 }
@@ -499,8 +599,10 @@ int TEST_deleteTail_i( Array* array, int dtype ) {
 
     if ( post>=pre ) {
         TEST_FAIL("deleteTail did not change the length of the array");
+        return 1;
     } else if (prevTail == postTail ) {
         TEST_FAIL("deleteTail did not delete the element to the beginning of the array");
+        return 1;
     } else {TEST_SUCCESS();}
     return 0;
 }
@@ -521,8 +623,10 @@ int TEST_deleteTail_d( Array* array, double dtype ) {
 
     if ( post>=pre ) {
         TEST_FAIL("deleteTail did not change the length of the array");
+        return 1;
     } else if (prevTail == postTail ) {
         TEST_FAIL("deleteTail did not delete the element to the beginning of the array");
+        return 1;
     } else {TEST_SUCCESS();}
     return 0;
 }
@@ -543,8 +647,10 @@ int TEST_deleteTail_c( Array* array, char dtype ) {
 
     if ( post>=pre ) {
         TEST_FAIL("deleteTail did not change the length of the array");
+        return 1;
     } else if (prevTail == postTail ) {
         TEST_FAIL("deleteTail did not delete the element to the beginning of the array");
+        return 1;
     } else {TEST_SUCCESS();}
     return 0;
 }
@@ -554,7 +660,10 @@ int TEST_listRepr_i( Array* array, int dtype ) {
     printf("\t*       array representation : "); printArray(array);
     printf("\t* linked list representation : ");
     if (!listRepr(array)) { TEST_SUCCESS(); }
-    else { TEST_FAIL("listRepr_i did not exit successfully"); }
+    else {
+        TEST_FAIL("listRepr_i did not exit successfully");
+        return 1;
+    }
     return 0;
 }
 int TEST_listRepr_d( Array* array, double dtype ) {
@@ -562,7 +671,10 @@ int TEST_listRepr_d( Array* array, double dtype ) {
     printf("\t*       array representation : "); printArray(array);
     printf("\t* linked list representation : ");
     if (!listRepr(array)) { TEST_SUCCESS(); }
-    else { TEST_FAIL("listRepr_d did not exit successfully"); }
+    else {
+        TEST_FAIL("listRepr_i did not exit successfully");
+        return 1;
+    }
     return 0;
 }
 int TEST_listRepr_c( Array* array, char dtype ) {
@@ -570,7 +682,10 @@ int TEST_listRepr_c( Array* array, char dtype ) {
     printf("\t*       array representation : "); printArray(array);
     printf("\t* linked list representation : ");
     if (!listRepr(array)) { TEST_SUCCESS(); }
-    else { TEST_FAIL("listRepr_c did not exit successfully"); }
+    else {
+        TEST_FAIL("listRepr_i did not exit successfully");
+        return 1;
+    }
     return 0;
 }
 /* int TEST_tests(void) {
@@ -667,6 +782,10 @@ int main() {
     TEST_getElement(testArray_i, targ_idx, INT);
     TEST_getElement(testArray_d, targ_idx, DOUBLE);
     TEST_getElement(testArray_c, targ_idx, CHAR);
+
+    TEST_setValue(testArray_i, swap_targ_i, swap_idx);
+    TEST_setValue(testArray_d, swap_targ_d, swap_idx);
+    TEST_setValue(testArray_c, swap_targ_c, swap_idx);
 
     TEST_getIndex(testArray_i, targ_i);
     TEST_getIndex(testArray_d, targ_d);

@@ -29,6 +29,7 @@ int main() {
     append(this, 1);
 
     printArray(this);
+    freeArray(this);
 
     return 0;
 

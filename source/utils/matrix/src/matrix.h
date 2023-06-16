@@ -187,13 +187,19 @@ void transpose_M( Matrix* matrix );
 /*
  * Printing
  */
-void printMatrix( Matrix* matrix );
+int printMatrix( Matrix* matrix );
+int printVector( Vector* vector );
+
+/*
+ * Representing the matrix object fully
+ */
+int matRepr( Matrix* matrix );
 
 /*
  * freeing memory
  */
-void free_M( Matrix* matrix );
-void free_V( Matrix* matrix );
+int free_M( Matrix* matrix );
+int free_V( Matrix* matrix );
 #define freeObj(obj) _Generic( (obj), \
                         Matrix* : free_M, \
                         Vector* : free_V )(obj)

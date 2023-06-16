@@ -18,7 +18,7 @@ TEST_TARGET = $(BINDIR)/test
 
 all: $(TARGET) | $(BINDIR)
 
-$(TARGET): $(OBJ) | $(OBJDIR)
+$(TARGET): $(OBJ) | $(BINDIR)
 	$(CC) $(CFLAGS) $^ -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
@@ -27,7 +27,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 test: $(TEST_TARGET) | $(BINDIR)
 	$(TEST_TARGET)
 
-$(TEST_TARGET): $(TEST_OBJ) $(filter-out $(OBJDIR)/main.o, $(OBJ)) | $(OBJDIR)
+$(TEST_TARGET): $(TEST_OBJ) $(filter-out $(OBJDIR)/main.o, $(OBJ)) | $(BINDIR)
 	$(CC) $(CFLAGS) -I$(SRCDIR) $^ -o $@
 
 $(OBJDIR)/%.o: $(TESTDIR)/%.c | $(OBJDIR)

@@ -72,6 +72,17 @@ int    getElement_i( Array* array, int index );
 double getElement_d( Array* array, int index );
 char   getElement_c( Array* array, int index );
 
+/*
+ * Setting an element at the given index as a given value
+ */
+int setValue_i( Array* array, int element, int index );
+int setValue_d( Array* array, double element, int index );
+int setValue_c( Array* array, char element, int index );
+#define setValue(arr, elem, idx) _Generic( (elem), \
+                                int: setValue_i,   \
+                               char: setValue_c,   \
+                             double: setValue_d )(arr, elem, idx)
+
 
 /*
  * Finding an index from a given element

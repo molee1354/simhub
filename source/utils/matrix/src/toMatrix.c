@@ -28,12 +28,8 @@ Matrix* toMatrix( double** nMatrix, int numRows, int numCols ) {
         Vector* colVect = makeVector(numRows, COL);
         for (int k=0; k<numRows; k++) {
             colVect->e[k] = nMatrix[k][j];
-            printf("nMat[%d][%d] : %7.2f\n", k,j,nMatrix[k][j]);
         }
         out->rowsNcols[i] = colVect;
-        printf("set rowsNcols[%d] to: ", i);
-        printVector(colVect);
-        puts("skip");
     }
     return out;
 }

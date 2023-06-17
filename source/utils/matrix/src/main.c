@@ -1,11 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include<string.h>
 
 #include "matrix.h"
 
 #define NROW 3
-#define NCOL 4
+#define NCOL 3
 int main() {
     double** nMatrix = (double**)malloc(sizeof(double*)*NROW);
     for (int i=0; i<NROW; i++) {
@@ -31,6 +30,12 @@ int main() {
 
     puts("\nmatRepr()");
     matRepr(myMatrix);
+
+    puts("\nfreeVector()");
+    freeVector(myVector);
+
+    puts("\nfreeMatrix()");
+    freeMatrix(myMatrix);
 
     return 0;
 }

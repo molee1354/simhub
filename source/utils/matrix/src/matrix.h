@@ -198,10 +198,10 @@ int matRepr( Matrix* matrix );
 /*
  * freeing memory
  */
-int free_M( Matrix* matrix );
-int free_V( Matrix* matrix );
+int freeMatrix( Matrix* matrix );
+int freeVector( Vector* vector );
 #define freeObj(obj) _Generic( (obj), \
-                        Matrix* : free_M, \
-                        Vector* : free_V )(obj)
+                        Matrix* : freeMatrix, \
+                        Vector* : freeVector )(obj)
 
 #endif

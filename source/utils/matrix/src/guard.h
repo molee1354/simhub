@@ -1,6 +1,5 @@
 #include "matrix.h"
 
-
 /*
  * Define vector struct
  *      -> enums used to set direction

@@ -14,8 +14,8 @@ int matRepr( Matrix* matrix ) {
     printMatrix(matrix);
     printf("\n\n\t* {}->rowsNcols :\n");
     for (int i=0; i<matrix->nCols+matrix->nRows; i++) {
-        if (i<matrix->nRows) printf("\n[%d,:] : ", i);
-        else printf("\n[:,%d] :\n", i);
+        if (i<matrix->nRows) printf("\n[%d] -> [%d,:] : ", i, i-matrix->nRows);
+        else printf("\n[%d] -> [:,%d] :\n", i, i-matrix->nRows);
         printVector(matrix->rowsNcols[i]);
     }
     return 0;

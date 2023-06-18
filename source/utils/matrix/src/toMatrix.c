@@ -8,10 +8,8 @@ Matrix* toMatrix( double** nMatrix, int numRows, int numCols ) {
     if (out==NULL) return out;
 
     out->e = nMatrix;
-    out->nRows = numRows;
-    out->nCols = numCols;
-    out->size[0] = numRows;
-    out->size[1] = numCols;
+    out->nRows = numRows; out->size[0] = numRows;
+    out->nCols = numCols; out->size[1] = numCols;
     out->isSquare = (numRows == numCols) ? 1 : 0;
     
     /* double Vector pointer to hold Vector* objects that represent
@@ -20,14 +18,14 @@ Matrix* toMatrix( double** nMatrix, int numRows, int numCols ) {
     out->rowsNcols = (Vector**)malloc(sizeof(Vector*)*rcCount);
     int i = 0;
     for (; i<numRows; i++) {
-        Vector* rowVect = toVector( nMatrix[i], numCols, ROW);
+        Vector* rowVect = toVector( out->e[i], numCols, ROW);
         out->rowsNcols[i] = rowVect;
     }
     for (; i<rcCount; i++) {
         int j = i-numRows;
         Vector* colVect = makeVector(numRows, COL);
         for (int k=0; k<numRows; k++) {
-            colVect->e[k] = nMatrix[k][j];
+            colVect->e[k] = out->e[k][j];
         }
         out->rowsNcols[i] = colVect;
     }

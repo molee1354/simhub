@@ -22,9 +22,9 @@ int main() {
     puts("\nprintMatrix()");
     printMatrix(myMatrix);
 
-    double* nVector = (double*)malloc(sizeof(double)*NCOL);
-    for (int i=0; i<NCOL; i++) nVector[i] = i+1;
-     
+    /*double* nVector = (double*)malloc(sizeof(double)*NCOL);
+    for (int i=0; i<NCOL; i++) nVector[i] = i+1; */
+
     // Vector* myVector = toVector(nVector, NCOL, ROW);
     Vector* myVector = zeros(NCOL, ROW);
     puts("\nprintVector()");

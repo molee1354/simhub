@@ -4,8 +4,7 @@
 
 Vector* makeVector( int numElem, vType direction ) {
     Vector* out = (Vector*)malloc(sizeof(Vector));
-    double* zeroVector = (double*)calloc(numElem, sizeof(double));
-    out->e = zeroVector;
+    out->e = (double*)calloc(numElem, sizeof(double));
     out->nEle = numElem;
     out->direction = direction;
     return out;

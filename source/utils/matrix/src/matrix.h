@@ -6,10 +6,11 @@
  *      -> enums used to set direction
  */
 typedef enum {
-    ROW,
-    COL
+    RowType,
+    ColType
 } vType;
-typedef struct DoubleVector  Vector;
+#define ROW (vType)RowType
+#define COL (vType)ColType
 
 /* note: for transpose, flip vType and keep the order
  *      => for [1 2
@@ -23,9 +24,10 @@ typedef struct DoubleVector  Vector;
 
 
 /*
- * Declare matrix struct
+ * Declare matrix/vector struct
  */
 typedef struct DoubleMatrix Matrix;
+typedef struct DoubleVector Vector;
 
 /*
  * Functions to create a matrix objects
@@ -80,15 +82,15 @@ Matrix* getVector_AA( Matrix* matrix, Allflag rAll, Allflag cAll ); // returns m
 Matrix* zeros_M( int numRows, int numCols );
 Vector* zeros_V( int numEle, vType direction );
 #define zeros( argLen, arg2 ) _Generic( (arg2), \
-                            int : zeros_M, \
-                            vType : zeros_V )( argLen, arg2 )
+                               int : zeros_M, \
+                             vType : zeros_V )( argLen, arg2 )
 
 /* Creates a matrix/vector of only ones */
 Matrix* ones_M( int numRows, int numCols );
 Vector* ones_V( int numEle, vType direction );
 #define ones( argLen, arg2 ) _Generic( (arg2), \
-                            int : ones_M, \
-                            vType : ones_V )( argLen, arg2 )
+                               int : ones_M, \
+                             vType : ones_V )( argLen, arg2 )
 
 /* creates an identity matrix (only square) */
 Matrix* eye( int sideLength ); 

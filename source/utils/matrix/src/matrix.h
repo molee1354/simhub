@@ -74,17 +74,24 @@ Matrix* getVector_AA( Matrix* matrix, Allflag rAll, Allflag cAll ); // returns m
 
 
 /*
- * Common matrix generators
+ * Common matrix/vector generators
  */
-Matrix* zeros( int numRows, int numCols );
-Matrix* ones( int numRows, int numCols );
-Matrix* eye( int sideLength ); // only square matrix
-
-/*
- * Common vector generators
- */
+/* Creates a matrix/vector of only ones */
+Matrix* zeros_M( int numRows, int numCols );
 Vector* zeros_V( int numEle, vType direction );
+#define zeros( argLen, arg2 ) _Generic( (arg2), \
+                            int : zeros_M, \
+                            vType : zeros_V )( argLen, arg2 )
+
+/* Creates a matrix/vector of only ones */
+Matrix* ones_M( int numRows, int numCols );
 Vector* ones_V( int numEle, vType direction );
+#define ones( argLen, arg2 ) _Generic( (arg2), \
+                            int : ones_M, \
+                            vType : ones_V )( argLen, arg2 )
+
+/* creates an identity matrix (only square) */
+Matrix* eye( int sideLength ); 
 
 /*
  * 'get' type functions

@@ -3,7 +3,7 @@
 #include "guard.h"
 
 
-Matrix* makeMatrix( int numRows, int numCols ) {
+Matrix* zeros_M( int numRows, int numCols ) {
     Matrix* out = (Matrix*)malloc(sizeof(Matrix));
     if (out==NULL) return out;
 
@@ -35,3 +35,11 @@ Matrix* makeMatrix( int numRows, int numCols ) {
     }
     return out;
 }
+Vector* zeros_V( int numElem, vType direction ) {
+    Vector* out = (Vector*)malloc(sizeof(Vector));
+    out->e = (double*)calloc(numElem, sizeof(double));
+    out->nEle = numElem;
+    out->direction = direction;
+    return out;
+}
+

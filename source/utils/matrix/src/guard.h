@@ -1,12 +1,12 @@
 #include "matrix.h"
 
-
 /*
  * Define vector struct
  *      -> enums used to set direction
  */
 typedef struct DoubleVector {
-    double* element;
+    double* e;
+    int nEle;
     vType direction;
 } Vector;
 
@@ -15,9 +15,10 @@ typedef struct DoubleVector {
  * the length of a row is equal to the number of columns and vice versa
  */
 typedef struct DoubleMatrix {
-    Vector* rowsNcols; // all the rows and columns as vectors
-    int rows;
-    int cols;
+    double** e;
+    Vector** rowsNcols; // all the rows and columns as vectors
+    int nRows;
+    int nCols;
     int size[2];
-    int squareMat;
+    int isSquare;
 } Matrix;

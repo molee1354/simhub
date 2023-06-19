@@ -76,7 +76,5 @@ int main() {
     puts("\nfreeMatrix()");
     freeMatrix(myMatrix);
 
-    puts("\nfreeModifiable()\n");
-
     return 0;
 }

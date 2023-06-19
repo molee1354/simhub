@@ -110,6 +110,11 @@ int  getSize_V( Vector* vector );
                         Matrix* : getSize_M, \
                         Vector* : getSize_V )( obj )
 
+/*
+ * This function won't be implemented as the makeModifiable()
+ * function pretty much has the same function, and seems to be
+ * easier/more intuitive
+ */
 int getElement_M( Matrix* matrix, int rIdx, int cIdx );
 int getRank( Matrix* matrix );
 

@@ -43,10 +43,17 @@ int main() {
     printf("%d]\n", size[1]);
 
     Matrix* matSum = plus(myMatrix, hisMatrix);
+    Matrix* matMinus = minus(myMatrix, hisMatrix);
+
     puts("\nmatrix sum");
     printMatrix(matSum);
+    puts("\nmatrix minus");
+    printMatrix(matMinus);
+
     freeMatrix(matSum);
+    freeMatrix(matMinus);
     freeMatrix(hisMatrix);
+
     /*double* nVector = (double*)malloc(sizeof(double)*NCOL);
     for (int i=0; i<NCOL; i++) nVector[i] = i+1; */
 

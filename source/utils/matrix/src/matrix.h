@@ -131,20 +131,36 @@ int  setIndex_V( Vector* matrix, double element, ...);
                             Matrix* : setIndex_M, \
                             Vector* : setIndex_V )(obj1, obj2, __VA_ARGS__)
 
+/* 
+ * function to handle argument input errors
+ */
+void argError(void);
+
 /*
  * simple matrix math
  */
 Matrix* plus_M( Matrix* mat1, Matrix* mat2 );
 Vector* plus_V( Vector* mat1, Vector* mat2 );
-#define plus( obj1, obj2 ) _Generic( (obj1)+(obj2), \
-                            Matrix* : plus_M, \
-                            Vector* : plus_V )(obj1, obj2)
+#define plus(obj1, obj2) _Generic( (obj1), \
+                          Matrix*: _Generic((obj2), \
+                                   Matrix*: plus_M, \
+                                   Vector*: argError), \
+                          Vector*: _Generic((obj2), \
+                                   Matrix*: argError, \
+                                   Vector*: plus_V ), \
+                          default: argError )(obj1, obj2)
+
 
 Matrix* minus_M( Matrix* mat1, Matrix* mat2 );
 Vector* minus_V( Vector* mat1, Vector* mat2 );
-#define minus( obj1, obj2 ) _Generic( (obj1)+(obj2), \
-                             Matrix* : minus_M, \
-                             Vector* : minus_V )(obj1, obj2)
+#define minus(obj1, obj2) _Generic( (obj1), \
+                          Matrix*: _Generic((obj2), \
+                                   Matrix*: minus_M, \
+                                   Vector*: argError), \
+                          Vector*: _Generic((obj2), \
+                                   Matrix*: argError, \
+                                   Vector*: minus_V ), \
+                          default: argError )(obj1, obj2)
 
 
 /*
@@ -167,22 +183,28 @@ Matrix* mult_MV( Matrix* mat, Vector* vec );
 
 Matrix* mult_ME( Matrix* mat1, Matrix* mat2 );
 Vector* mult_VE( Vector* vec1, Vector* vec2 );
-#define mult_E( obj1, obj2 ) _Generic( (obj1)+(obj2), \
-                              Matrix* : mult_ME, \
-                              Vector* : mult_VE )(obj1, obj2)
+#define mult_E(obj1, obj2) _Generic((obj1), \
+                            Matrix*: _Generic((obj2), \
+                                    Matrix*: mult_ME, \
+                                    Vector*: argError), \
+                            Vector*: _Generic((obj2), \
+                                    Matrix*: argError, \
+                                    Vector*: mult_VE, \
+                                    default: argError))(obj1, obj2)
+
 
 Matrix* mult_MC( Matrix* matrix, double constant );
 Vector* mult_VC( Vector* vec1, double constant );
-#define mult_C( obj1, obj2 ) _Generic( (obj1)+(obj2), \
-                              Matrix* : mult_MC, \
-                              Vector* : mult_VC )(obj1, obj2)
+#define mult_C(obj1, obj2) _Generic((obj1), \
+                            Matrix*: _Generic((obj2), \
+                                    Matrix*: mult_MC, \
+                                    Vector*: argError), \
+                            Vector*: _Generic((obj2), \
+                                    Matrix*: argError, \
+                                    Vector*: mult_VC, \
+                                    default: argError))(obj1, obj2)
 
-/* 
- * function to handle argument input errors
- */
-void argError(void);
-
-#define mult(obj1, obj2) _Generic( (obj1)+(obj2),      \
+#define mult(obj1, obj2) _Generic( (obj1),      \
                             Matrix*: _Generic( (obj2),   \
                                      Matrix*: mult_MM,   \
                                      Vector*: mult_MV,   \

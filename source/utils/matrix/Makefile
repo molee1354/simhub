@@ -13,9 +13,12 @@ TEST_SRC = $(wildcard $(TESTDIR)/*.c)
 TEST_OBJ = $(patsubst $(TESTDIR)/%.c,$(BINDIR)/%.o,$(TEST_SRC))
 TEST_TARGET = $(BINDIR)/test
 
-.PHONY: all test clean
+.PHONY: all run test clean
 
 all: $(TARGET)
+
+run: $(TARGET)
+	$(TARGET)
 
 $(TARGET): $(OBJ) | $(BINDIR)
 	$(CC) $(CFLAGS) $^ -o $@

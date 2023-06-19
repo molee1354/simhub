@@ -3,10 +3,10 @@
 
 #include "matrix.h"
 
-#define NROW 3
-#define NCOL 8
+#define NROW 8
+#define NCOL 10
 int main() {
-    /* double** nMatrix = (double**)malloc(sizeof(double*)*NROW);
+    double** nMatrix = (double**)malloc(sizeof(double*)*NROW);
     for (int i=0; i<NROW; i++) {
         nMatrix[i] = (double*)malloc(sizeof(double)*NCOL);
     }
@@ -15,10 +15,11 @@ int main() {
         for (int j=0; j<NCOL; j++) {
             nMatrix[i][j] = n++;
         }
-    } */
+    }
 
     // Matrix* myMatrix = toMatrix(nMatrix, NROW, NCOL);
-    Matrix* myMatrix = ones(NROW, NCOL);
+    // Matrix* myMatrix = ones(NROW, NCOL);
+    Matrix* myMatrix = eye(NCOL);
     puts("\nprintMatrix()");
     printMatrix(myMatrix);
 

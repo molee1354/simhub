@@ -111,14 +111,22 @@ int  getSize_V( Vector* vector );
                         Vector* : getSize_V )( obj )
 
 int getElement_M( Matrix* matrix, int rIdx, int cIdx );
-int getIndex_M( Matrix* matrix, double target );
 int getRank( Matrix* matrix );
+
+/*
+ * getting the index of the first occurence
+ */
+int* getIndex_M( Matrix* matrix, double target );
+int  getIndex_V( Vector* matrix, double target );
+#define getIndex( obj, targ ) _Generic( (obj), \
+                        Matrix* : getIndex_M, \
+                        Vector* : getIndex_V )( obj, targ )
 
 /*
  * Function to change a specific value at the index
  */
-int setIndex_M( Matrix* matrix, double element, ...);
-int setIndex_V( Vector* matrix, double element, ...);
+int* setIndex_M( Matrix* matrix, double element, ...);
+int  setIndex_V( Vector* matrix, double element, ...);
 #define setIndex( obj1, obj2, ... ) _Generic( (obj1), \
                             Matrix* : setIndex_M, \
                             Vector* : setIndex_V )(obj1, obj2, __VA_ARGS__)

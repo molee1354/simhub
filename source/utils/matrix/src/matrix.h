@@ -105,6 +105,11 @@ Matrix* eye( int sideLength );
  * 'get' type functions
  */
 int* getSize_M( Matrix* matrix );
+int  getSize_V( Vector* vector );
+#define getSize( obj ) _Generic( (obj), \
+                        Matrix* : getSize_M, \
+                        Vector* : getSize_V )( obj )
+
 int getElement_M( Matrix* matrix, int rIdx, int cIdx );
 int getIndex_M( Matrix* matrix, double target );
 int getRank( Matrix* matrix );

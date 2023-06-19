@@ -27,12 +27,20 @@ int main() {
     puts("\nprintMatrix()");
     printMatrix(myMatrix);
 
+    puts("\ngetSize()");
+    int* size = getSize(myMatrix);
+    printf("size : [");
+    printf("%d, ", size[0]);
+    printf("%d]\n", size[1]);
+    
     /*double* nVector = (double*)malloc(sizeof(double)*NCOL);
     for (int i=0; i<NCOL; i++) nVector[i] = i+1; */
 
     // Vector* myVector = toVector(nVector, NCOL, ROW);
     Vector* myVector = zeros(NCOL, ROW);
     puts("\nprintVector()");
+    double* modVector = makeModifiable(myVector);
+    modVector[1] = -1;
     printVector(myVector);
 
     puts("\nmatRepr()");

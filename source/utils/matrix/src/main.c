@@ -7,21 +7,22 @@
 #define NCOL 3
 
 int main() {
-    // double** nMatrix = (double**)malloc(sizeof(double*)*NROW);
-    // for (int i=0; i<NROW; i++) {
-    //     nMatrix[i] = (double*)malloc(sizeof(double)*NCOL);
-    // }
-    // int n = 1;
-    // for (int i=0; i<NROW; i++) {
-    //     for (int j=0; j<NCOL; j++) {
-    //         nMatrix[i][j] = n++;
-    //     }
-    // }
+    double** nMatrix = (double**)malloc(sizeof(double*)*NROW);
+    for (int i=0; i<NROW; i++) {
+        nMatrix[i] = (double*)malloc(sizeof(double)*NCOL);
+    }
+    int n = 1;
+    for (int i=0; i<NROW; i++) {
+        for (int j=0; j<NCOL; j++) {
+            nMatrix[i][j] = n++;
+        }
+    }
 
     // Matrix* myMatrix = toMatrix(nMatrix, NROW, NCOL);
     // Matrix* myMatrix = ones(NROW, NCOL);
 
     Matrix* myMatrix = eye(NCOL);
+    Matrix* hisMatrix = toMatrix(nMatrix, NROW, NCOL);
     double** modMatrix = makeModifiable(myMatrix);
 
     double targ = 1.;
@@ -41,6 +42,11 @@ int main() {
     printf("%d, ", size[0]);
     printf("%d]\n", size[1]);
 
+    Matrix* matSum = plus(myMatrix, hisMatrix);
+    puts("\nmatrix sum");
+    printMatrix(matSum);
+    freeMatrix(matSum);
+    freeMatrix(hisMatrix);
     /*double* nVector = (double*)malloc(sizeof(double)*NCOL);
     for (int i=0; i<NCOL; i++) nVector[i] = i+1; */
 

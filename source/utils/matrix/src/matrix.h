@@ -1,10 +1,7 @@
 #ifndef _matrix_h
 #define _matrix_h
 
-/*
- * Declare vector struct
- *      -> enums used to set direction
- */
+/* Direction Enum */
 typedef enum {
     RowType,
     ColType
@@ -29,6 +26,14 @@ typedef enum {
 typedef struct DoubleMatrix Matrix;
 typedef struct DoubleVector Vector;
 
+/*
+ * Make the matrix modifiable/accessible by index
+ */
+double*  makeModifiable_V( Vector* vector );
+double** makeModifiable_M( Matrix* matrix );
+#define makeModifiable( obj ) _Generic( (obj), \
+                               Matrix* : makeModifiable_M, \
+                               Vector* : makeModifiable_V )(obj)
 /*
  * Functions to create a matrix objects
  *      -> toMatrix() receives a double double pointer and makes

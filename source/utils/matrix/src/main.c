@@ -45,7 +45,6 @@ int main() {
     freeMatrix(myMatrix);
 
     puts("\nfreeModifiable()");
-    freeModifiable(modMatrix, NCOL);
 
     return 0;
 }

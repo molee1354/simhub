@@ -36,15 +36,6 @@ double** makeModifiable_M( Matrix* matrix );
                                Vector* : makeModifiable_V )(obj)
 
 /*
- * Free modifiable
- */
-int freeModifiable_V( double*  vectorDouble, int nElem );
-int freeModifiable_M( double** matrixDouble, int nRows );
-#define freeModifiable( obj, len ) _Generic( (obj), \
-                                    double** : freeModifiable_M, \
-                                    double*  : freeModifiable_V )(obj, len)
-
-/*
  * Functions to create a matrix objects
  *      -> toMatrix() receives a double double pointer and makes
  *          a matrix obj based on that

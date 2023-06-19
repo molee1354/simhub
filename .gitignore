@@ -1,4 +1,5 @@
 # directories
+.idea/
 .vscode/
 .idea/
 ./*/.vscode/

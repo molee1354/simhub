@@ -3,8 +3,8 @@
 
 #include "matrix.h"
 
-#define NROW 3
-#define NCOL 3
+#define NROW 4
+#define NCOL 4
 
 int main() {
     double** nMatrix = (double**)malloc(sizeof(double*)*NROW);
@@ -42,17 +42,16 @@ int main() {
     printf("%d, ", size[0]);
     printf("%d]\n", size[1]);
 
+    Matrix* matMult = mult(myMatrix, 13.);
     Matrix* matSum = plus(myMatrix, hisMatrix);
     Matrix* matMinus = minus(myMatrix, hisMatrix);
 
+    puts("\nmatrix const mult");
+    printMatrix(matMult);
     puts("\nmatrix sum");
     printMatrix(matSum);
     puts("\nmatrix minus");
     printMatrix(matMinus);
-
-    freeMatrix(matSum);
-    freeMatrix(matMinus);
-    freeMatrix(hisMatrix);
 
     /*double* nVector = (double*)malloc(sizeof(double)*NCOL);
     for (int i=0; i<NCOL; i++) nVector[i] = i+1; */
@@ -68,13 +67,20 @@ int main() {
     printf("\ngetIdx_v for targ %.2f = %d\n", targ, vecIdx);
 
     puts("\nmatRepr()");
-    matRepr(myMatrix);
+    matRepr(matSum);
 
     puts("\nfreeVector()");
     freeVector(myVector);
 
     puts("\nfreeMatrix()");
     freeMatrix(myMatrix);
+    freeMatrix(matMult);
+    freeMatrix(matSum);
+    freeMatrix(matMinus);
+    freeMatrix(hisMatrix);
+
+    puts("\nArgerror");
+    argError();
 
     return 0;
 }

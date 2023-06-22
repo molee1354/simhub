@@ -17,8 +17,7 @@ Matrix* plus_M( Matrix* mat1, Matrix* mat2 ) {
     for (int i = 0; i<mat1->nRows; i++) {
         for (int j = 0; j<mat1->nCols; j++) {
             out->e[i][j] = mat1->e[i][j] + mat2->e[i][j];
-        }
-    }
+        } }
     puts("Make sure to free the memory allocated by the plus() function call");
     return out;
 }

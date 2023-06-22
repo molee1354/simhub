@@ -201,13 +201,9 @@ Vector* mult_VE( Vector* vec1, Vector* vec2 );
 Matrix* mult_MC( Matrix* matrix, double constant );
 Vector* mult_VC( Vector* vec1, double constant );
 #define mult_C(obj1, obj2) _Generic((obj1), \
-                            Matrix*: _Generic((obj2), \
-                                    Matrix*: mult_MC, \
-                                    Vector*: argError), \
-                            Vector*: _Generic((obj2), \
-                                    Matrix*: argError, \
-                                    Vector*: mult_VC, \
-                                    default: argError))(obj1, obj2)
+                            Matrix*: mult_MC, \
+                            Vector*: mult_MV, \
+                            default: argError )(obj1, obj2)
 
 #define mult(obj1, obj2) _Generic( (obj1),      \
                             Matrix*: _Generic( (obj2),   \

@@ -70,10 +70,6 @@ int main() {
     Matrix* mat3 = mult(mat2, 3.);
     Vector* matMultMV = mult(mat2, vec2);
     printVector(matMultMV);
-    freeObj(vec2);
-    freeObj(mat2);
-    freeObj(mat3);
-    freeObj(matMultMV);
 
     /*double* nVector = (double*)malloc(sizeof(double)*NCOL);
     for (int i=0; i<NCOL; i++) nVector[i] = i+1; */
@@ -100,18 +96,11 @@ int main() {
     puts("\nmatRepr()");
     matRepr(matMinus);
 
-    puts("\nfreeVector()");
-    freeObj(myVector);
-    freeObj(onesVector);
-
-    puts("\nfreeMatrix()");
-    freeMatrix(myMatrix);
-    freeMatrix(matSum);
-    freeObj(matMinus);
-    freeObj(hisMatrix);
-    freeMatrix(matMultC);
-    freeMatrix(matMultE);
-    freeObj(matMultMM);
+    puts("\nfreeVector");
+    freeAll_V(myVector, onesVector, vec2, matMultMV, NULL);
+    puts("\nfreematrix");
+    freeAll_M(myMatrix, matSum, matMinus, hisMatrix, matMultC, matMultE,
+              matMultMM, mat2, mat3, NULL);
 
     puts("\nArgerror");
     argError();

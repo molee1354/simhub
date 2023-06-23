@@ -251,6 +251,12 @@ int freeMatrix( Matrix* matrix );
 int freeVector( Vector* vector );
 #define freeObj(obj) _Generic( (obj), \
                         Matrix* : freeMatrix, \
-                        Vector* : freeVector )(obj)
+                        Vector* : freeVector, \
+                        default : argError )(obj)
+/*
+ * freeing multiple instances --> they have to be of the same type
+ */
+int freeAll_M( Matrix* first, ...);
+int freeAll_V( Vector* first, ...);
 
 #endif

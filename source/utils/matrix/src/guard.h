@@ -16,7 +16,6 @@ typedef struct DoubleVector {
  */
 typedef struct DoubleMatrix {
     double** e;
-    Vector** rowsNcols; // all the rows and columns as vectors
     int nRows;
     int nCols;
     int size[2];

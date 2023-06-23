@@ -3,12 +3,10 @@
 #include "guard.h"
 
 int freeMatrix( Matrix* matrix ) {
-    // freeing the vectors seems to free the values in nMatrix->e as well
-    for (int i=0; i<matrix->nRows+matrix->nCols ; i++) {
-        freeVector( matrix->rowsNcols[i] );
+    for (int i = 0; i<matrix->nRows; i++) {
+        free(matrix->e[i]);
+        matrix->e[i] = NULL;
     }
-    free(matrix->rowsNcols);
-    matrix->rowsNcols = NULL;
 
     free(matrix->e);
     matrix->e = NULL;

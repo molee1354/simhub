@@ -13,10 +13,23 @@ int matRepr( Matrix* matrix ) {
     printf("\n* {}->e :\n\n");
     printMatrix(matrix);
     printf("\n\n* {}->rowsNcols :\n");
-    for (int i=0; i<matrix->nCols+matrix->nRows; i++) {
-        if (i<matrix->nRows) printf("\n[%d] -> [%d,:] : ", i, i-matrix->nRows);
-        else printf("\n[%d] -> [:,%d] :\n", i, i-matrix->nRows);
-        printVector(matrix->rowsNcols[i]);
+
+    // Row representation
+    for (int i=0; i<matrix->nRows; i++) {
+        printf(" Row %d [%d,:] : \n[", i, i);
+        int j;
+        for (j=0;j<matrix->nCols-1; j++) {
+            printf("%7.3f, ", matrix->e[i][j]);
+        }   printf("%7.3f]\n\n", matrix->e[i][j]);
+    }
+
+    // Column representation
+    for (int i=0; i<matrix->nCols; i++) {
+        printf(" Col %d [:,%d] : \n", i, i);
+        int j;
+        for (j=0;j<matrix->nRows-1; j++) {
+            printf("| %7.3f |\n", matrix->e[j][i]);
+        }   printf("| %7.3f |\n\n", matrix->e[j][i]);
     }
     return 0;
 }

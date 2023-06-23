@@ -4,7 +4,7 @@
 #include "matrix.h"
 
 #define NROW 4
-#define NCOL 4
+#define NCOL 6
 
 int main() {
     double** nMatrix = (double**)malloc(sizeof(double*)*NROW);
@@ -21,7 +21,7 @@ int main() {
     // Matrix* myMatrix = toMatrix(nMatrix, NROW, NCOL);
     // Matrix* myMatrix = ones(NROW, NCOL);
 
-    Matrix* myMatrix = eye(NCOL);
+    Matrix* myMatrix = ones(NROW, NCOL);
     Matrix* hisMatrix = toMatrix(nMatrix, NROW, NCOL);
     double** modMatrix = makeModifiable(myMatrix);
 
@@ -67,7 +67,7 @@ int main() {
     printf("\ngetIdx_v for targ %.2f = %d\n", targ, vecIdx);
 
     puts("\nmatRepr()");
-    matRepr(matSum);
+    matRepr(matMinus);
 
     puts("\nfreeVector()");
     freeVector(myVector);

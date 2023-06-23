@@ -182,7 +182,7 @@ Vector* minus_V( Vector* mat1, Vector* mat2 );
  *
  */
 Matrix* mult_MM( Matrix* mat1, Matrix* mat2 );
-Matrix* mult_MV( Matrix* mat, Vector* vec );
+Vector* mult_MV( Matrix* mat, Vector* vec );
 
 Matrix* mult_ME( Matrix* mat1, Matrix* mat2 );
 Vector* mult_VE( Vector* vec1, Vector* vec2 );

@@ -3,8 +3,8 @@
 
 #include "matrix.h"
 
-#define NROW 4
-#define NCOL 6
+#define NROW 3
+#define NCOL 3
 
 int main() {
     double** nMatrix = (double**)malloc(sizeof(double*)*NROW);
@@ -46,25 +46,53 @@ int main() {
     Matrix* matMinus = minus(myMatrix, hisMatrix);
     Matrix* matMultE = mult_E(myMatrix, matMinus);
     Matrix* matSum = plus(myMatrix, hisMatrix);
+    Matrix* matMultMM = mult(hisMatrix, matMultC);
 
     puts("\nmatrix const mult");
     printMatrix(matMultC);
     puts("\nmatrix element-wise mult");
     printMatrix(matMultE);
+
+    puts("\nmatrix mult MM");
+    printMatrix(hisMatrix);
+    printMatrix(matMultC);
+    printMatrix(matMultMM);
+
     puts("\nmatrix sum");
     printMatrix(matSum);
     puts("\nmatrix minus");
     printMatrix(matMinus);
+
+    // matrix mult
+    puts("\nmatrix mult Vec");
+    Vector* vec2 = ones(3, COL);
+    Matrix* mat2 = ones(3, 3);
+    Matrix* mat3 = mult(mat2, 3.);
+    Vector* matMultMV = mult(mat2, vec2);
+    printVector(matMultMV);
+    freeObj(vec2);
+    freeObj(mat2);
+    freeObj(mat3);
+    freeObj(matMultMV);
 
     /*double* nVector = (double*)malloc(sizeof(double)*NCOL);
     for (int i=0; i<NCOL; i++) nVector[i] = i+1; */
 
     // Vector* myVector = toVector(nVector, NCOL, ROW);
     Vector* myVector = zeros(NCOL, ROW);
-    puts("\nprintVector()");
+    Vector* onesVector = ones(NCOL, ROW);
+    puts("\nprintVector() zeros");
     double* modVector = makeModifiable(myVector);
     modVector[1] = targ;
     printVector(myVector);
+
+    puts("\nprintVector() zeros");
+    printVector(onesVector);
+
+    puts("\nVector sum");
+    Vector* vecSum = plus(myVector, onesVector);
+    printVector(vecSum);
+    freeObj(vecSum);
 
     int vecIdx = getIndex(myVector, targ);
     printf("\ngetIdx_v for targ %.2f = %d\n", targ, vecIdx);
@@ -73,15 +101,17 @@ int main() {
     matRepr(matMinus);
 
     puts("\nfreeVector()");
-    freeVector(myVector);
+    freeObj(myVector);
+    freeObj(onesVector);
 
     puts("\nfreeMatrix()");
     freeMatrix(myMatrix);
     freeMatrix(matSum);
-    freeMatrix(matMinus);
-    freeMatrix(hisMatrix);
+    freeObj(matMinus);
+    freeObj(hisMatrix);
     freeMatrix(matMultC);
     freeMatrix(matMultE);
+    freeObj(matMultMM);
 
     puts("\nArgerror");
     argError();

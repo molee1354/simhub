@@ -25,10 +25,14 @@ Matrix* plus_M( Matrix* mat1, Matrix* mat2 ) {
  * Returns the sum of the two vectors in a new vectors
  */
 Vector* plus_V( Vector* vec1, Vector* vec2 ) {
-    if (vec1->nEle != vec2->nEle || vec1->direction != vec2->direction) {
+    if (vec1->direction != vec2->direction) {
+        printf("The given vectors have different directions!\n");
+        return (Vector*)NULL;
+    }
+    if (vec1->nEle != vec2->nEle) {
         printf("The given vectors are of different size!\n");
-        printf("\tVector 1 : %dx%d\n", vec1->nEle, vec1->nEle);
-        printf("\tVector 2 : %dx%d\n", vec2->nEle, vec2->nEle);
+        printf("\tVector 1 : %d\n", vec1->nEle);
+        printf("\tVector 2 : %d\n", vec2->nEle);
         return (Vector*)NULL;
     }
     Vector* out = makeVector( vec1->nEle, vec1->direction );

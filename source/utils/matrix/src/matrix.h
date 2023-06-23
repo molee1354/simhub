@@ -238,6 +238,10 @@ void transpose_M( Matrix* matrix );
  */
 int printMatrix( Matrix* matrix );
 int printVector( Vector* vector );
+#define printObj(obj) _Generic( (obj), \
+                        Matrix* : printMatrix, \
+                        Vector* : printVector, \
+                        default : argError )(obj)
 
 /*
  * Representing the matrix object fully

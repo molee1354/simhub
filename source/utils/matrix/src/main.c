@@ -42,12 +42,15 @@ int main() {
     printf("%d, ", size[0]);
     printf("%d]\n", size[1]);
 
-    Matrix* matMult = mult(myMatrix, 13.);
-    Matrix* matSum = plus(myMatrix, hisMatrix);
+    Matrix* matMultC = mult(myMatrix, 13.);
     Matrix* matMinus = minus(myMatrix, hisMatrix);
+    Matrix* matMultE = mult_E(myMatrix, matMinus);
+    Matrix* matSum = plus(myMatrix, hisMatrix);
 
     puts("\nmatrix const mult");
-    printMatrix(matMult);
+    printMatrix(matMultC);
+    puts("\nmatrix element-wise mult");
+    printMatrix(matMultE);
     puts("\nmatrix sum");
     printMatrix(matSum);
     puts("\nmatrix minus");
@@ -74,10 +77,11 @@ int main() {
 
     puts("\nfreeMatrix()");
     freeMatrix(myMatrix);
-    freeMatrix(matMult);
     freeMatrix(matSum);
     freeMatrix(matMinus);
     freeMatrix(hisMatrix);
+    freeMatrix(matMultC);
+    freeMatrix(matMultE);
 
     puts("\nArgerror");
     argError();

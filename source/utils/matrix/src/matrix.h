@@ -217,8 +217,8 @@ Vector* mult_VC( Vector* vec1, double constant );
 /*
  * Switching
  */
-void switchRows( Matrix* matrix, int thisRow, int thatRow );
-void switchCols( Matrix* matrix, int thisCol, int thatCol );
+void swapRows( Matrix* matrix, int thisRow, int thatRow );
+void swapCols( Matrix* matrix, int thisCol, int thatCol );
 
 /*
  * Other important matrix operations

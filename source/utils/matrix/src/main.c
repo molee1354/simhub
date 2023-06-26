@@ -32,6 +32,14 @@ int main() {
     hisMatrix_mod[1][0] = -4.;
     puts("\nprintMatrix()");
     printObj(hisMatrix);
+
+    puts("\nswapRows(mat, 0,1)");
+    swapRows(hisMatrix, 0,1);
+    printObj(hisMatrix);
+    puts("\nswapCols(mat, 1,2)");
+    swapCols(hisMatrix, 1,2);
+    printObj(hisMatrix);
+
     double hisMatrix_det = determinant(hisMatrix);
     printf("\ndeterminant: %.2f", hisMatrix_det);
 

@@ -47,10 +47,11 @@ int main() {
     double hisMatrix_det = determinant(hisMatrix);
     printf("\ndeterminant: %.2f", hisMatrix_det);
 
-    puts("\ngetVector(1,:)");
-    Vector* oneRow = getVector(hisMatrix, 0,ALL);
-    Vector* oneCol = getVector(hisMatrix, ALL,1);
+    puts("\ngetVector(0,:)");
+    Vector* oneRow = getVector(inverted, 0,ALL);
     printObj(oneRow);
+    puts("\ngetVector(:,1)");
+    Vector* oneCol = getVector(inverted, ALL,1);
     printObj(oneCol);
 
     puts("\nprintMatrix()");

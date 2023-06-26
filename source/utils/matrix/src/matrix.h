@@ -66,25 +66,25 @@ Matrix* getSlice( Matrix* matrix,
  * Function to get an individual row or column as a 1d array
  */
 typedef enum {
-    ALL
-} Allflag;
+    AllType
+} AllFlag;
+#define ALL (AllFlag)AllType
 double getVector_ii( Matrix* matrix, int rIdx, int cIdx );
-Vector* getVector_iA( Matrix* matrix, int rIdx, Allflag cAll );
-Vector* getVector_Ai( Matrix* matrix, Allflag rAll, int cIdx );
-Matrix* getVector_AA( Matrix* matrix, Allflag rAll, Allflag cAll ); // returns matrix
-#define getVector( rowDef, colDef ) _Generic((rowDef)+(colDef), \
-                            int: _Generic( (colDef), \
+Vector* getVector_iA( Matrix* matrix, int rIdx, AllFlag cAll );
+Vector* getVector_Ai( Matrix* matrix, AllFlag rAll, int cIdx );
+Matrix* getVector_AA( Matrix* matrix, AllFlag rAll, AllFlag cAll ); // returns matrix
+#define getVector( matrix, rowDef, colDef ) _Generic( (rowDef), \
+                               int: _Generic( (colDef), \
                                          int: getVector_ii, \
-                                     Allflag: getVector_iA ), \
-                        Allflag: _Generic( (colDef), \
+                                     AllFlag: getVector_iA ), \
+                           AllFlag: _Generic( (colDef), \
                                          int: getVector_Ai, \
-                                     Allflag: getVector_AA ))(rowDef, colDef)
+                                     AllFlag: getVector_AA ))(matrix, rowDef, colDef)
 
 
 /*
  * Common matrix/vector generators
  */
-/* Creates a matrix/vector of only ones */
 Matrix* zeros_M( int numRows, int numCols );
 Vector* zeros_V( int numEle, vType direction );
 #define zeros( argLen, arg2 ) _Generic( (arg2), \
@@ -223,10 +223,10 @@ void switchCols( Matrix* matrix, int thisCol, int thatCol );
 /*
  * Other important matrix operations
  */
-double determinantMat( Matrix* matrix );
-Matrix* invertMat( Matrix* matrix );
-Matrix* refMat( Matrix* matrix );
-Matrix* rrefMat( Matrix* matrix );
+double determinant( Matrix* matrix );
+Matrix* invert( Matrix* matrix );
+Matrix* ref( Matrix* matrix );
+Matrix* rref( Matrix* matrix );
 void transpose_V( Vector* vector );
 void transpose_M( Matrix* matrix );
 #define transpose(obj) _Generic( (obj), \

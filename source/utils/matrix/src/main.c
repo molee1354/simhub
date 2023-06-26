@@ -25,8 +25,21 @@ int main() {
     Matrix* hisMatrix = toMatrix(nMatrix, NROW, NCOL);
     double** modMatrix = makeModifiable(myMatrix);
 
-    double targ = 1.;
+    double targ = -1.;
     modMatrix[2][2] = targ;
+
+    double** hisMatrix_mod = makeModifiable(hisMatrix);
+    hisMatrix_mod[1][0] = -4.;
+    puts("\nprintMatrix()");
+    printObj(hisMatrix);
+    double hisMatrix_det = determinant(hisMatrix);
+    printf("\ndeterminant: %.2f", hisMatrix_det);
+
+    puts("\ngetVector(1,:)");
+    Vector* oneRow = getVector(hisMatrix, 0,ALL);
+    Vector* oneCol = getVector(hisMatrix, ALL,1);
+    printObj(oneRow);
+    printObj(oneCol);
 
     puts("\nprintMatrix()");
     printMatrix(myMatrix);
@@ -97,10 +110,12 @@ int main() {
     matRepr(matMinus);
 
     puts("\nfreeVector");
-    freeAll_V(myVector, onesVector, vec2, matMultMV, NULL);
+    freeAll_V(myVector, onesVector, vec2, matMultMV, oneRow, oneCol,
+              NULL);
     puts("\nfreematrix");
     freeAll_M(myMatrix, matSum, matMinus, hisMatrix, matMultC, matMultE,
-              matMultMM, mat2, mat3, NULL);
+              matMultMM, mat2, mat3,
+              NULL);
 
     puts("\nArgerror");
     argError();

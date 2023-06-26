@@ -3,8 +3,8 @@
 
 #include "matrix.h"
 
-#define NROW 3
-#define NCOL 3
+#define NROW 4
+#define NCOL 4
 
 int main() {
     double** nMatrix = (double**)malloc(sizeof(double*)*NROW);
@@ -14,9 +14,7 @@ int main() {
     int n = 1;
     for (int i=0; i<NROW; i++) {
         for (int j=0; j<NCOL; j++) {
-            nMatrix[i][j] = n++;
-        }
-    }
+            nMatrix[i][j] = n++; } }
 
     // Matrix* myMatrix = toMatrix(nMatrix, NROW, NCOL);
     // Matrix* myMatrix = ones(NROW, NCOL);
@@ -30,15 +28,21 @@ int main() {
 
     double** hisMatrix_mod = makeModifiable(hisMatrix);
     hisMatrix_mod[1][0] = -4.;
+    hisMatrix_mod[3][2] = -3.;
     puts("\nprintMatrix()");
     printObj(hisMatrix);
 
     puts("\nswapRows(mat, 0,1)");
     swapRows(hisMatrix, 0,1);
     printObj(hisMatrix);
+
     puts("\nswapCols(mat, 1,2)");
     swapCols(hisMatrix, 1,2);
     printObj(hisMatrix);
+
+    puts("\ninvert(mat)");
+    Matrix* inverted = invert(hisMatrix);
+    printObj(inverted);
 
     double hisMatrix_det = determinant(hisMatrix);
     printf("\ndeterminant: %.2f", hisMatrix_det);
@@ -122,7 +126,7 @@ int main() {
               NULL);
     puts("\nfreematrix");
     freeAll_M(myMatrix, matSum, matMinus, hisMatrix, matMultC, matMultE,
-              matMultMM, mat2, mat3,
+              matMultMM, mat2, mat3, inverted,
               NULL);
 
     puts("\nArgerror");

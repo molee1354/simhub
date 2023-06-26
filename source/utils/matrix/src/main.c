@@ -40,6 +40,10 @@ int main() {
     swapCols(hisMatrix, 1,2);
     printObj(hisMatrix);
 
+    puts("\nrref(mat)");
+    Matrix* matRref = rref(hisMatrix);
+    printObj(matRref);
+
     puts("\ninvert(mat)");
     Matrix* inverted = invert(hisMatrix);
     printObj(inverted);
@@ -127,7 +131,7 @@ int main() {
               NULL);
     puts("\nfreematrix");
     freeAll_M(myMatrix, matSum, matMinus, hisMatrix, matMultC, matMultE,
-              matMultMM, mat2, mat3, inverted,
+              matMultMM, mat2, mat3, inverted, matRref,
               NULL);
 
     puts("\nArgerror");

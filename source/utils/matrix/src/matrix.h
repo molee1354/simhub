@@ -242,6 +242,15 @@ int printVector( Vector* vector );
                         Matrix* : printMatrix, \
                         Vector* : printVector, \
                         default : argError )(obj)
+/*
+ * Copying
+ */
+Matrix* copyMatrix( Matrix* matrix );
+Vector* copyVector( Vector* vector );
+#define copyObj(obj) _Generic( (obj), \
+                        Matrix* : copyMatrix, \
+                        Vector* : copyVector, \
+                        default : argError )(obj)
 
 /*
  * Representing the matrix object fully

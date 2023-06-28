@@ -1,14 +1,42 @@
 CC = gcc
-CFLAGS = -I.
-DEPS = matrix.h
-OBJ = matrix.o main.o
+CFLAGS = -Wall -Wextra -g
+SRCDIR = src
+TESTDIR = tests
+BINDIR = bin
 
-%.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS)
+SRC = $(wildcard $(SRCDIR)/*.c)
+OBJ = $(patsubst $(SRCDIR)/%.c,$(BINDIR)/%.o,$(SRC))
+# TARGET = $(BINDIR)/main
+TARGET = ./main $(BINDIR)/main
 
-main: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
+TEST_SRC = $(wildcard $(TESTDIR)/*.c)
+TEST_OBJ = $(patsubst $(TESTDIR)/%.c,$(BINDIR)/%.o,$(TEST_SRC))
+TEST_TARGET = $(BINDIR)/test
+
+.PHONY: all run test clean
+
+all: $(TARGET)
+
+run: $(TARGET)
+	$(TARGET)
+
+$(TARGET): $(OBJ) | $(BINDIR)
+	$(CC) $(CFLAGS) $^ -o $@
+
+$(BINDIR)/%.o: $(SRCDIR)/%.c | $(BINDIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+test: $(TEST_TARGET)
+	$(TEST_TARGET)
+
+$(TEST_TARGET): $(TEST_OBJ) $(filter-out $(BINDIR)/main.o, $(OBJ)) | $(BINDIR)
+	$(CC) $(CFLAGS) -I$(SRCDIR) $^ -o $@
+
+$(BINDIR)/%.o: $(TESTDIR)/%.c | $(BINDIR)
+	$(CC) $(CFLAGS) -I$(SRCDIR) -c $< -o $@
+
+$(BINDIR):
+	mkdir -p $(BINDIR)
 
 clean:
-	rm -f *.o
-	rm main
+	rm -f $(OBJ) $(TEST_OBJ) $(TARGET) $(TEST_TARGET)

@@ -3,8 +3,8 @@
 
 #include "matrix.h"
 
-#define NROW 4
-#define NCOL 4
+#define NROW 5
+#define NCOL 5
 
 int main() {
     double** nMatrix = (double**)malloc(sizeof(double*)*NROW);
@@ -135,7 +135,9 @@ int main() {
               NULL);
     puts("\nfreematrix");
     freeAll_M(myMatrix, matSum, matMinus, hisMatrix, matMultC, matMultE,
-              matMultMM, mat2, mat3, inverted, slicedMat,
+              matMultMM, mat2, mat3,
+              // inverted,
+              slicedMat,
               // matRref,
               NULL);
 

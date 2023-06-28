@@ -40,9 +40,13 @@ int main() {
     swapCols(hisMatrix, 1,2);
     printObj(hisMatrix);
 
-    puts("\nrref(mat)");
+    puts("\ngetSlice(mat, 1,3, 1,3)");
+    Matrix* slicedMat = getSlice(hisMatrix, 1,3, 1,3);
+    printObj(slicedMat);
+
+    /* puts("\nrref(mat)");
     Matrix* matRref = rref(hisMatrix);
-    printObj(matRref);
+    printObj(matRref); */
 
     puts("\ninvert(mat)");
     Matrix* inverted = invert(hisMatrix);
@@ -131,7 +135,8 @@ int main() {
               NULL);
     puts("\nfreematrix");
     freeAll_M(myMatrix, matSum, matMinus, hisMatrix, matMultC, matMultE,
-              matMultMM, mat2, mat3, inverted, matRref,
+              matMultMM, mat2, mat3, inverted, slicedMat,
+              // matRref,
               NULL);
 
     puts("\nArgerror");

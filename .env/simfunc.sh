@@ -15,15 +15,15 @@ function sim() {
             case "${SIM_CALL}" in
                 utils-matrix)
                     rsync -a ./source/utils/matrix/* ${SIM_DIR} \
-                        --exclude tests/
-                        --exclude='docs.md'
+                        --exclude tests/ \
+                        --exclude 'docs.md'
 
                     printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
                     ;;
                 utils-array)
                     rsync -a ./source/utils/array/* ${SIM_DIR} \
-                        --exclude tests/
-                        --exclude='docs.md'
+                        --exclude tests/ \
+                        --exclude 'docs.md'
 
                     printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
                     ;;

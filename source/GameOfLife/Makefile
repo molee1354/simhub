@@ -17,11 +17,11 @@ all: $(TARGET) | $(BINDIR)
 $(TARGET): $(OBJ) | $(BINDIR)
 	$(CC) $(CFLAGS) $^ -o $@
 
-# $(OBJDIR)/%.o: $(SRCDIR)/%.c get_deps | $(OBJDIR)
-# 	$(CC) $(CFLAGS) -c $< -o $@
-
-$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c get_deps | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+# $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
+# 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR):
 	mkdir -p $(OBJDIR)
@@ -38,5 +38,5 @@ clean:
 get_deps:
 	@while IFS= read -r line; do \
 		echo "$$line"; \
-		rsync -a --exclude='main.c' "$$line"src/* ./src/; \
+		rsync -a --exclude='main.c' ../source/"$$line"src/* ./src/; \
 	done < $(DEPS)

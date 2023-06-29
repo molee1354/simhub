@@ -7,7 +7,7 @@ OBJDIR = obj
 SRC = $(wildcard $(SRCDIR)/*.c)
 OBJ = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRC))
 # TARGET = $(BINDIR)/main
-TARGET = ./main $(BINDIR)/main
+TARGET = $(BINDIR)/main
 
 .PHONY: all clean
 

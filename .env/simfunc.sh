@@ -51,9 +51,14 @@ function sim() {
             ./main
             cd ../
             ;;
-        build | compile | make)
+        build | compile )
             cd ${SIM_DIR} || return 0
             make
+            cd ../
+            ;;
+        make)
+            cd ${SIM_DIR} || return 0
+            make $2
             cd ../
             ;;
         clean)

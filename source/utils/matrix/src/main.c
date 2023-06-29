@@ -6,7 +6,7 @@
 #define NROW 10
 #define NCOL 10
 
-int checkMethods() {
+int checkMethods(void) {
     double** nMatrix = (double**)malloc(sizeof(double*)*NROW);
     for (int i=0; i<NROW; i++) {
         nMatrix[i] = (double*)malloc(sizeof(double)*NCOL);
@@ -148,6 +148,8 @@ int checkMethods() {
 }
 
 int main() {
-    puts("call the \"checkMethods()\" function to check different matrix methods");
+    puts("\narray.h called");
+    puts("\nCall the \"checkMethods()\" function to check different matrix methods");
+    checkMethods();
     return 0;
 }

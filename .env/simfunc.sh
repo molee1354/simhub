@@ -51,7 +51,7 @@ function sim() {
             ./main
             cd ../
             ;;
-        make)
+        build | compile | make)
             cd ${SIM_DIR} || return 0
             make
             cd ../

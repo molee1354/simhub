@@ -35,7 +35,7 @@ where the "XX" in `pyvenv-3.XX` should be the version number of the Python inter
 
 With the virtual environment and the bash helper functions set up, the simulation is now ready to be loaded. To load a simulation, run the `./set-sim` command followed by the desired simulation name. For example, this is how the 2d projectile simulation would be called:
 
-        ./set-sim projectile-2d
+        sin call projectile-2d
 
 The above command will load the simulation with modifiable initial parameters. You should be able to see that within the current working directory, there is a new `./simulation` directory within which are the necessary files and functions for computation. Simulation names are simply the directory in which the `main.c` for the simulation lives, all in lower-case and separated by dashes instead of forward slashes. So from the above command, we can see that the `main.c` file for the 2d projectile simulation lives in the `./source/Projectile/2d/` directory.
 

@@ -4,8 +4,11 @@
 #include "minunit.h"
 #include "test.h"
 
-#include "../src/matrix.h"
-#include "../src/guard.h"
+// #include "../src/matrix.h"
+// #include "../src/guard.h"
+
+#include "matrix.h"
+#include "guard.h"
 
 static int testRowNum;
 static int testColNum;
@@ -268,11 +271,6 @@ MU_TEST(test_slice) {
     freeMatrix(testMatObjSlice);
 }
 
-
-MU_TEST(test_fail) {
-	mu_fail("Fail now!");
-}
-
 MU_TEST_SUITE(test_suite) {
 	MU_SUITE_CONFIGURE(&test_setup, &test_teardown);
 
@@ -289,9 +287,6 @@ MU_TEST_SUITE(test_suite) {
     MU_RUN_TEST(test_minus);
     MU_RUN_TEST(test_slice);
 
-
-
-    // MU_RUN_TEST(test_fail);
 }
 
 int main( ) {

@@ -1,9 +1,8 @@
 #ifndef _test_h
 #define _test_h
 
-#include "../../matrix/src/matrix.h"
-
 #define N 3
+
 /*
  * Function to convert a static double 2d array to a dynamic 2d array
  */

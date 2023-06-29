@@ -33,15 +33,19 @@ Matrix* gaussJordan(Matrix* matrix) {
     return identity;
 }
 
-// Function to invert a matrix
+/*
+ * Function to invert a matrix
+ *      -> returns a copy of a matrix for non-invertible cases
+ *         to have consistency in function behavior.
+ */
 Matrix* invert(Matrix* matrix) {
     if (determinant(matrix)==0) {
         puts("Cannot determine the inverse: matrix is singular!");
-        return matrix;
+        return copyMatrix(matrix);
     }
     if (matrix->isSquare!=1) {
         puts("Cannot determine the inverse: matrix is non-square!");
-        return matrix;
+        return copyMatrix(matrix);
     }
     // Perform Gaussian elimination with back substitution
     // gaussJordan(matrix);

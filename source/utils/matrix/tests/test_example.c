@@ -1,5 +1,5 @@
 // #include "minunit.h"
-#include "test_example.h"
+#include "minunit.h"
 
 static int foo = 0;
 static int bar = 0;

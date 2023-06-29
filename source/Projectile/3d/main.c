@@ -19,9 +19,9 @@ int main() {
     }
 
     float* proj = makeProjectile(
-            START_X_POS, START_Y_POS, START_Z_POS,
-            START_X_VEL, START_Y_VEL, START_Z_VEL,
             SIM_START_T,
+            START_X_POS, START_Y_POS, START_Z_POS,
+            START_X_VEL, START_Y_VEL, START_Z_VEL
             );
 
     printHeader(t, proj);

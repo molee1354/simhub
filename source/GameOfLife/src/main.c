@@ -1,16 +1,21 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
+
 #include "board.h"
-#include "sim.input"
 
 
 int main() {
-    Board* newBoard = generateRandomBoard(NROWS, NCOLS);
+    Board* board = makeRandomBoard(NROWS, NCOLS);
 
-    printBoard(newBoard);
+    for (int i = 0; i<20; i++) {
+        generateNext(board);
+        printBoard(board);
+        sleep(1);
+        system("clear");
+    }
 
-    // check with valgrind for any memory leaks
-    freeBoard(newBoard);
+    freeBoard(board);
 
     return 0;
 }

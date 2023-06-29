@@ -31,6 +31,10 @@ function sim() {
                     cp -r ./source/Projectile/2d/* ${SIM_DIR}
                     printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
                     ;;
+                gameoflife)
+                    cp -r ./source/GameOfLife/* ${SIM_DIR}
+                    printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
+                    ;;
                 *)
                     if [[ -z "${SIM_CALL}" ]]; then
                         echo "Enter a simulation name"

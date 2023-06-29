@@ -51,7 +51,7 @@ void printBoard( Board* board );
 /*
  * Write the current board to a simulation file
  */
-void writeBoard( FILE* file, Board* board );
+void writeBoard( FILE* file, Board* board, int timestep );
 
 /*
  * Freeing allocated memory

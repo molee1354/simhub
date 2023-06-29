@@ -3,6 +3,7 @@ CFLAGS = -Wall -Wextra -g
 SRCDIR = src
 BINDIR = bin
 OBJDIR = obj
+DUMPS = $(wildcard ./dump.*)
 DEPS = deps
 
 SRC = $(wildcard $(SRCDIR)/*.c)
@@ -16,7 +17,10 @@ all: $(TARGET) | $(BINDIR)
 $(TARGET): $(OBJ) | $(BINDIR)
 	$(CC) $(CFLAGS) $^ -o $@
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c get_deps | $(OBJDIR)
+# $(OBJDIR)/%.o: $(SRCDIR)/%.c get_deps | $(OBJDIR)
+# 	$(CC) $(CFLAGS) -c $< -o $@
+
+$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR):
@@ -29,7 +33,7 @@ run: $(TARGET) | $(BINDIR)
 	$(TARGET)
 
 clean:
-	rm -f $(OBJ) $(TEST_OBJ) $(TARGET) $(TEST_TARGET)
+	rm -f $(OBJ) $(TEST_OBJ) $(TARGET) $(TEST_TARGET) $(DUMPS)
 
 get_deps:
 	@while IFS= read -r line; do \

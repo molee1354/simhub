@@ -8,10 +8,10 @@
 
 Board* generateRandomBoard( int numRows, int numCols ) {
     // malloc free implemented by a separate function
-    Board* out = (Board*)malloc( sizeof(Board*) );
+    Board* out = (Board*)malloc( sizeof(Board) );
     int** boardMatrix = (int**)malloc( sizeof(int*)*numRows );
-    for (int i = 0; i<numCols; i++) {
-        boardMatrix[i] = (int*)malloc( sizeof(int*)*numCols );
+    for (int i = 0; i<numRows; i++) {
+        boardMatrix[i] = (int*)malloc( sizeof(int)*numCols );
     }
         
     // generating a random seed for the random board generation
@@ -35,13 +35,13 @@ Board* generateRandomBoard( int numRows, int numCols ) {
     return out;
 }
 
-int countNeighbors( Board* currentBoard, int rowIdx, int colIdx ) {
+/* int countNeighbors( Board* currentBoard, int rowIdx, int colIdx ) {
     currentBoard->boardMatrix;
-}
+} */
 
-Board* generateNext( Board* currentBoard ) {
+/* Board* generateNext( Board* currentBoard ) {
   
-}
+} */
 
 void printBoard( Board* board ) {
     for (int i=0; i<board->numRows; i++) {

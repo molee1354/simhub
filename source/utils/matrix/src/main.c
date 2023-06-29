@@ -6,7 +6,7 @@
 #define NROW 10
 #define NCOL 10
 
-int main() {
+int checkMethods() {
     double** nMatrix = (double**)malloc(sizeof(double*)*NROW);
     for (int i=0; i<NROW; i++) {
         nMatrix[i] = (double*)malloc(sizeof(double)*NCOL);
@@ -144,5 +144,10 @@ int main() {
     puts("\nArgerror");
     argError();
 
+    return 0;
+}
+
+int main() {
+    puts("call the \"checkMethods()\" function to check different matrix methods");
     return 0;
 }

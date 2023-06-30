@@ -17,7 +17,7 @@ all: $(TARGET) | $(BINDIR)
 $(TARGET): $(OBJ) | $(BINDIR)
 	$(CC) $(CFLAGS) $^ -o $@
 
-$(OBJDIR)/%.o: $(SRCDIR)/%.c deps | $(OBJDIR)
+$(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(OBJDIR):

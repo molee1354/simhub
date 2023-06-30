@@ -1,15 +1,14 @@
-# project root
-export SIMROOT=$(pwd)
+# current simulation called
+SIM_CUR="."
 
 # sim [option] function to call and interact with different simulations
 function sim() {
+
+    # setting the user call to the correct directory
     if [[ $(pwd) != ${SIMROOT} ]]; then
         printf "\"sim\" command evoked from wrong directory.\nRun the command from \"%s\".\n" ${SIMROOT}
         return
     fi
-    SIM_DIR="./simulation"
-    SRC_DIR="./source"
-    DEPS="require"
 
     case $1 in
 
@@ -24,37 +23,24 @@ function sim() {
             mkdir ${SIM_DIR}
             case "${SIM_CALL}" in
                 utils-matrix)
-                    rsync -a ${SRC_DIR}/utils/matrix/* ${SIM_DIR} \
-                        --exclude tests/
-                    printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
+                    DEST="${SRC_DIR}/utils/matrix"
+                    __call_simulation ${SIM_CALL} ${DEST}
                     ;;
                 utils-array)
-                    rsync -a ${SRC_DIR}/utils/array/* ${SIM_DIR} \
-                        --exclude tests/
-                    printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
+                    DEST="${SRC_DIR}/utils/array"
+                    __call_simulation ${SIM_CALL} ${DEST}
                     ;;
                 projectile-3d)
-                    cp -r ${SRC_DIR}/Projectile/3d/* ${SIM_DIR}
-                    printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
+                    DEST="${SRC_DIR}/Projectile/3d"
+                    __call_simulation ${SIM_CALL} ${DEST}
                     ;;
                 projectile-2d)
-                    cp -r ${SRC_DIR}/Projectile/2d/* ${SIM_DIR}
-                    printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
+                    DEST="${SRC_DIR}/Projectile/2d"
+                    __call_simulation ${SIM_CALL} ${DEST}
                     ;;
                 gameoflife)
                     DEST="${SRC_DIR}/GameOfLife"
-                    rsync -a ${DEST}/* ${SIM_DIR} \
-                        --exclude tests/
-                    printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
-                    if [[ -e ${DEST}/${DEPS} ]]; then
-                        while IFS= read -r LINE; do
-                            TARG="$(basename ${LINE})"
-                            rsync -a ${SRC_DIR}/${LINE}src/* ${SIM_DIR}/src \
-                                --exclude 'main.c'
-                            printf "...Copied dependency [%s] into %s/src\n" "${TARG}" "${SIM_DIR}"
-                        done < ${DEST}/${DEPS}
-                    fi
-                    echo Done!
+                    __call_simulation ${SIM_CALL} ${DEST}
                     ;;
                 *)
                     if [[ -z "${SIM_CALL}" ]]; then
@@ -93,6 +79,7 @@ function sim() {
             else
                 printf "%s did not exist\n" "${SIM_DIR}"
             fi
+            SIM_CALL="."
             ;;
 
         anim)
@@ -109,10 +96,33 @@ function sim() {
                 return 0
             fi
             python3 ${SIM_DIR}/vis/plot.py ${SIM_DIR}/dump.out
-
             ;;
+        
+        which)
+            printf "Current simulation called in %s is [%s].\n" "${SIM_DIR}" "${SIM_CUR}"
+            ;;
+
         *)
             echo "Not a valid input"
             ;;
     esac
+}
+
+function __call_simulation() {
+    SIM_CALL=$1
+    DEST=$2
+    
+    rsync -a ${DEST}/* ${SIM_DIR} \
+        --exclude tests/
+    printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
+    if [[ -e ${DEST}/${DEPS} ]]; then
+        while IFS= read -r LINE; do
+            TARG="$(basename ${LINE})"
+            rsync -a ${SRC_DIR}/${LINE}src/* ${SIM_DIR}/src \
+                --exclude 'main.c'
+            printf "...Copied dependency [%s] into %s/src\n" "${TARG}" "${SIM_DIR}"
+        done < ${DEST}/${DEPS}
+    fi
+    SIM_CUR="${SIM_CALL}"
+    echo Done!
 }

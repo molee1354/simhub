@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "matrix.h"
-#include "guard.h"
+#include "_matrix.h"
 
 
 Matrix* gaussJordan(Matrix* matrix) {

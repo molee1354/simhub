@@ -117,7 +117,8 @@ int  getSize_V( Vector* vector );
  */
 int getElement_M( Matrix* matrix, int rIdx, int cIdx );
 int getRank( Matrix* matrix );
-/* No implementation */
+
+/* no implementation for the same reason above */
 int* setIndex_M( Matrix* matrix, double element, ...);
 int  setIndex_V( Vector* matrix, double element, ...);
 #define setIndex( obj1, obj2, ... ) _Generic( (obj1), \
@@ -128,11 +129,11 @@ int  setIndex_V( Vector* matrix, double element, ...);
 /*
  * getting the index of the first occurence
  */
-int* getIndex_M( Matrix* matrix, double target );
-int  getIndex_V( Vector* matrix, double target );
-#define getIndex( obj, targ ) _Generic( (obj), \
-                        Matrix* : getIndex_M, \
-                        Vector* : getIndex_V )( obj, targ )
+int* findIndex_M( Matrix* matrix, double target );
+int  findIndex_V( Vector* matrix, double target );
+#define findIndex( obj, targ ) _Generic( (obj), \
+                        Matrix* : findIndex_M, \
+                        Vector* : findIndex_V )( obj, targ )
 
 /* 
  * function to handle argument input errors

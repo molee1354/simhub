@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "matrix.h"
-#include "guard.h"
+#include "_matrix.h"
 
-int* getIndex_M( Matrix* matrix, double target ) {
+int* findIndex_M( Matrix* matrix, double target ) {
     int* out = (int*)malloc(sizeof(int)*2);
     if (out==NULL) {return NULL;}
     for (int i = 0; i < matrix->nRows; i++) {
@@ -14,10 +14,10 @@ int* getIndex_M( Matrix* matrix, double target ) {
             } } }
     out[0] = -1;
     out[1] = -1;
-    puts("Make sure to free the memory allocated by the getIndex() function call");
+    puts("Make sure to free the memory allocated by the findIndex() function call");
     return out;
 }
-int getIndex_V( Vector* vector, double target ) {
+int findIndex_V( Vector* vector, double target ) {
     int out = -1;
     for (int i = 0; i < vector->nEle; i++) {
         if ( vector->e[i] == target ) return i;

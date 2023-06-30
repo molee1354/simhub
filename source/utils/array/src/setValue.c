@@ -1,5 +1,5 @@
 #include "array.h"
-#include "guard.h"
+#include "_array.h"
 
 iNode* getNode_i( Array* array, int index ) {
     int count = 0;

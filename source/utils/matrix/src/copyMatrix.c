@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "matrix.h"
-#include "guard.h"
+#include "_matrix.h"
 
 Matrix* copyMatrix(Matrix* matrix) {
     Matrix* out = makeMatrix(matrix->nRows, matrix->nCols);

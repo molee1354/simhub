@@ -65,8 +65,8 @@ int checkMethods(void) {
     puts("\nprintMatrix()");
     printMatrix(myMatrix);
 
-    int* matIdx = getIndex(myMatrix, targ);
-    printf("\ngetIdx_v for targ %.2f = [%d, %d]\n", targ,
+    int* matIdx = findIndex(myMatrix, targ);
+    printf("\nfindIndex_v for targ %.2f = [%d, %d]\n", targ,
             matIdx[0], matIdx[1]);
     free(matIdx);
 
@@ -124,8 +124,8 @@ int checkMethods(void) {
     printVector(vecSum);
     freeObj(vecSum);
 
-    int vecIdx = getIndex(myVector, targ);
-    printf("\ngetIdx_v for targ %.2f = %d\n", targ, vecIdx);
+    int vecIdx = findIndex(myVector, targ);
+    printf("\nfindIndex_v for targ %.2f = %d\n", targ, vecIdx);
 
     puts("\nmatRepr()");
     matRepr(matMinus);

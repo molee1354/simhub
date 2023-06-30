@@ -10,6 +10,7 @@ PY_VENV_DIR="./${ENV_DIR}/pyvenv-${PY_VER}"
 
 # commands to run simulation
 source "${ENV_DIR}/simfunc.sh"
+source "${ENV_DIR}/config"
 
 # function to activate virtual environment
 function activate_venv() {

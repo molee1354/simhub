@@ -35,6 +35,6 @@ clean:
 deps:
 	@while IFS= read -r line; do \
 		TARG="$$(basename $${line})"; \
-		echo "Copying dependency [$${TARG}] into $(SRCDIR)/"; \
 		rsync -a --exclude='main.c' ../source/"$$line"src/* ./$(SRCDIR)/; \
+		echo "...Copied dependency [$${TARG}] into ./$(notdir $(shell pwd))/$(SRCDIR)"; \
 	done < $(DEPS)

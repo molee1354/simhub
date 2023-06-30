@@ -5,7 +5,7 @@ SIM_CUR="."
 function sim() {
 
     # setting the user call to the correct directory
-    if [[ $(pwd) != ${SIMROOT} ]]; then
+    if [[ $(pwd) != ${SIM_ROOT} ]]; then
         printf "\"sim\" command evoked from wrong directory.\nRun the command from \"%s\".\n" ${SIMROOT}
         return
     fi

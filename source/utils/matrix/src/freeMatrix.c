@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "matrix.h"
-#include "guard.h"
+#include "_matrix.h"
 
 int freeMatrix( Matrix* matrix ) {
     for (int i = 0; i<matrix->nRows; i++) {

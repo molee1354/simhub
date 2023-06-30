@@ -1,0 +1,16 @@
+# DO NOT EDIT
+
+# simhub root directory
+export SIM_ROOT=$(pwd)
+
+# The directory where the simulation files will be called to
+export SIM_DIR="./simulation"
+
+# The directory where the simulation files will be called from
+export SRC_DIR="./source"
+
+# The file that lists the dependencies for each simulation
+export DEPS="require"
+
+
+# DEST and SIM_CALL need be passed in

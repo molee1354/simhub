@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdarg.h>
 #include "matrix.h"
-#include "guard.h"
+#include "_matrix.h"
 
 int freeAll_M( Matrix* first, ... ) {
     va_list argList;

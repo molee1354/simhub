@@ -8,14 +8,25 @@
 int main() {
     Board* board = makeRandomBoard(NROWS, NCOLS);
 
-    for (int i = 0; i<20; i++) {
-        generateNext(board);
-        printBoard(board);
-        sleep(1);
-        system("clear");
+    FILE *out;
+    out = fopen(DATA_OUT, "w");
+    if (out == NULL) {
+        puts("File error");
+        exit(1);
     }
 
+    for (int i = 0; i<SIM_END; i++) {
+        generateNext(board);
+        writeBoard(out, board, i);
+        // printBoard(board);
+        // puts("");
+        // sleep(1);
+        // system("clear");
+    }
+
+    printf("\nFinished running GameOfLife simulation for %d timesteps\n\n", SIM_END);
     freeBoard(board);
+    fclose(out);
 
     return 0;
 }

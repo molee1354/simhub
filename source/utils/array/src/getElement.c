@@ -1,5 +1,5 @@
 #include "array.h"
-#include "guard.h"
+#include "_array.h"
 
 int getElement_i( Array* array, int index ) {
     int count = 0;

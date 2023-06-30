@@ -8,7 +8,7 @@
 // #include "../src/guard.h"
 
 #include "matrix.h"
-#include "guard.h"
+#include "_matrix.h"
 
 static int testRowNum;
 static int testColNum;

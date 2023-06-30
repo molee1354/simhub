@@ -18,7 +18,7 @@ class Projectile:
         if not os.path.exists(self.filename):
             raise FileNotFoundError(
                     f"Input file \"{self.filename}\" not found! " \
-                            "Make sure to run the \"sim-run\" command " \
+                            "Make sure to run the \"sim run\" command " \
                             "to compile and run the simulation."
                             )
 

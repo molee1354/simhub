@@ -1,5 +1,5 @@
 #include "matrix.h"
-#include "guard.h"
+#include "_matrix.h"
 
 void swapCols( Matrix* matrix, int thisCol, int thatCol ) {
     for (int i = 0; i<matrix->nCols; i++) {

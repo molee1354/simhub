@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "matrix.h"
-#include "guard.h"
+#include "_matrix.h"
 
 
 Matrix* zeros_M( int numRows, int numCols ) {

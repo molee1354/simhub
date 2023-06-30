@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "matrix.h"
-#include "guard.h"
+#include "_matrix.h"
 
 int freeVector( Vector* vector ) {
     free(vector->e);

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "matrix.h"
-#include "guard.h"
+#include "_matrix.h"
 
 Vector* copyVector(Vector* vector) {
     Vector* out = makeVector(vector->nEle, vector->direction);

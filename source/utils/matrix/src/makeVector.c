@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "matrix.h"
-#include "guard.h"
+#include "_matrix.h"
 
 Vector* makeVector( int numElem, vType direction ) {
     Vector* out = (Vector*)malloc(sizeof(Vector));

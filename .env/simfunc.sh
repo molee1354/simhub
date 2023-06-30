@@ -1,3 +1,7 @@
+# project root
+export SIMROOT=$(pwd)
+
+# sim [option] function to call and interact with different simulations
 function sim() {
     SIM_DIR="./simulation"
 

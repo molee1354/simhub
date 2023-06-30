@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "matrix.h"
-#include "guard.h"
+#include "_matrix.h"
 
 int printVector( Vector* vector ) {
     if (vector->direction == ROW) {

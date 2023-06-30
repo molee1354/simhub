@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "array.h"
-#include "guard.h"
+#include "_array.h"
 
 void printArray_i( Array* array ) {
     iNode* currentNode = ((iNode*)array->head)->next;

@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "matrix.h"
-#include "guard.h"
+#include "_matrix.h"
 
 double getVector_ii( Matrix* matrix, int rIdx, int cIdx ) {
     return matrix->e[rIdx][cIdx];

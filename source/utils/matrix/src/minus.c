@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include "matrix.h"
-#include "guard.h"
+#include "_matrix.h"
 
 Matrix* minus_M( Matrix* mat1, Matrix* mat2 ) {
     if (mat1->nRows != mat2->nRows ||  mat1->nCols != mat2->nCols) {

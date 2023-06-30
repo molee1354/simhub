@@ -1,5 +1,5 @@
 #include "array.h"
-#include "guard.h"
+#include "_array.h"
 
 int getLength_i( Array* array ) {
     int length = 1;

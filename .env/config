@@ -11,6 +11,3 @@ export SRC_DIR="./source"
 
 # The file that lists the dependencies for each simulation
 export DEPS="require"
-
-
-# DEST and SIM_CALL need be passed in

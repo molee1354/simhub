@@ -78,7 +78,7 @@ int checkMethods(void) {
 
     Matrix* matMultC = mult(myMatrix, 13.);
     Matrix* matMinus = minus(myMatrix, hisMatrix);
-    Matrix* matMultE = mult_E(myMatrix, matMinus);
+    Matrix* matMultE = multElem(myMatrix, matMinus);
     Matrix* matSum = plus(myMatrix, hisMatrix);
     Matrix* matMultMM = mult(hisMatrix, matMultC);
 

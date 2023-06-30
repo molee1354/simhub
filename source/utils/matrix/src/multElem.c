@@ -6,7 +6,7 @@
 /*
  * All math operations will create a new matrix
  */
-Matrix* mult_ME( Matrix* mat1, Matrix* mat2 ) {
+Matrix* multElem_M( Matrix* mat1, Matrix* mat2 ) {
     if (mat1->nRows != mat2->nRows ||  mat1->nCols != mat2->nCols) {
         printf("The given matrices are of different size!\n");
         printf("\tMatrix 1 : %dx%d\n", mat1->nRows, mat1->nCols);
@@ -21,7 +21,7 @@ Matrix* mult_ME( Matrix* mat1, Matrix* mat2 ) {
     puts("Make sure to free the memory allocated by the plus() function call");
     return out;
 }
-Vector* mult_VE( Vector* vec1, Vector* vec2 ) {
+Vector* multElem_V( Vector* vec1, Vector* vec2 ) {
     if (vec1->nEle != vec2->nEle || vec1->direction != vec2->direction) {
         printf("The given vectors are of different size!\n");
         printf("\tVector 1 : %dx%d\n", vec1->nEle, vec1->nEle);

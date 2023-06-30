@@ -6,7 +6,7 @@
 /*
  * All math operations will create a new matrix
  */
-Matrix* mult_MC( Matrix* matrix, double constant ) {
+Matrix* multConst_M( Matrix* matrix, double constant ) {
     Matrix* out = makeMatrix( matrix->nRows, matrix->nCols );
     for (int i = 0; i<matrix->nRows; i++) {
         for (int j = 0; j<matrix->nCols; j++) {
@@ -16,7 +16,7 @@ Matrix* mult_MC( Matrix* matrix, double constant ) {
     puts("Make sure to free the memory allocated by the mult_C() function call");
     return out;
 }
-Vector* mult_VC( Vector* vector, double constant ) {
+Vector* multConst_V( Vector* vector, double constant ) {
     Vector* out = makeVector( vector->nEle, vector->direction );
     for (int i = 0; i<vector->nEle; i++) {
         out->e[i] = vector->e[i]*constant;

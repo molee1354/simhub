@@ -174,7 +174,7 @@ MU_TEST(test_determinant) {
     freeMatrix(testMatObj);
 }
 
-MU_TEST(test_constMult) {
+MU_TEST(test_multConst) {
     Matrix* testMatObj = ones(N, N);
     Matrix* testMatObjConstMult = mult(testMatObj, constMultiplier);
     mu_assert_int_eq(N, testMatObj->nRows);
@@ -191,7 +191,7 @@ MU_TEST(test_constMult) {
     freeMatrix(testMatObjConstMult);
 }
 
-MU_TEST(test_matMult) {
+MU_TEST(test_multMat) {
     double** testMatInput = fromStatic(testMat, N, N);
     Matrix* testMatObj = toMatrix(testMatInput, N, N);
     Matrix* testMatMult1 = ones(N, N);
@@ -281,8 +281,8 @@ MU_TEST_SUITE(test_suite) {
     MU_RUN_TEST(test_eye);
     MU_RUN_TEST(test_invert);
     MU_RUN_TEST(test_determinant);
-    MU_RUN_TEST(test_matMult);
-    MU_RUN_TEST(test_constMult);
+    MU_RUN_TEST(test_multMat);
+    MU_RUN_TEST(test_multConst);
     MU_RUN_TEST(test_plus);
     MU_RUN_TEST(test_minus);
     MU_RUN_TEST(test_slice);

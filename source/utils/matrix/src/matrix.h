@@ -167,7 +167,7 @@ Vector* minus_V( Vector* mat1, Vector* mat2 );
                           default: argError )(obj1, obj2)
 
 
-/*
+/**
  * more complex matrix math
  *
  *      ** multiple dispatch not implemented **
@@ -182,37 +182,48 @@ Vector* minus_V( Vector* mat1, Vector* mat2 );
  *      -> mult_MC : matrix constant multiplication
  *
  */
-Matrix* mult_MM( Matrix* mat1, Matrix* mat2 );
-Vector* mult_MV( Matrix* mat, Vector* vec );
 
-Matrix* mult_ME( Matrix* mat1, Matrix* mat2 );
-Vector* mult_VE( Vector* vec1, Vector* vec2 );
-#define mult_E(obj1, obj2) _Generic((obj1), \
+/*
+ * TODO -> add `default : argError` cases as appropriate
+ */
+Matrix* multMat_M( Matrix* mat1, Matrix* mat2 );
+Vector* multMat_V( Matrix* mat, Vector* vec );
+#define multMat(obj1, obj2) _Generic((obj1), \
                             Matrix*: _Generic((obj2), \
-                                    Matrix*: mult_ME, \
+                                    Matrix*: multMat_M, \
                                     Vector*: argError), \
                             Vector*: _Generic((obj2), \
                                     Matrix*: argError, \
-                                    Vector*: mult_VE, \
+                                    Vector*: multMat_V, \
                                     default: argError))(obj1, obj2)
 
+Matrix* multElem_M( Matrix* mat1, Matrix* mat2 );
+Vector* multElem_V( Vector* vec1, Vector* vec2 );
+#define multElem(obj1, obj2) _Generic((obj1), \
+                            Matrix*: _Generic((obj2), \
+                                    Matrix*: multElem_M, \
+                                    Vector*: argError), \
+                            Vector*: _Generic((obj2), \
+                                    Matrix*: argError, \
+                                    Vector*: multElem_V, \
+                                    default: argError))(obj1, obj2)
 
-Matrix* mult_MC( Matrix* matrix, double constant );
-Vector* mult_VC( Vector* vec1, double constant );
-#define mult_C(obj1, obj2) _Generic((obj1), \
-                            Matrix*: mult_MC, \
-                            Vector*: mult_MV, \
+Matrix* multConst_M( Matrix* matrix, double constant );
+Vector* multConst_V( Vector* vec1, double constant );
+#define multConst(obj1, obj2) _Generic((obj1), \
+                            Matrix*: multConst_M, \
+                            Vector*: multMat_V, \
                             default: argError )(obj1, obj2)
 
 #define mult(obj1, obj2) _Generic( (obj1),      \
                             Matrix*: _Generic( (obj2),   \
-                                     Matrix*: mult_MM,   \
-                                     Vector*: mult_MV,   \
-                                      double: mult_MC ), \
+                                     Matrix*: multMat_M,   \
+                                     Vector*: multMat_V,   \
+                                      double: multConst_M ), \
                             Vector*: _Generic( (obj2),   \
                                      Matrix*: argError,  \
-                                     Vector*: mult_VE,   \
-                                      double: mult_VC ), \
+                                     Vector*: multElem_V,   \
+                                      double: multConst_V ), \
                             default: argError )(obj1, obj2)
 
 /*

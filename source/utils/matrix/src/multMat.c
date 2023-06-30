@@ -4,7 +4,7 @@
 #include "_matrix.h"
 
 
-Matrix* mult_MM( Matrix* mat1, Matrix* mat2 ) {
+Matrix* multMat_M( Matrix* mat1, Matrix* mat2 ) {
     if (mat1->nCols != mat2->nRows) {
         printf("The given matrices have invalid size!\n");
         printf("\tMatrix 1 : %dx%d\n", mat1->nRows, mat1->nCols);
@@ -22,7 +22,7 @@ Matrix* mult_MM( Matrix* mat1, Matrix* mat2 ) {
 
     return out;
 }
-Vector* mult_MV( Matrix* mat, Vector* vec ) {
+Vector* multMat_V( Matrix* mat, Vector* vec ) {
     if (mat->nCols != vec->nEle) {
         printf("The given matrices have invalid size!\n");
         printf("\tMatrix length : %d\n", mat->nCols);

@@ -24,6 +24,7 @@ int main() {
         // system("clear");
     }
 
+    printf("\nFinished running GameOfLife simulation for %d timesteps\n\n", SIM_END);
     freeBoard(board);
     fclose(out);
 

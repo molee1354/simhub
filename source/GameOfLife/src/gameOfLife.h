@@ -1,5 +1,5 @@
-#ifndef _gameOfLife.h
-#define _gameOfLife.h
+#ifndef _gameOfLife_h
+#define _gameOfLife_h
 
 #include <stdio.h>
 #include "sim.input"

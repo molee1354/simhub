@@ -2,9 +2,11 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "board.h"
+#include "gameOfLife.h"
+#include "sim.input"
 
-#define RAD 5
+#define RAD_V NROWS/2
+#define RAD_H NCOLS/2
 
 Board* makeRandomBoard( int numRows, int numCols ) {
     Board* out = (Board*)malloc( sizeof(Board) );
@@ -18,8 +20,8 @@ Board* makeRandomBoard( int numRows, int numCols ) {
     for (int i = 0; i<numRows; i++) {
         for (int j = 0; j<numCols; j++) {
             // make 3x3 grid of living squares
-            if ( ((i - (numRows/2 - RAD)) * (i - (numRows/2 + RAD)) <= 0) && 
-                  ((j - (numRows/2 - RAD)) * (j - (numRows/2 + RAD)) <= 0) ){
+            if ( ((i - (numRows/2 - RAD_V)) * (i - (numRows/2 + RAD_V)) <= 0) && 
+                  ((j - (numCols/2 - RAD_H)) * (j - (numCols/2 + RAD_H)) <= 0) ){
               boardMatrix[i][j] = rand()%2;
             } else {
               boardMatrix[i][j] = 0;

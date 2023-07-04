@@ -3,18 +3,17 @@
 
 
 // define board environment
-#define NROWS             16
-#define NCOLS             16
+#define NROWS             64
+#define NCOLS             64
 
 // output file
 #define DATA_OUT          "dump.out"
 
 // simulation start and end parameters
 #define SIM_START         0
-#define SIM_END           10000
+#define SIM_END           1000
 #define SIM_FREQ          100 // stdout print frequency
 #define SIM_START_T       0.
-
 
 
 #endif

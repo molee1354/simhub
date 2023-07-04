@@ -87,12 +87,20 @@ function sim() {
                 echo "No visualization module found in current simulation!"
                 return 0
             fi
+            if [[ ! -f "${SIM_DIR}/vis/animate.py" ]]; then
+                echo "No animator module found in current simulation!"
+                return 0
+            fi
             python3 ${SIM_DIR}/vis/animate.py ${SIM_DIR}/dump.out
             ;;
 
         plot)
             if [[ ! -d "${SIM_DIR}/vis/" ]]; then
                 echo "No visualization module found in current simulation!"
+                return 0
+            fi
+            if [[ ! -f "${SIM_DIR}/vis/plot.py" ]]; then
+                echo "No plotting module found in current simulation!"
                 return 0
             fi
             python3 ${SIM_DIR}/vis/plot.py ${SIM_DIR}/dump.out

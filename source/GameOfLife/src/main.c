@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "board.h"
+#include "gameOfLife.h"
 
 
 int main() {

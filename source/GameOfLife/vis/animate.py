@@ -1,5 +1,5 @@
 import sys
-import animate as proj
+import gameoflife as gol
 
 
 def main() -> None:
@@ -8,7 +8,7 @@ def main() -> None:
     except IndexError:
         filename = "dump.out"
         print(f"Simulation file {sys.argv[1]} not found. Using ../{filename}!")
-    obj = proj.Animator(filename)
+    obj = gol.Animator(filename)
     obj.animate_data()
 
 

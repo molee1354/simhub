@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "board.h"
+#include "gameOfLife.h"
 
 
 void generateNext( Board* currentBoard ) {

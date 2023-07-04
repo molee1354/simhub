@@ -1,4 +1,4 @@
-#include "board.h"
+#include "gameOfLife.h"
 #include "sim.input"
 
 int countNorthWest( Board* currentBoard, int rowIdx, int colIdx ) {

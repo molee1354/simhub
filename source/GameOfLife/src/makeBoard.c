@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "board.h"
+#include "gameOfLife.h"
 
 #define RAD 5
 

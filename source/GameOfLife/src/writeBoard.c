@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "board.h"
+#include "gameOfLife.h"
 
 void writeBoard( FILE* file, Board* board, int timestep ) {
     fprintf(file, "\nTimestep : %d\n", timestep);

@@ -7,7 +7,6 @@ OBJDIR = obj
 
 SRC = $(wildcard $(SRCDIR)/*.c)
 OBJ = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRC))
-# TARGET = $(BINDIR)/main
 TARGET = ./main $(BINDIR)/main
 
 TEST_SRC = $(wildcard $(TESTDIR)/*.c)

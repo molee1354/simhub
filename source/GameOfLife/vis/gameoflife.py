@@ -64,7 +64,6 @@ class Animator(GameOfLife):
         self.ax.set_title(f"Timestep {iter}")
         sns.heatmap( self.data[iter, ...],
                 ax = self.ax,
-                linewidths = 2,
                 cmap = self.colorsBW,
                 cbar = False,
                 square = True,

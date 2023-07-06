@@ -4,7 +4,7 @@
 
 
 void generateNext_mp( Board* currentBoard ) {
-    Board* nextBoard = makeEmtpyBoard(currentBoard->numRows, currentBoard->numCols);
+    Board* nextBoard = makeEmptyBoard(currentBoard->numRows, currentBoard->numCols);
 
     #pragma omp parallel for
     for (int i = 0; i < currentBoard->numRows; i++) {

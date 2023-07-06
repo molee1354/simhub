@@ -26,12 +26,7 @@ Board* makeRandomBoard( int numRows, int numCols );
 /*
  * Generates an empty board
  */
-Board* makeEmtpyBoard( int numRows, int numCols );
-
-/*
- * Generates an empty board
- */
-Board* makeEmtpyBoard( int numRows, int numCols );
+Board* makeEmptyBoard( int numRows, int numCols );
 
 /*
  * counting the live neighbors at a given index

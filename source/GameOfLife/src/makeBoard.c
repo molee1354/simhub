@@ -42,7 +42,7 @@ Board* makeUserBoard( int** userBoard, int numRows, int numCols ) {
     return out;
 }
 
-Board* makeEmtpyBoard( int numRows, int numCols ) {
+Board* makeEmptyBoard( int numRows, int numCols ) {
     Board* out = (Board*)malloc( sizeof(Board) );
 
     int** boardMatrix = (int**)calloc( numRows, sizeof(int*) );

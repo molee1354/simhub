@@ -3,7 +3,7 @@
 
 
 void generateNext( Board* currentBoard ) {
-    Board* nextBoard = makeEmtpyBoard(currentBoard->numRows, currentBoard->numCols);
+    Board* nextBoard = makeEmptyBoard(currentBoard->numRows, currentBoard->numCols);
 
     for (int i = 0; i < currentBoard->numRows; i++) {
         for (int j = 0; j < currentBoard->numCols; j++) {

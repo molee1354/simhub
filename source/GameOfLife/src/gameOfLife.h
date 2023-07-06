@@ -42,6 +42,8 @@ int countNeighbors( Board* currentBoard, int rowIdx, int colIdx );
  * Take in the current board and generating the next state of the board
  */
 void generateNext( Board* currentBoard );
+void generateNext_mp( Board* currentBoard );
+void generateNext_mp2( Board* currentBoard );
 
 /*
  * Print current board descriptively

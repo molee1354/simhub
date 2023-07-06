@@ -35,15 +35,13 @@ int main() {
 
         nextBoard(board);
         writeBoard(out, board, i);
-        printf("\t%d\n", i);
 
         fclose(out);
     }
     clock_t end = omp_get_wtime();
     double elapse_time = end-start;
 
-    printf("\nElapsed time %.3f sec\n", elapse_time);
-    printf("\nFinished running GameOfLife simulation for %d timesteps\n\n", SIM_END);
+    printf("\nFinished running GameOfLife simulation for %d timesteps in %.3f seconds\n\n", SIM_END, elapse_time);
     freeBoard(board);
 
     return 0;

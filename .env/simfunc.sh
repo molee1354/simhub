@@ -96,7 +96,14 @@ function sim() {
                 echo "No animator module found in current simulation!"
                 return 0
             fi
-            python3 ${SIM_DIR}/vis/animate.py ${SIM_DIR}/dump.out
+            if [[ -d "${SIM_DIR}/dumps/" ]]; then
+                python3 ${SIM_DIR}/vis/animate.py ${SIM_DIR}/dumps
+                return 0
+            fi
+            if [[ -f "${SIM_DIR}/dump.out" ]]; then
+                python3 ${SIM_DIR}/vis/animate.py ${SIM_DIR}/dump.out
+                return 0
+            fi
             ;;
 
         plot)
@@ -108,7 +115,14 @@ function sim() {
                 echo "No plotting module found in current simulation!"
                 return 0
             fi
-            python3 ${SIM_DIR}/vis/plot.py ${SIM_DIR}/dump.out
+            if [[ -d "${SIM_DIR}/dumps/" ]]; then
+                python3 ${SIM_DIR}/vis/animate.py ${SIM_DIR}/dumps
+                return 0
+            fi
+            if [[ -f "${SIM_DIR}/dump.out" ]]; then
+                python3 ${SIM_DIR}/vis/animate.py ${SIM_DIR}/dump.out
+                return 0
+            fi
             ;;
         
         which)

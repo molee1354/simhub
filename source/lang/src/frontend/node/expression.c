@@ -13,7 +13,7 @@ Expression* newExpresion( NodeType kind ) {
     return out;
 }
 
-void freeExpression( BinExpr* binExpr ) {
+void freeExpression( Expression* binExpr ) {
     freeStatement(binExpr->exprKind);
     binExpr->exprKind = NULL;
     free(binExpr);

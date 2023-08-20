@@ -32,10 +32,10 @@ Array* tokenize(char* sourceCode, int srcSize);
  * 
  */
 typedef enum {
-    Program,
-    NumericLiteral,
-    IdentifierNode,
-    IdentifierBinaryExpr,
+    Program_Node,
+    NumericLiteral_Node,
+    Identifier_Node,
+    BinaryExpression_Node,
 } NodeType;
 
 /**
@@ -86,7 +86,7 @@ Expression* newExpression( NodeType kind );
  * @param 
  *
  */
-void freeExpression( BinExpr* binExpr );
+void freeExpression( Expression* binExpr );
 
 /**
  * @brief Program handle. Implements statement with field once initialized.
@@ -104,7 +104,7 @@ typedef struct ProgramNode {
  * @param prgmBody Body of program as an array of statements
  * @return Prgm*
  */
-Prgm* newProgram( NodeType kind, Statement** prgmBody );
+Prgm* newProgram( Statement** prgmBody );
 
 /**
  * @brief Method to free the memory allocated for a program node
@@ -134,7 +134,7 @@ typedef struct BinaryExprNode {
  * @param string String value of BinExpr
  * @return BinExpr*
  */
-BinExpr* newBinExpr( NodeType kind, Expression* left, Expression* right, char* string );
+BinExpr* newBinExpr( Expression* left, Expression* right, char* string );
 
 /**
  * @brief Method to free a binary expression struct
@@ -161,7 +161,15 @@ typedef struct IdentifierNode {
  * @param string string value for Ident
  * @return Ident*
  */
-Ident* newIdent( NodeType kind, char* string );
+Ident* newIdent( char* string );
+
+/**
+ * @brief Method to free a identifier node struct
+ *
+ * @param identifier pointer to a identifier node to free
+ *
+ */
+void freeIdent( Ident* ident );
 
 /**
  * @brief NumericLiteralNode implementation
@@ -179,6 +187,14 @@ typedef struct NumericLiteralNode {
  * @param value double value for NumLit
  * @return NumLit*
  */
-NumLit* newNumLit( NodeType kind, double value );
+NumLit* newNumLit( double value );
+
+/**
+ * @brief Method to free a numeric literal node struct
+ *
+ * @param identifier pointer to a numeric literal node to free
+ *
+ */
+void freeNumLit( NumLit* numLit );
 
 #endif

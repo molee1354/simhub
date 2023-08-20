@@ -1,8 +1,8 @@
-#ifndef _lang_h_
-#define _lang_h_
+#ifndef _node_h_
+#define _node_h_
 
-#include "../deps/token.h"
-#include "../deps/array.h"
+#include "../../deps/token.h"
+#include "../../deps/array.h"
 
 /* Lexer Defs */
 
@@ -43,26 +43,34 @@ typedef enum {
  * in a value at runtime
  * 
  */
-typedef struct Statement {
+typedef struct StatementNode {
     NodeType kind;
-} Stmt;
+} Statement;
 
 /**
  * @brief Constructor for base statement class
  * 
  * @param kind NodeType of statement
- * @return Stmt* 
+ * @return Statement* 
  */
-Stmt* newStatement( NodeType kind );
+Statement* newStatement( NodeType kind );
+
+/**
+ * @brief Method to free the statement struct
+ *
+ * @param 
+ *
+ */
+void freeStatement( Statement* stmt );
 
 /**
  * @brief Base expression interface for implementation. Does result in a
  * value at runtime
  * 
  */
-typedef struct Expression {
-    Stmt* exprKind;
-} Expr;
+typedef struct ExpressionBaseNode {
+    Statement* exprKind;
+} Expression;
 
 /**
  * @brief Constructor for base expression struct. Sets NodeType for expression
@@ -70,15 +78,23 @@ typedef struct Expression {
  * @param kind NodeType of expression
  * @return Expr* 
  */
-Expr* newExpression( NodeType kind );
+Expression* newExpression( NodeType kind );
+
+/**
+ * @brief Method to free the expression struct
+ *
+ * @param 
+ *
+ */
+void freeExpression( BinExpr* binExpr );
 
 /**
  * @brief Program handle. Implements statement with field once initialized.
  * 
  */
 typedef struct ProgramNode {
-    Stmt* stmtKind;
-    Stmt** body;
+    Statement* stmtKind;
+    Statement** body;
 } Prgm;
 
 /**
@@ -88,16 +104,24 @@ typedef struct ProgramNode {
  * @param prgmBody Body of program as an array of statements
  * @return Prgm*
  */
-Prgm* newProgram( NodeType kind, Stmt** prgmBody );
+Prgm* newProgram( NodeType kind, Statement** prgmBody );
+
+/**
+ * @brief Method to free the memory allocated for a program node
+ *
+ * @param prgm Pointer to a program node to free
+ * @param stmtLength length of program statement
+ */
+void freeProgram( Prgm* prgm, int stmtLength );
 
 /**
  * @brief Binary expression implementation
  * 
  */
 typedef struct BinaryExprNode {
-    Expr* exprKind;
-    Expr* left;
-    Expr* right;
+    Expression* exprKind;
+    Expression* left;
+    Expression* right;
     char* string; // needs to be of type BinaryOperator
 } BinExpr;
 
@@ -110,14 +134,22 @@ typedef struct BinaryExprNode {
  * @param string String value of BinExpr
  * @return BinExpr*
  */
-BinExpr* newBinExpr( NodeType kind, Expr* left, Expr* right, char* string );
+BinExpr* newBinExpr( NodeType kind, Expression* left, Expression* right, char* string );
+
+/**
+ * @brief Method to free a binary expression struct
+ *
+ * @param binExpr pointer to a binary expression node to free
+ *
+ */
+void freeBinExpr( BinExpr* binExpr );
 
 /**
  * @brief Identifier implementation
  * 
  */
 typedef struct IdentifierNode {
-    Expr* exprKind;
+    Expression* exprKind;
     char* string;
 } Ident;
 
@@ -136,7 +168,7 @@ Ident* newIdent( NodeType kind, char* string );
  * 
  */
 typedef struct NumericLiteralNode {
-    Expr* exprKind;
+    Expression* exprKind;
     double value;
 } NumLit;
 

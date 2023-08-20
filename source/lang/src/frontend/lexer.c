@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <string.h>
 
-#include "frontend.h"
+#include "node/node.h"
 
 Token* token(char* word, TokenType t_type) {
     Token* out = (Token*)malloc(sizeof(Token));

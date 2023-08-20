@@ -1,8 +1,11 @@
 #ifndef _node_h_
 #define _node_h_
 
-#include "../../deps/token.h"
-#include "../../deps/array.h"
+/* #include "../../deps/token.h"
+#include "../../deps/array.h" */
+
+#include "../token/array.h"
+#include "../token/token.h"
 
 /* Lexer Defs */
 
@@ -95,16 +98,16 @@ void freeExpression( Expression* binExpr );
 typedef struct ProgramNode {
     Statement* stmtKind;
     Statement** body;
-} Prgm;
+} Program;
 
 /**
  * @brief Constructor for program struct. Sets nodetype for program
  *
  * @param kind NodeType of program
  * @param prgmBody Body of program as an array of statements
- * @return Prgm*
+ * @return Program*
  */
-Prgm* newProgram( Statement** prgmBody );
+Program* newProgram( Statement** prgmBody );
 
 /**
  * @brief Method to free the memory allocated for a program node
@@ -112,7 +115,7 @@ Prgm* newProgram( Statement** prgmBody );
  * @param prgm Pointer to a program node to free
  * @param stmtLength length of program statement
  */
-void freeProgram( Prgm* prgm, int stmtLength );
+void freeProgram( Program* prgm, int stmtLength );
 
 /**
  * @brief Binary expression implementation

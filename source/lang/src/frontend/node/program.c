@@ -3,8 +3,8 @@
 
 #include "node.h"
 
-Prgm* newProgram( Statement** prgmBody ) {
-    Prgm* out = (Prgm*)malloc(sizeof(Prgm));
+Program* newProgram( Statement** prgmBody ) {
+    Program* out = (Program*)malloc(sizeof(Program));
     if (out==NULL) {
         fprintf(stderr, "Could not allocate memory for new Program");
         return NULL;
@@ -14,7 +14,7 @@ Prgm* newProgram( Statement** prgmBody ) {
     return out;
 }
 
-void freeProgram( Prgm* prgm, int stmtLength ) {
+void freeProgram( Program* prgm, int stmtLength ) {
     for (int i=0; i<stmtLength; i++) {
         freeStatement(prgm->body[i]);
         // no null statement as the function above already implements null

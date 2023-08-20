@@ -1,7 +1,7 @@
 #ifndef _parser_h
 #define _parser_h
 
-#include "frontend.h"
+#include "node/node.h"
 
 /**
  * @brief Method to produce an AST given a sourcecode
@@ -9,7 +9,7 @@
  * @param sourceCode
  * @return Prgm*
  */
-Prgm* produceAST(char* sourceCode);
+Program* produceAST(char* sourceCode);
 
 /**
  * @brief Method to check if the current token is an EOF token
@@ -50,41 +50,41 @@ Token advanceCheckToken(Array* tokenArray, TokenType expected);
  * @brief Method to parse statements
  *
  * @param tokenArray
- * @return Stmt*
+ * @return Statement*
  */
-Stmt* parseStmt(Array* tokenArray);
+Statement* parseStatement(Array* tokenArray);
 
 /**
  * @brief Method to parse expressions
  *
  * @param tokenArray
- * @return Stmt*
+ * @return Statement*
  */
-Expr* parseExpr(Array* tokenArray);
+Expression* parseExpression(Array* tokenArray);
 
 /**
  * @brief Method to parse additive expressions
  *
  * @param tokenArray
- * @return Stmt*
+ * @return Statement*
  */
-Expr* parseAddExpr(Array* tokenArray);
+Expression* parseAddExpression(Array* tokenArray);
 
 /**
  * @brief Method to parse multiplicative expressions
  *
  * @param tokenArray
- * @return Stmt*
+ * @return Statement*
  */
-Expr* parseMultExpr(Array* tokenArray);
+Expression* parseMultExpression(Array* tokenArray);
 
 /**
  * @brief Method to parse primary expressions
  *
  * @param tokenArray
- * @return Stmt*
+ * @return Statement*
  */
-Expr* parsePrimaryExpr(Array* tokenArray);
+Expression* parsePrimaryExpression(Array* tokenArray);
 
 
 #endif

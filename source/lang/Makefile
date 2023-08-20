@@ -4,7 +4,8 @@ SRCDIR = src
 OBJDIR = obj
 BINDIR = bin
 
-SRC = $(wildcard $(SRCDIR)/*.c) $(wildcard $(SRCDIR)/**/*.c)
+# Find all "*.c" files within src/frontend/ and its subdirectories
+SRC = $(wildcard $(SRCDIR)/frontend/**/*.c) $(wildcard $(SRCDIR)/**/*.c) $(wildcard $(SRCDIR)/*.c)
 OBJ = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
 TARGET = main
 
@@ -13,17 +14,19 @@ TARGET = main
 all: $(TARGET)
 
 $(TARGET): $(OBJ) | $(BINDIR)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $(BINDIR)/$@
 
+# Compile each "*.c" file to its corresponding location in OBJDIR
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR): 
-	mkdir -p $(OBJDIR)/deps;\
-	mkdir -p $(OBJDIR)/frontend
+# Create directory structure in OBJDIR
+$(OBJDIR):
+	@mkdir -p $(shell find $(SRCDIR)/frontend -type d | sed 's/$(SRCDIR)/$(OBJDIR)/')
 
 $(BINDIR):
 	mkdir -p $(BINDIR)
 
 clean:
-	rm -rf $(TARGET) $(OBJDIR) $(BINDIR)
+	rm -rf $(BINDIR)/$(TARGET) $(OBJDIR) $(BINDIR)
+

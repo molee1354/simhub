@@ -14,7 +14,7 @@ TARGET = main
 all: $(TARGET)
 
 $(TARGET): $(OBJ) | $(BINDIR)
-	$(CC) $(CFLAGS) $^ -o $(BINDIR)/$@
+	$(CC) $(CFLAGS) $^ -o $@
 
 # Compile each "*.c" file to its corresponding location in OBJDIR
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)

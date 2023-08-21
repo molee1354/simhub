@@ -106,7 +106,8 @@ void parsePrimaryExpression(Array* tokenArray, void** outExpr) {
     }
     else if (curTok.type == OpenParen) {
         Token _prev = advanceToken(tokenArray);
-        Expression* value = parseExpression(tokenArray);
+        void* value = NULL;
+        parseExpression(tokenArray, value);
         _prev = expectToken(tokenArray, CloseParen);
         *outExpr = value;
     }

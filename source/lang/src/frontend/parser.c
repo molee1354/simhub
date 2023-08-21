@@ -35,13 +35,13 @@ Token expectToken(Array* tokenArray, TokenType expected) {
     return curTok;
 }
 
-Statement* parseStatement(Array* tokenArray);
+Statement* parseStatement(Array* tokenArray) {}
 
-Expression* parseExpression(Array* tokenArray);
+Expression* parseExpression(Array* tokenArray) {}
 
-Expression* parseAddExpression(Array* tokenArray);
+Expression* parseAddExpression(Array* tokenArray) {}
 
-Expression* parseMultExpression(Array* tokenArray);
+Expression* parseMultExpression(Array* tokenArray) {}
 
 /**
  * When calling the function, call a null pointer and use an ampersand (&)

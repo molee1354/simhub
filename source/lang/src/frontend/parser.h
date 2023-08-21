@@ -44,7 +44,7 @@ Token advanceToken(Array* tokenArray);
  * @param expected expected token
  * @return Token
  */
-Token advanceCheckToken(Array* tokenArray, TokenType expected);
+Token expectToken(Array* tokenArray, TokenType expected);
 
 /**
  * @brief Method to parse statements
@@ -58,7 +58,7 @@ Statement* parseStatement(Array* tokenArray);
  * @brief Method to parse expressions
  *
  * @param tokenArray
- * @return Statement*
+ * @return Expression*
  */
 Expression* parseExpression(Array* tokenArray);
 
@@ -66,7 +66,7 @@ Expression* parseExpression(Array* tokenArray);
  * @brief Method to parse additive expressions
  *
  * @param tokenArray
- * @return Statement*
+ * @return Expression*
  */
 Expression* parseAddExpression(Array* tokenArray);
 
@@ -74,7 +74,7 @@ Expression* parseAddExpression(Array* tokenArray);
  * @brief Method to parse multiplicative expressions
  *
  * @param tokenArray
- * @return Statement*
+ * @return Expression*
  */
 Expression* parseMultExpression(Array* tokenArray);
 
@@ -82,9 +82,11 @@ Expression* parseMultExpression(Array* tokenArray);
  * @brief Method to parse primary expressions
  *
  * @param tokenArray
- * @return Statement*
+ * @param outExpr a double void pointer that holds the pointer to the parsed 
+ * expression
+ *
  */
-Expression* parsePrimaryExpression(Array* tokenArray);
+void parsePrimaryExpression(Array* tokenArray, void** outExpr);
 
 
 #endif

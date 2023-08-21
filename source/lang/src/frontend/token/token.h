@@ -23,8 +23,8 @@ typedef enum {
  * Token struct
  */
 typedef struct UserToken {
-    char* value;
     TokenType type;
+    char* value;
 } Token;
 
 #endif

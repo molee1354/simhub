@@ -14,6 +14,13 @@ typedef struct TokenNode {
 } Node;
 
 /*
+ * TODO arrays could hold this struct instead
+ */
+typedef struct ArrayElement {
+    void* elem;
+} Elem;
+
+/*
  * Array object is a linked list
  */
 typedef struct LinkedList {

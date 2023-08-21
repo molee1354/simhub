@@ -125,7 +125,7 @@ typedef struct BinaryExprNode {
     Expression* exprKind;
     Expression* left;
     Expression* right;
-    char* string; // needs to be of type BinaryOperator
+    char* operation; // needs to be of type BinaryOperator
 } BinExpr;
 
 /**
@@ -137,7 +137,7 @@ typedef struct BinaryExprNode {
  * @param string String value of BinExpr
  * @return BinExpr*
  */
-BinExpr* newBinExpr( Expression* left, Expression* right, char* string );
+BinExpr* newBinExpr( Expression* left, Expression* right, char* operation );
 
 /**
  * @brief Method to free a binary expression struct

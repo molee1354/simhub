@@ -1,13 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include "node/node.h"
 #include "parser.h"
+#include "node/node.h"
 #include "token/token.h"
+
+/**
+ * All the parsing is done on the token array, so every parsing function
+ * must have a token array argument passed in.
+ */
 
 #define ERR_EXIT(reason)    fprintf(stderr, "Parse Error:\n%s\n", reason); \
                             exit(1);
-
 
 int notEof(Token* currentToken) {
     return currentToken->type == EndOfFile;
@@ -35,13 +40,50 @@ Token expectToken(Array* tokenArray, TokenType expected) {
     return curTok;
 }
 
-Statement* parseStatement(Array* tokenArray) {}
+void parseStatement(Array* tokenArray, void** outStmt) {
+    parseExpression(tokenArray, outStmt);
+}
 
-Expression* parseExpression(Array* tokenArray) {}
+void parseExpression(Array* tokenArray, void** outExpr) {
+    parseAddExpression(tokenArray, outExpr);
+}
 
-Expression* parseAddExpression(Array* tokenArray) {}
+void parseAddExpression(Array* tokenArray, void** outExpr) {
+    void* left = NULL;
+    parseMultExpression(tokenArray, &left);
+    Token curTok = currentToken(tokenArray);
 
-Expression* parseMultExpression(Array* tokenArray) {}
+    // if the current token is a additive operator
+    while ( !strcmp("+",curTok.value) ||
+            !strcmp("-",curTok.value) )
+    {
+        // create a new binary expression
+        void* right = NULL;
+        parseMultExpression(tokenArray, &right);
+        *outExpr = newBinExpr(left, right, curTok.value);
+        return;
+    }
+    *outExpr = left;
+}
+
+void parseMultExpression(Array* tokenArray, void** outExpr) {
+    void* left = NULL;
+    parsePrimaryExpression(tokenArray, &left);
+    Token curTok = currentToken(tokenArray);
+
+    // if the current token is a multiplicative operator
+    while ( !strcmp("*",curTok.value) ||
+            !strcmp("/",curTok.value) ||
+            !strcmp("%",curTok.value) )
+    {
+        // create a new binary expression
+        void* right = NULL;
+        parsePrimaryExpression(tokenArray, &right);
+        *outExpr = newBinExpr(left, right, curTok.value);
+        return;
+    }
+    *outExpr = left;
+}
 
 /**
  * When calling the function, call a null pointer and use an ampersand (&)

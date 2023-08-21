@@ -46,13 +46,15 @@ Token advanceToken(Array* tokenArray);
  */
 Token expectToken(Array* tokenArray, TokenType expected);
 
+//TODO update method comments
+
 /**
  * @brief Method to parse statements
  *
  * @param tokenArray
  * @return Statement*
  */
-Statement* parseStatement(Array* tokenArray);
+void parseStatement(Array* tokenArray, void** outStmt);
 
 /**
  * @brief Method to parse expressions
@@ -60,7 +62,7 @@ Statement* parseStatement(Array* tokenArray);
  * @param tokenArray
  * @return Expression*
  */
-Expression* parseExpression(Array* tokenArray);
+void parseExpression(Array* tokenArray, void** outExpr);
 
 /**
  * @brief Method to parse additive expressions
@@ -68,7 +70,7 @@ Expression* parseExpression(Array* tokenArray);
  * @param tokenArray
  * @return Expression*
  */
-Expression* parseAddExpression(Array* tokenArray);
+void parseAddExpression(Array* tokenArray, void** outExpr);
 
 /**
  * @brief Method to parse multiplicative expressions
@@ -76,7 +78,7 @@ Expression* parseAddExpression(Array* tokenArray);
  * @param tokenArray
  * @return Expression*
  */
-Expression* parseMultExpression(Array* tokenArray);
+void parseMultExpression(Array* tokenArray, void** outExpr);
 
 /**
  * @brief Method to parse primary expressions

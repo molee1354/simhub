@@ -2,46 +2,14 @@
 #define _array_h
 
 #include <stddef.h>
-#include "token.h"
-
-/*
- * Structs defined in the "guard.h" file to keep opacity
- * Nodes defined for different types.
- */
-typedef struct TokenNode { 
-    Token token;
-    struct TokenNode* next;
-} Node;
+#include "../types.h"
 
 
-/*
- * TODO arrays could hold this struct instead
- */
-
-/*
-typedef enum {
-    TokenElement,
-    PrgmElement
-} ElemType;
-typedef struct ArrayElement {
-    ElemType type;
-    void* elem;
-} Elem;*/
-
-
-/*
- * Array object is a linked list
- */
-typedef struct LinkedList {
-    void* head;
-    void* tail;
-} Array;
-
-/*
+/**
  * creates an array of type Token
  *  -> cast the head and tail nodes to the right datatype node
  */
-Array* makeArray(void);
+Array* makeArray( ArrayType arrayType );
 
 /*
  * Safely(!) getting rid of the array.
@@ -51,12 +19,20 @@ int freeArray( Array* array );
 /*
  * Adding a value to the beginning of an array
  */
-void prepend( Array* array, Token token);
+void prepend_T( Array* array, Token elem );
+void prepend_S( Array* array, Statement elem );
+#define prepend(arr, elem) _Generic( (elem), \
+                                Token: prepend_T, \
+                            Statement: prepend_S)(arr, elem)
 
 /*
  * Adding a value to the end of the array
  */
-void append( Array* array, Token token);
+void append_T( Array* array, Token elem );
+void append_S( Array* array, Statement elem );
+#define append(arr, elem) _Generic( (elem), \
+                                Token: append_T, \
+                            Statement: append_S)(arr, elem)
 
 /*
  * Deleting the respective node in the array. 
@@ -73,7 +49,8 @@ int getLength( Array* array );
 /*
  * Getting a token element from an array at index
  */
-Token getElement( Array* array, int index );
+Token getElement_T( Array* array, int index );
+Statement getElement_S( Array* array, int index );
 
 /*
  * Array printing.

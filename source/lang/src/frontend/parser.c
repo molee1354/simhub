@@ -4,7 +4,6 @@
 
 #include "parser.h"
 #include "node/node.h"
-#include "token/token.h"
 
 /**
  * All the parsing is done on the token array, so every parsing function
@@ -19,12 +18,12 @@ int notEof(Token* currentToken) {
 }
 
 Token currentToken(Array* tokenArray) {
-    Token out = getElement(tokenArray, 0);
+    Token out = getElement_T(tokenArray, 0);
     return out;
 }
 
 Token advanceToken(Array* tokenArray) {
-    Token out = getElement(tokenArray, 0);
+    Token out = getElement_T(tokenArray, 0);
     deleteHead(tokenArray);
     return out;
 }

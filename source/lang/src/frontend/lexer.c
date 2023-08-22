@@ -40,7 +40,7 @@ int isSkippable(char c) {
 }
 
 Array* tokenize(char* sourceCode, int srcSize) {
-    Array* out = makeArray();
+    Array* out = makeArray(TokenArray);
     
     for (int i = 0; i < srcSize; i++) {
         char currentChar = sourceCode[i];

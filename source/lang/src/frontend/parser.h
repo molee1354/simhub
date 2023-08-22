@@ -7,7 +7,7 @@
  * @brief Method to produce an AST given a sourcecode
  *
  * @param sourceCode
- * @return Prgm*
+ * @return Program*
  */
 Program* produceAST(char* sourceCode);
 

@@ -13,12 +13,21 @@ typedef struct TokenNode {
     struct TokenNode* next;
 } Node;
 
+
 /*
  * TODO arrays could hold this struct instead
  */
+
+/*
+typedef enum {
+    TokenElement,
+    PrgmElement
+} ElemType;
 typedef struct ArrayElement {
+    ElemType type;
     void* elem;
-} Elem;
+} Elem;*/
+
 
 /*
  * Array object is a linked list
@@ -30,7 +39,7 @@ typedef struct LinkedList {
 
 /*
  * creates an array of type Token
- *  -> cast the head annd tail nodes to the right datatype node
+ *  -> cast the head and tail nodes to the right datatype node
  */
 Array* makeArray(void);
 

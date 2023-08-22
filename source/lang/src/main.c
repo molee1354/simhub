@@ -45,15 +45,6 @@ int main(int argc, char** argv) {
         Array* myTokens = tokenize(content, fileSize);
         printArray(myTokens);
 
-        /* 
-         * deleteHead() must come after any access to the 'head' token
-         */
-
-        /* Token head = getElement(myTokens, 0);
-        printf("head: {%s, %d}\n", head.value, head.type);
-        deleteHead(myTokens);
-        printArray(myTokens); */
-
         // Free the allocated memory
         free(content);
         freeArray(myTokens);
@@ -61,7 +52,7 @@ int main(int argc, char** argv) {
 
     // shell
     else {
-        puts("mlang v0.1.0");
+        puts("hwin v0.1.0");
         while (1) {
             char input[128];
             printf("\n>>> ");

@@ -7,7 +7,7 @@ BINDIR = bin
 # Find all "*.c" files within src/frontend/ and its subdirectories
 SRC = $(wildcard $(SRCDIR)/frontend/**/*.c) $(wildcard $(SRCDIR)/**/*.c) $(wildcard $(SRCDIR)/*.c)
 OBJ = $(patsubst $(SRCDIR)/%.c, $(OBJDIR)/%.o, $(SRC))
-TARGET = main
+TARGET = hwin
 
 .PHONY: all clean
 
@@ -28,5 +28,5 @@ $(BINDIR):
 	mkdir -p $(BINDIR)
 
 clean:
-	rm -rf $(BINDIR)/$(TARGET) $(OBJDIR) $(BINDIR)
+	rm -rf $(TARGET) $(OBJDIR) $(BINDIR)
 

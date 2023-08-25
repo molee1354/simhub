@@ -15,6 +15,7 @@ typedef struct {
 
     Value stack[STACK_MAX];
     Value* stackTop;
+    Obj* objects; // vm stores the head of the objects list
 } VM;
 
 typedef enum {
@@ -23,6 +24,8 @@ typedef enum {
     INTERPRET_RUNTIME_ERROR,
 } InterpretResult;
 
+extern VM vm;
+
 /**
  * @brief VM Constructor
  *
@@ -30,7 +33,7 @@ typedef enum {
 void initVM();
 
 /**
- * @brief VM Desctuctor
+ * @brief VM Destructor
  *
  */
 void freeVM();

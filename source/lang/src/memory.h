@@ -2,6 +2,20 @@
 #define _memory_h
 
 #include "common.h"
+#include "object.h"
+
+/**
+ * @brief Macro to allocate a new array on the heap
+ *
+ */
+#define ALLOCATE(type, count) \
+    (type*)reallocate(NULL, 0, sizeof(type)*(count) )
+
+/**
+ * @brief Macro definition to free a pointer
+ *
+ */
+#define FREE(type, pointer) reallocate(pointer, sizeof(type), 0);
 
 /**
  * @brief Macro definition to double the capacity of the byte array
@@ -37,5 +51,10 @@
  * Will be casted to its new type
  */
 void* reallocate(void* pointer, size_t oldSize, size_t newSize);
+
+/**
+ * @brief Method to free all the remaining objects
+ */
+void freeObjects();
 
 #endif

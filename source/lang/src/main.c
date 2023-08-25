@@ -8,6 +8,7 @@
 #include "vm.h"
 
 static void repl() {
+    puts("hwin v0.1.0");
     char line[1024];
     for (;;) {
         printf(">>> ");

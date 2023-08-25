@@ -40,7 +40,7 @@ void freeVM();
  * @param chunk The pointer to the chunk to interpret
  *
  */
-InterpretResult interpret(Chunk* chunk);
+InterpretResult interpret(const char* source);
 
 /**
  * @brief Pushing a value into the vm stack

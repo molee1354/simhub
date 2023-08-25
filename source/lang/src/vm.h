@@ -3,6 +3,7 @@
 
 #include "chunk.h"
 #include "value.h"
+#include "table.h"
 
 #define STACK_MAX 256
 
@@ -15,6 +16,7 @@ typedef struct {
 
     Value stack[STACK_MAX];
     Value* stackTop;
+    Table strings; // every string that's created
     Obj* objects; // vm stores the head of the objects list
 } VM;
 

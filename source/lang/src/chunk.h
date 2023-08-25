@@ -12,7 +12,7 @@ typedef enum {
     OP_CONSTANT,    // Produces a constant
 
     OP_ADD,
-    OP_SUBSTACT,
+    OP_SUBTRACT,
     OP_MULTIPLY,
     OP_DIVIDE,
 

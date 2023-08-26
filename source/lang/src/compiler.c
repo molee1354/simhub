@@ -231,6 +231,7 @@ static void statement();
 static void declaration();
 static ParseRule* getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
+static uint8_t identifierConstant(Token* name);
 
 /**
  * @brief Method to handle binary operations
@@ -298,10 +299,29 @@ static void number() {
 
 /**
  * @brief Method to convert a parsed string into string value
+ *
  */
 static void string() {
     emitConstant( OBJ_VAL(copyString(parser.previous.start + 1,
                                      parser.previous.length -2)) );
+}
+
+/**
+ * @brief TODO add comment here
+ *
+ * @param name 
+ */
+static void namedVariable(Token name) {
+    uint8_t arg = identifierConstant(&name);
+    emitBytes(OP_GET_GLOBAL, arg);
+}
+
+/**
+ * @brief Method to parse variables
+ *
+ */
+static void variable() {
+    namedVariable(parser.previous);
 }
 
 /**
@@ -347,7 +367,7 @@ ParseRule rules[] = {
     [TOKEN_GREATER_EQUAL] = {NULL,     binary, PREC_COMPARISON},
     [TOKEN_LESS]          = {NULL,     binary, PREC_COMPARISON},
     [TOKEN_LESS_EQUAL]    = {NULL,     binary, PREC_COMPARISON},
-    [TOKEN_IDENTIFIER]    = {NULL,     NULL,   PREC_NONE},
+    [TOKEN_IDENTIFIER]    = {variable, NULL,   PREC_NONE},
     [TOKEN_STRING]        = {string,   NULL,   PREC_NONE},
     [TOKEN_NUMBER]        = {number,   NULL,   PREC_NONE},
     [TOKEN_AND]           = {NULL,     NULL,   PREC_NONE},
@@ -393,6 +413,39 @@ static void parsePrecedence(Precedence precedence) {
     }
 }
 
+
+/**
+ * @brief Method to write the constant name as a string to the table
+ *
+ * @param name Name of the token
+ * @return uint8_t index of the constant in the program
+ */
+static uint8_t identifierConstant(Token* name) {
+    return makeConstant(OBJ_VAL(copyString(name->start,
+                    name->length)));
+}
+
+/**
+ * @brief Method to parse a variable declaration and expect an identifier
+ *
+ * @param errorMessage Error message to emit when no identifier is found
+ * @return uint8_t index of the constant in the constant array
+ */
+static uint8_t parseVariable(const char* errorMessage) {
+    consume(TOKEN_IDENTIFIER, errorMessage);
+    return identifierConstant(&parser.previous);
+}
+
+/**
+ * @brief Method to output the bytecode instruction that defines the new
+ * variable and stores its initial value
+ *
+ * @param global Variable index
+ */
+static void defineVariable(uint8_t global) {
+    emitBytes(OP_DEFINE_GLOBAL, global);
+}
+
 /**
  * @brief A method that indexes the parsing rules table based on type. The
  * lookup is wrapped in a function.
@@ -411,6 +464,32 @@ static void expression() {
 }
 
 /**
+ * @brief A method to handle variable declarations.
+ */
+static void varDeclaration() {
+    uint8_t global = parseVariable("Expect variable name.");
+
+    if (match(TOKEN_EQUAL)) {
+        expression();
+    } else {
+        emitByte(OP_NULL);
+    }
+    consume(TOKEN_SEMICOLON, "Expect ';' after variable declaration");
+
+    defineVariable(global);
+}
+
+/**
+ * @brief Method to compile an expression followed by a semicolon.
+ *
+ */
+static void expressionStatement() {
+    expression();
+    consume(TOKEN_SEMICOLON, "Expect ';' after expression.");
+    emitByte(OP_POP);
+}
+
+/**
  * @brief Method to handle print statements
  */
 static void printStatement() {
@@ -420,11 +499,45 @@ static void printStatement() {
 }
 
 /**
+ * @brief Method to synchronize panic mode. Allows the compiler to exit
+ * panic mode when it reaches a synchronization point.
+ */
+static void synchronize() {
+    parser.panicMode = false;
+
+    while (parser.current.type != TOKEN_EOF) {
+        if (parser.previous.type == TOKEN_SEMICOLON) return;
+        switch (parser.current.type) {
+            case TOKEN_CLASS:
+            case TOKEN_FUN:
+            case TOKEN_VAR:
+            case TOKEN_FOR:
+            case TOKEN_IF:
+            case TOKEN_WHILE:
+            case TOKEN_PRINT:
+            case TOKEN_RETURN:
+                return;
+
+            default:
+                ; // do nothing
+        }
+        advance();
+    }
+}
+
+/**
  * @brief Method to compile a single declaration
  *
  */
 static void declaration() {
-    statement();
+    if (match(TOKEN_VAR)) {
+        varDeclaration();
+    } else {
+        statement();
+    }
+
+    // if parser gets into panic mode, we synchronize
+    if (parser.panicMode) synchronize();
 }
 
 /**
@@ -434,6 +547,8 @@ static void declaration() {
 static void statement() {
     if (match(TOKEN_PRINT)) {
         printStatement();
+    } else {
+        expressionStatement();
     }
 }
 

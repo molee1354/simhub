@@ -44,7 +44,7 @@ void freeTable(Table* table);
  * @param value The pointer to the value that will hold the value
  * @return True if value exists
  */
-bool tabelGet(Table* table, ObjString* key, Value* value);
+bool tableGet(Table* table, ObjString* key, Value* value);
 
 /**
  * @brief Method to add the given key-value pair to the hast table

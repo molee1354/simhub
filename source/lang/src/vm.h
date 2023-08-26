@@ -16,8 +16,9 @@ typedef struct {
 
     Value stack[STACK_MAX];
     Value* stackTop;
+    Table globals; // hash table to hold global variables
     Table strings; // every string that's created
-    Obj* objects; // vm stores the head of the objects list
+    Obj* objects;  // vm stores the head of the objects list
 } VM;
 
 typedef enum {

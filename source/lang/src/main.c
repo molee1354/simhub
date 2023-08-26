@@ -32,6 +32,7 @@ static char* readFile(const char* path) {
     // finding the file size off of byte offset
     fseek(file, 0L, SEEK_END);
     size_t fileSize = ftell(file);
+    rewind(file);
 
     // allocating enough memory to hold the file size + 1
     char* buffer = (char*)malloc(fileSize+1);

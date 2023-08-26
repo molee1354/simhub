@@ -137,6 +137,28 @@ static void consume(TokenType type, const char* message) {
 }
 
 /**
+ * @brief Helper method to check if the current type is of a certain type
+ *
+ * @param type The type to match 
+ * @return True if the types match
+ */
+static bool check(TokenType type) {
+    return parser.current.type == type;
+}
+
+/**
+ * @brief Method to check the current type going through the parser
+ *
+ * @param type The type to match
+ * @return True if the types match
+ */
+static bool match(TokenType type) {
+    if (!check(type)) return false;
+    advance();
+    return true;
+}
+
+/**
  * @brief Method to append a single byte to the chunk
  * @param byte Byte to write
  *
@@ -205,6 +227,8 @@ static void endCompiler() {
 
 /* Wrapper function declarations */
 static void expression();
+static void statement();
+static void declaration();
 static ParseRule* getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
 
@@ -378,8 +402,39 @@ static ParseRule* getRule(TokenType type) {
     return &rules[type];
 }
 
+/**
+ * @brief Method to parse expressions
+ *
+ */
 static void expression() {
     parsePrecedence(PREC_ASSIGNMENT);
+}
+
+/**
+ * @brief Method to handle print statements
+ */
+static void printStatement() {
+    expression();
+    consume(TOKEN_SEMICOLON, "Expect ';' after value.");
+    emitByte(OP_PRINT);
+}
+
+/**
+ * @brief Method to compile a single declaration
+ *
+ */
+static void declaration() {
+    statement();
+}
+
+/**
+ * @brief Method to match statements according to their tokens
+ * 
+ */
+static void statement() {
+    if (match(TOKEN_PRINT)) {
+        printStatement();
+    }
 }
 
 bool compile(const char *source, Chunk* chunk) {
@@ -391,8 +446,9 @@ bool compile(const char *source, Chunk* chunk) {
     parser.panicMode = false;
 
     advance();
-    expression();
-    consume(TOKEN_EOF, "Expect end of expression.");
+    while (!match(TOKEN_EOF)) {
+        declaration();
+    }
     endCompiler();
     return !parser.hadError;
 }

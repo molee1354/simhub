@@ -28,6 +28,7 @@ typedef enum {
     OP_NOT,
 
     OP_NEGATE,
+    OP_PRINT,
     OP_RETURN,   // Returns from the current function
 } OpCode;
 

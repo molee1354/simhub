@@ -41,7 +41,7 @@ typedef enum {
  * @brief ParseFn is a simple typedef for a function with no args and no return
  *
  */
-typedef void (*ParseFn)();
+typedef void (*ParseFn)(bool canAssign);
 
 /**
  * @brief Wrapper for a single row in the parser table
@@ -237,7 +237,7 @@ static uint8_t identifierConstant(Token* name);
  * @brief Method to handle binary operations
  *
  */
-static void binary() {
+static void binary(bool canAssign) {
     TokenType operatorType = parser.previous.type;
     ParseRule* rule = getRule(operatorType);
     parsePrecedence( (Precedence)(rule->precedence + 1) );
@@ -267,7 +267,7 @@ static void binary() {
  *
  *
  */
-static void literal() {
+static void literal(bool canAssign) {
     switch (parser.previous.type) {
         case TOKEN_FALSE:  emitByte(OP_FALSE); break;
         case TOKEN_NULL:   emitByte(OP_NULL); break;
@@ -283,7 +283,7 @@ static void literal() {
  * expression() to handle expressions within the parenthesis
  *
  */
-static void grouping() {
+static void grouping(bool canAssign) {
     expression(); // takes care of generating bytecode inside the parenthesis
     consume(TOKEN_RIGHT_PAREN, "Expect ')' after expression.");
 }
@@ -292,7 +292,7 @@ static void grouping() {
  * @brief Method to convert a parsed string to a number
  *
  */
-static void number() {
+static void number(bool canAssign) {
     double value = strtod(parser.previous.start, NULL);
     emitConstant(NUMBER_VAL(value));
 }
@@ -301,7 +301,7 @@ static void number() {
  * @brief Method to convert a parsed string into string value
  *
  */
-static void string() {
+static void string(bool canAssign) {
     emitConstant( OBJ_VAL(copyString(parser.previous.start + 1,
                                      parser.previous.length -2)) );
 }
@@ -311,24 +311,29 @@ static void string() {
  *
  * @param name 
  */
-static void namedVariable(Token name) {
+static void namedVariable(Token name, bool canAssign) {
     uint8_t arg = identifierConstant(&name);
-    emitBytes(OP_GET_GLOBAL, arg);
+    if (canAssign && match(TOKEN_EQUAL)) {
+        expression();
+        emitBytes(OP_SET_GLOBAL, arg);
+    } else {
+        emitBytes(OP_GET_GLOBAL, arg);
+    }
 }
 
 /**
  * @brief Method to parse variables
  *
  */
-static void variable() {
-    namedVariable(parser.previous);
+static void variable(bool canAssign) {
+    namedVariable(parser.previous, canAssign);
 }
 
 /**
  * @brief Method to deal with the unary minus
  *
  */
-static void unary() {
+static void unary(bool canAssign) {
     TokenType operatorType = parser.previous.type;
 
     // compiling the operand
@@ -404,12 +409,18 @@ static void parsePrecedence(Precedence precedence) {
         return;
     }
 
-    prefixRule();
+    // checking if assignment can happen
+    bool canAssign = precedence <= PREC_ASSIGNMENT;
+    prefixRule(canAssign);
 
     while (precedence <= getRule(parser.current.type)->precedence) {
         advance();
         ParseFn infixRule = getRule(parser.previous.type)->infix;
-        infixRule();
+        infixRule(canAssign);
+    }
+
+    if (canAssign && match(TOKEN_EQUAL)) {
+        error("Invalid assignment target.");
     }
 }
 

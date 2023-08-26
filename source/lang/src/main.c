@@ -11,7 +11,7 @@ static void repl() {
     puts("hwin v0.1.0");
     char line[1024];
     for (;;) {
-        printf(">>> ");
+        printf("\n>>> ");
 
         if (!fgets(line, sizeof(line), stdin)) {
             printf("\n");

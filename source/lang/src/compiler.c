@@ -31,7 +31,7 @@ typedef enum {
     PREC_EQUALITY,    // == !=
     PREC_COMPARISON,  // < > <= >=
     PREC_TERM,        // + -
-    PREC_FACTOR,      // * /
+    PREC_FACTOR,      // * / %
     PREC_UNARY,       // ! -
     PREC_CALL,        // . ()
     PREC_PRIMARY
@@ -227,10 +227,11 @@ static void binary() {
         case TOKEN_LESS_EQUAL:    emitBytes(OP_GREATER, OP_NOT); break;
 
         // math oper
-        case TOKEN_PLUS:        emitByte(OP_ADD); break;
-        case TOKEN_MINUS:       emitByte(OP_SUBTRACT); break;
-        case TOKEN_STAR:        emitByte(OP_MULTIPLY); break;
-        case TOKEN_SLASH:       emitByte(OP_DIVIDE); break;
+        case TOKEN_PLUS:          emitByte(OP_ADD); break;
+        case TOKEN_MINUS:         emitByte(OP_SUBTRACT); break;
+        case TOKEN_STAR:          emitByte(OP_MULTIPLY); break;
+        case TOKEN_SLASH:         emitByte(OP_DIVIDE); break;
+        case TOKEN_MOD:           emitByte(OP_MOD); break;
 
         // unreachable
         default: return;
@@ -243,9 +244,9 @@ static void binary() {
  */
 static void literal() {
     switch (parser.previous.type) {
-        case TOKEN_FALSE: emitByte(OP_FALSE); break;
-        case TOKEN_NULL: emitByte(OP_NULL); break;
-        case TOKEN_TRUE: emitByte(OP_TRUE); break;
+        case TOKEN_FALSE:  emitByte(OP_FALSE); break;
+        case TOKEN_NULL:   emitByte(OP_NULL); break;
+        case TOKEN_TRUE:   emitByte(OP_TRUE); break;
 
         // unreachable
         default: return;
@@ -313,6 +314,7 @@ ParseRule rules[] = {
     [TOKEN_SEMICOLON]     = {NULL,     NULL,   PREC_NONE},
     [TOKEN_SLASH]         = {NULL,     binary, PREC_FACTOR},
     [TOKEN_STAR]          = {NULL,     binary, PREC_FACTOR},
+    [TOKEN_MOD]           = {NULL,     binary, PREC_FACTOR},
     [TOKEN_BANG]          = {unary,    NULL,   PREC_NONE},
     [TOKEN_BANG_EQUAL]    = {NULL,     binary, PREC_EQUALITY},
     [TOKEN_EQUAL]         = {NULL,     NULL,   PREC_NONE},

@@ -289,6 +289,7 @@ Token scanToken() {
         case '+': return makeToken(TOKEN_PLUS);
         case '/': return makeToken(TOKEN_SLASH);
         case '*': return makeToken(TOKEN_STAR);
+        case '%': return makeToken(TOKEN_MOD);
 
         // recognizing double character tokens
         case '!':

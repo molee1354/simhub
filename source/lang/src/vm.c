@@ -162,6 +162,22 @@ static InterpretResult run() {
             case OP_SUBTRACT: BINARY_OP(NUMBER_VAL, -); break;
             case OP_MULTIPLY: BINARY_OP(NUMBER_VAL, *); break;
             case OP_DIVIDE:   BINARY_OP(NUMBER_VAL, /); break;
+            case OP_MOD: {
+                if ( (IS_NUMBER(peek(0)) && IS_NUMBER(peek(0))) &&
+                     (AS_NUMBER(peek(0)) == (int)AS_NUMBER(peek(0))) &&
+                     (AS_NUMBER(peek(1)) == (int)AS_NUMBER(peek(1))) 
+                   ) {
+                    
+                    int b = (int)AS_NUMBER(pop());
+                    int a = (int)AS_NUMBER(pop());
+                    push(NUMBER_VAL(a%b));
+                } else {
+                    runtimeError(
+                            "Operands must be two integers.");
+                    return INTERPRET_RUNTIME_ERROR;;
+                }
+                break;
+            }
 
             case OP_NOT:
                 push(BOOL_VAL(isFalsey(pop())));

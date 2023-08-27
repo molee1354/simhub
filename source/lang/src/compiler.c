@@ -259,6 +259,22 @@ static void endCompiler() {
 #endif
 }
 
+/**
+ * @brief Method to "go down" a single scope.
+ *
+ */
+static void beginScope() {
+    current->scopeDepth++;
+}
+
+/**
+ * @brief Method to "go up" a single scope.
+ * 
+ */
+static void endScope() {
+    current->scopeDepth--;
+}
+
 /* Wrapper function declarations */
 static void expression();
 static void statement();
@@ -509,6 +525,18 @@ static void expression() {
 }
 
 /**
+ * @brief Method to parse blocks inside braces. Expects a closing curly brace
+ *
+ */
+static void block() {
+    while (!check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF)) {
+        declaration();
+    }
+
+    consume(TOKEN_RIGHT_BRACE, "Expect '}' after block.");
+}
+
+/**
  * @brief A method to handle variable declarations.
  */
 static void varDeclaration() {
@@ -592,6 +620,10 @@ static void declaration() {
 static void statement() {
     if (match(TOKEN_PRINT)) {
         printStatement();
+    } else if (match(TOKEN_LEFT_BRACE)) {
+        beginScope();
+        block();
+        endScope();
     } else {
         expressionStatement();
     }

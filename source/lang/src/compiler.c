@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "chunk.h"
 #include "common.h"
@@ -273,6 +274,13 @@ static void beginScope() {
  */
 static void endScope() {
     current->scopeDepth--;
+
+    // destroying local vars at end of scope
+    while (current->localCount > 0 &&
+           current->locals[current->localCount-1].depth > current->scopeDepth) {
+        emitByte(OP_POP);       // pop local var
+        current->localCount--;  // decrement count
+    }
 }
 
 /* Wrapper function declarations */
@@ -487,6 +495,56 @@ static uint8_t identifierConstant(Token* name) {
 }
 
 /**
+ * @brief Method check if two identifiers are the same
+ *
+ * @param a First identifier
+ * @param b Second identifier
+ * @return bool True if the identifiers are equal
+ */
+static bool identifiersEqual(Token* a, Token* b) {
+    if (a->length != b->length) return false;
+    return memcmp(a->start, b->start, a->length) == 0;
+}
+
+/**
+ * @brief Method to add a local variable to the compiler locals stack
+ *
+ * @param name Name of variable token.
+ */
+static void addLocal(Token name) {
+    // checking for local variable max count
+    if (current->localCount == UINT8_COUNT) {
+        errror("Too many variables in current scope.");
+        return;
+    }
+    Local* local = &current->locals[current->localCount++];
+    local->name = name;
+    local->depth = current->scopeDepth;
+}
+
+/**
+ * @brief Method to declare and add a local variable.
+ * 
+ */
+static void declareVariable() {
+    if (current->scopeDepth == 0) return; // if at global scope, return
+
+    Token* name = &parser.previous;
+    for (int i = current->localCount-1; i>=0; i--) {
+        Local* local = &current->locals[i];
+        if (local->depth != -1 && local->depth < current->scopeDepth) {
+            break;
+        }
+
+        // checking for var name collisions in local scope
+        if (identifiersEqual(name, &local->name)) {
+            error("Already a variable with this name in same scope.");
+        }
+    }
+    addLocal(*name);
+}
+
+/**
  * @brief Method to parse a variable declaration and expect an identifier
  *
  * @param errorMessage Error message to emit when no identifier is found
@@ -494,6 +552,10 @@ static uint8_t identifierConstant(Token* name) {
  */
 static uint8_t parseVariable(const char* errorMessage) {
     consume(TOKEN_IDENTIFIER, errorMessage);
+
+    declareVariable();
+    if (current->scopeDepth > 0) return 0; // exit the function if local scope
+
     return identifierConstant(&parser.previous);
 }
 
@@ -504,6 +566,10 @@ static uint8_t parseVariable(const char* errorMessage) {
  * @param global Variable index
  */
 static void defineVariable(uint8_t global) {
+    // don't define var if in local scope
+    if (current->scopeDepth > 0) {
+        return;
+    }
     emitBytes(OP_DEFINE_GLOBAL, global);
 }
 

@@ -53,7 +53,29 @@ typedef struct {
     Precedence precedence;
 } ParseRule;
 
+/**
+ * @brief Struct for local variable
+ *
+ */
+typedef struct {
+    Token name;
+    int depth; // Depth of local variable
+} Local;
+
+/**
+ * @brief Struct for holding the list of local variables
+ *
+ */
+typedef struct {
+    Local locals[UINT8_COUNT];
+    int localCount; // The number of local variables
+    int scopeDepth; // The depth of the scope (0 for global)
+} Compiler;
+
 Parser parser;
+
+// global compilers bad for multithreading
+Compiler* current = NULL; 
 Chunk* compilingChunk;
 
 /**
@@ -210,6 +232,18 @@ static uint8_t makeConstant(Value value) {
  */
 static void emitConstant(Value value) {
     emitBytes(OP_CONSTANT, makeConstant(value));
+}
+
+/**
+ * @brief Constructor for the compiler struct. Zero initializes the values for
+ * the compiler
+ *
+ * @param compiler The pointer to the compiler to be initialized
+ */
+static void initCompiler(Compiler* compiler) {
+    compiler->localCount = 0;
+    compiler->scopeDepth = 0;
+    current = compiler;
 }
 
 /**
@@ -565,6 +599,8 @@ static void statement() {
 
 bool compile(const char *source, Chunk* chunk) {
     initScanner(source);
+    Compiler compiler;
+    initCompiler(&compiler);
     compilingChunk = chunk;
 
     // initializing error state

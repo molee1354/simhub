@@ -38,6 +38,39 @@ static int simpleInstruction(const char* name, int offset) {
     return offset+1;
 }
 
+/**
+ * @brief Display method for byte instructions. Used for showing local
+ * variables and their slot numbers.
+ *
+ * @param name Name of the operation
+ * @param chunk The current chunk within bytecode
+ * @param offset The current location in code
+ * @return static int The current offset of the code
+ */
+static int byteInstruction(const char* name, Chunk* chunk, int offset) {
+    uint8_t slot = chunk->code[offset+1];
+    printf("%-16s %4d\n", name, slot);
+    return offset+2;
+}
+
+/**
+ * @brief Method to disassmeble 16-bit operand jump instructions.
+ *
+ * @param name The name of the operand
+ * @param sign The sign of the operand
+ * @param chunk The current chunk
+ * @param offset The current location of the code
+ * @return static int The current offset of the code
+ */
+static int jumpInstruction(const char* name, int sign, Chunk* chunk,
+                           int offset) {
+    uint16_t jump = (uint16_t)(chunk->code[offset+1] << 8);
+    jump |= chunk->code[offset+2];
+    printf("%-16s %4d -> %d\n", name, offset,
+            offset+3+sign*jump);
+    return offset+3;
+}
+
 int disassembleInstruction(Chunk *chunk, int offset) {
     printf("%04d ", offset);
     if (offset > 0 &&
@@ -58,6 +91,10 @@ int disassembleInstruction(Chunk *chunk, int offset) {
             return simpleInstruction("OP_FALSE", offset);
         case OP_POP:
             return simpleInstruction("OP_POP", offset);
+        case OP_GET_LOCAL:
+            return byteInstruction("OP_GET_LOCAL", chunk, offset);
+        case OP_SET_LOCAL:
+            return byteInstruction("OP_SET_LOCAL", chunk, offset);
         case OP_GET_GLOBAL:
             return constantInstruction("OP_GET_GLOBAL", chunk, offset);
         case OP_DEFINE_GLOBAL:
@@ -92,6 +129,12 @@ int disassembleInstruction(Chunk *chunk, int offset) {
             return simpleInstruction("OP_NEGATE", offset);
         case OP_PRINT:
             return simpleInstruction("OP_PRINT", offset);
+        case OP_JUMP:
+            return jumpInstruction("OP_JUMP", 1, chunk, offset);
+        case OP_JUMP_IF_FALSE:
+            return jumpInstruction("OP_JUMP_IF_FALSE", 1, chunk, offset);
+        case OP_LOOP:
+            return jumpInstruction("OP_LOOP", -1, chunk, offset);
         case OP_RETURN:
             return simpleInstruction("OP_RETURN", offset);
         default:

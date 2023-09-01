@@ -201,6 +201,29 @@ static void emitBytes(uint8_t byte1, uint8_t byte2) {
     emitByte(byte2);
 }
 
+static void emitLoop(int loopStart) {
+    emitByte(OP_LOOP);
+
+    int offset = currentChunk()->count - loopStart + 2;
+    if (offset > UINT16_MAX) error("Loop body too large");
+
+    emitByte((offset>>8) & 0xff);
+    emitByte(offset & 0xff);
+}
+
+/**
+ * @brief Method to jump a certain offset for control flow
+ *
+ * @param instruction The instruction to jump
+ * @return int The current chunk offset by a jump count
+ */
+static int emitJump(uint8_t instruction) {
+    emitByte(instruction);
+    emitByte(0xff);
+    emitByte(0xff);
+    return currentChunk()->count-2;
+}
+
 /**
  * @brief Method to write OP_RETURN to the current chunk
  *
@@ -233,6 +256,17 @@ static uint8_t makeConstant(Value value) {
  */
 static void emitConstant(Value value) {
     emitBytes(OP_CONSTANT, makeConstant(value));
+}
+
+static void patchJump(int offset) {
+    // -2 to adjust for the bytecode jump offset
+    int jump = currentChunk()->count - offset -2;
+
+    if (jump > UINT16_MAX) {
+        error("Too much code to jump over");
+    }
+    currentChunk()->code[offset] = (jump >> 8) & 0xff;
+    currentChunk()->code[offset+1] = jump & 0xff;
 }
 
 /**
@@ -290,6 +324,7 @@ static void declaration();
 static ParseRule* getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
 static uint8_t identifierConstant(Token* name);
+static int resolveLocal(Compiler* compiler, Token* name);
 
 /**
  * @brief Method to handle binary operations
@@ -356,6 +391,35 @@ static void number(bool canAssign) {
 }
 
 /**
+ * @brief Method to handle the 'and' logical operation
+ *
+ * @param canAssign Variable to check if the value can be assigned
+ */
+static void and_(bool canAssign) {
+    int endJump = emitJump(OP_JUMP_IF_FALSE);
+
+    emitByte(OP_POP);
+    parsePrecedence(PREC_AND);
+    patchJump(endJump);
+}
+
+/**
+ * @brief Method to handle the 'or' logical operation
+ *
+ * @param canAssign Variable to check if the value can be assigned
+ */
+static void or_(bool canAssign) {
+    int elseJump = emitJump(OP_JUMP_IF_FALSE);
+    int endJump = emitJump(OP_JUMP);
+
+    patchJump(elseJump);
+    emitByte(OP_POP);
+
+    parsePrecedence(PREC_OR);
+    patchJump(endJump);
+}
+
+/**
  * @brief Method to convert a parsed string into string value
  *
  */
@@ -370,12 +434,25 @@ static void string(bool canAssign) {
  * @param name 
  */
 static void namedVariable(Token name, bool canAssign) {
-    uint8_t arg = identifierConstant(&name);
+    uint8_t getOp, setOp;
+    int arg = resolveLocal(current, &name);
+
+    if (arg != -1) {
+        getOp = OP_GET_LOCAL;
+        getOp = OP_SET_LOCAL;
+    } else {
+        arg = identifierConstant(&name);
+        getOp = OP_GET_GLOBAL;
+        getOp = OP_SET_GLOBAL;
+    }
+
     if (canAssign && match(TOKEN_EQUAL)) {
         expression();
         emitBytes(OP_SET_GLOBAL, arg);
+        emitBytes(setOp, (uint8_t)arg);
     } else {
         emitBytes(OP_GET_GLOBAL, arg);
+        emitBytes(getOp, (uint8_t)arg);
     }
 }
 
@@ -433,7 +510,7 @@ ParseRule rules[] = {
     [TOKEN_IDENTIFIER]    = {variable, NULL,   PREC_NONE},
     [TOKEN_STRING]        = {string,   NULL,   PREC_NONE},
     [TOKEN_NUMBER]        = {number,   NULL,   PREC_NONE},
-    [TOKEN_AND]           = {NULL,     NULL,   PREC_NONE},
+    [TOKEN_AND]           = {NULL,     and_,   PREC_AND},
     [TOKEN_CLASS]         = {NULL,     NULL,   PREC_NONE},
     [TOKEN_ELSE]          = {NULL,     NULL,   PREC_NONE},
     [TOKEN_FALSE]         = {literal,  NULL,   PREC_NONE},
@@ -441,7 +518,7 @@ ParseRule rules[] = {
     [TOKEN_FUN]           = {NULL,     NULL,   PREC_NONE},
     [TOKEN_IF]            = {NULL,     NULL,   PREC_NONE},
     [TOKEN_NULL]          = {literal,  NULL,   PREC_NONE},
-    [TOKEN_OR]            = {NULL,     NULL,   PREC_NONE},
+    [TOKEN_OR]            = {NULL,     or_,    PREC_OR},
     [TOKEN_PRINT]         = {NULL,     NULL,   PREC_NONE},
     [TOKEN_RETURN]        = {NULL,     NULL,   PREC_NONE},
     [TOKEN_SUPER]         = {NULL,     NULL,   PREC_NONE},
@@ -507,6 +584,26 @@ static bool identifiersEqual(Token* a, Token* b) {
 }
 
 /**
+ * @brief Method to check if a given token name exists in the local scope
+ *
+ * @param compiler The current compiler
+ * @param name The name of the token
+ * @return The local index where the variable is found, -1 if not. 
+ */
+static int resolveLocal(Compiler* compiler, Token* name) {
+    for (int i = compiler->localCount -1; i>=0; i--) {
+        Local* local = &compiler->locals[i];
+        if (identifiersEqual(name, &local->name)) {
+            if (local->depth == -1) {
+                error("Can't read local variable in its own initializer.");
+            }
+            return i;
+        }
+    }
+    return -1;
+}
+
+/**
  * @brief Method to add a local variable to the compiler locals stack
  *
  * @param name Name of variable token.
@@ -514,12 +611,12 @@ static bool identifiersEqual(Token* a, Token* b) {
 static void addLocal(Token name) {
     // checking for local variable max count
     if (current->localCount == UINT8_COUNT) {
-        errror("Too many variables in current scope.");
+        error("Too many variables in current scope.");
         return;
     }
     Local* local = &current->locals[current->localCount++];
     local->name = name;
-    local->depth = current->scopeDepth;
+    local->depth = -1;
 }
 
 /**
@@ -560,6 +657,13 @@ static uint8_t parseVariable(const char* errorMessage) {
 }
 
 /**
+ * @brief Method to mark a variable as initialized.
+ */
+static void markInitialized() {
+    current->locals[current->localCount - 1].depth = current->scopeDepth;
+}
+
+/**
  * @brief Method to output the bytecode instruction that defines the new
  * variable and stores its initial value
  *
@@ -568,6 +672,7 @@ static uint8_t parseVariable(const char* errorMessage) {
 static void defineVariable(uint8_t global) {
     // don't define var if in local scope
     if (current->scopeDepth > 0) {
+        markInitialized();
         return;
     }
     emitBytes(OP_DEFINE_GLOBAL, global);
@@ -629,12 +734,99 @@ static void expressionStatement() {
 }
 
 /**
+ * @brief Method to parse through for statements
+ */
+static void forStatement() {
+    beginScope();
+    consume(TOKEN_LEFT_PAREN, "Expect '(' after 'for'.");
+    if (match(TOKEN_SEMICOLON)) {
+        // no initializer
+    } else if (match(TOKEN_VAR)) {
+        varDeclaration();
+    } else {
+        expressionStatement();
+    }
+
+    int loopStart = currentChunk()->count;
+    int exitJump = -1;
+    if (!match(TOKEN_SEMICOLON)) {
+        expression();
+        consume(TOKEN_SEMICOLON, "Expect ';' after loop condition.");
+
+        // jump out if condition is false
+        exitJump = emitJump(OP_JUMP_IF_FALSE);
+        emitByte(OP_POP); // pop condition
+    }
+    if (!match(TOKEN_RIGHT_PAREN)) {
+
+        int bodyJump = emitJump(OP_JUMP);
+        int incrementStart = currentChunk()->count;
+        expression();
+        emitByte(OP_POP);
+        consume(TOKEN_RIGHT_PAREN, "Expect ')' after for clauses.");
+
+        emitLoop(loopStart);
+        loopStart = incrementStart;
+        patchJump(bodyJump);
+    }
+
+    statement();
+    emitLoop(loopStart);
+
+    // patching the jump for a condition clause
+    if (exitJump != -1) {
+        patchJump(exitJump);
+        emitByte(OP_POP);
+    }
+    endScope();
+}
+
+/**
+ * @brief Method to parse through the if statement
+ */
+static void ifStatement() {
+    consume(TOKEN_LEFT_PAREN, "Expect '(' after 'if'.");
+    expression();
+    consume(TOKEN_RIGHT_PAREN, "Expect ')' after 'if'.");
+
+    int thenJump = emitJump(OP_JUMP_IF_FALSE);
+    emitByte(OP_POP);
+    statement();
+
+    int elseJump = emitJump(OP_JUMP);
+    patchJump(thenJump);
+    emitByte(OP_POP);
+
+    if (match(TOKEN_ELSE)) statement();
+    patchJump(elseJump);
+}
+
+/**
  * @brief Method to handle print statements
  */
 static void printStatement() {
     expression();
     consume(TOKEN_SEMICOLON, "Expect ';' after value.");
     emitByte(OP_PRINT);
+}
+
+/**
+ * @brief Method to handle while statements
+ */
+static void whileStatement() {
+    int loopStart = currentChunk()->count;
+    consume(TOKEN_LEFT_PAREN, "Expect '(' after 'while'.");
+    expression();
+    consume(TOKEN_RIGHT_PAREN, "Expect ')' after 'while'.");
+
+    int exitJump = emitJump(OP_JUMP_IF_FALSE);
+    emitByte(OP_POP);
+    statement();
+
+    emitLoop(loopStart);
+
+    patchJump(exitJump);
+    emitByte(OP_POP);
 }
 
 /**
@@ -686,6 +878,12 @@ static void declaration() {
 static void statement() {
     if (match(TOKEN_PRINT)) {
         printStatement();
+    } else if (match(TOKEN_FOR)) {
+        forStatement();
+    } else if (match(TOKEN_IF)) {
+        ifStatement();
+    } else if (match(TOKEN_WHILE)) {
+        whileStatement();
     } else if (match(TOKEN_LEFT_BRACE)) {
         beginScope();
         block();

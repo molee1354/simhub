@@ -439,19 +439,17 @@ static void namedVariable(Token name, bool canAssign) {
 
     if (arg != -1) {
         getOp = OP_GET_LOCAL;
-        getOp = OP_SET_LOCAL;
+        setOp = OP_SET_LOCAL;
     } else {
         arg = identifierConstant(&name);
         getOp = OP_GET_GLOBAL;
-        getOp = OP_SET_GLOBAL;
+        setOp = OP_SET_GLOBAL;
     }
 
     if (canAssign && match(TOKEN_EQUAL)) {
         expression();
-        emitBytes(OP_SET_GLOBAL, arg);
         emitBytes(setOp, (uint8_t)arg);
     } else {
-        emitBytes(OP_GET_GLOBAL, arg);
         emitBytes(getOp, (uint8_t)arg);
     }
 }
@@ -739,8 +737,10 @@ static void expressionStatement() {
 static void forStatement() {
     beginScope();
     consume(TOKEN_LEFT_PAREN, "Expect '(' after 'for'.");
-    if (match(TOKEN_SEMICOLON)) {
-        // no initializer
+
+    // init clause
+    if(match(TOKEN_SEMICOLON)) {
+        // no init
     } else if (match(TOKEN_VAR)) {
         varDeclaration();
     } else {
@@ -748,17 +748,20 @@ static void forStatement() {
     }
 
     int loopStart = currentChunk()->count;
+
+    // condition clause
     int exitJump = -1;
     if (!match(TOKEN_SEMICOLON)) {
         expression();
         consume(TOKEN_SEMICOLON, "Expect ';' after loop condition.");
 
-        // jump out if condition is false
+        // exit loop if condition is false
         exitJump = emitJump(OP_JUMP_IF_FALSE);
-        emitByte(OP_POP); // pop condition
+        emitByte(OP_POP);
     }
-    if (!match(TOKEN_RIGHT_PAREN)) {
 
+    // increment clause
+    if (!match(TOKEN_RIGHT_PAREN)) {
         int bodyJump = emitJump(OP_JUMP);
         int incrementStart = currentChunk()->count;
         expression();
@@ -769,11 +772,10 @@ static void forStatement() {
         loopStart = incrementStart;
         patchJump(bodyJump);
     }
-
+    
     statement();
     emitLoop(loopStart);
 
-    // patching the jump for a condition clause
     if (exitJump != -1) {
         patchJump(exitJump);
         emitByte(OP_POP);

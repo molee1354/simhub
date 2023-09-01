@@ -1,2 +1,6 @@
+# directories
+obj/
+bin/
+
 # ignoring test files
 test.*

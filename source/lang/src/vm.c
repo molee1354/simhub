@@ -19,6 +19,9 @@
  */
 VM vm;
 
+// Runtime error function declaration
+static void runtimeError(const char* format, ...);
+
 /**
  * @brief Defining native "clock()" function.
  *
@@ -26,8 +29,21 @@ VM vm;
  * @param args The arguments
  * @return Value The elapsed time since the program started running
  */
-static Value clockNative(int argcount, Value* args) {
+static Value clockNative(int argCount, Value* args) {
     return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
+}
+
+static Value putsNative(int argCount, Value* args ) {
+    if (argCount > 1) {
+        runtimeError("Too many arguments provided : %d", argCount);
+        return NULL_VAL;
+    }
+    if (!IS_STRING(args[0])) {
+        runtimeError("Incorrect argument type.");
+        return NULL_VAL;
+    }
+    printf("%s\n", AS_CSTRING(args[0]));
+    return NULL_VAL;
 }
 
 static void resetStack() {
@@ -87,7 +103,10 @@ void initVM() {
     vm.objects = NULL;
     initTable(&vm.globals);
     initTable(&vm.strings);
+
+    // defining native functions
     defineNative("clock", clockNative);
+    defineNative("puts", putsNative);
 }
 
 void freeVM() {

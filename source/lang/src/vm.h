@@ -4,15 +4,29 @@
 #include "chunk.h"
 #include "value.h"
 #include "table.h"
+#include "object.h"
 
-#define STACK_MAX 256
+#define FRAMES_MAX 64
+#define STACK_MAX (FRAMES_MAX * UINT8_COUNT)
 
+/**
+ * @brief Struct to define the callframe of a function
+ *
+ */
 typedef struct {
-    Chunk* chunk;
-
-    // byte pointer that points to the instruction.
-    // Dereference this pointer to get instruction
+    ObjFunction* function;
     uint8_t* ip;
+    Value* slots;
+} CallFrame;
+
+/**
+ * @brief Struct to define the VM that runs the bytecode
+ *
+ */
+typedef struct {
+    CallFrame frames[FRAMES_MAX]; // each callframe has its own ip and
+                                  // pointer to ObjFunction
+    int frameCount; // current height of the frames stack
 
     Value stack[STACK_MAX];
     Value* stackTop;

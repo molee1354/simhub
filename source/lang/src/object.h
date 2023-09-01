@@ -2,6 +2,7 @@
 #define _object_h
 
 #include "common.h"
+#include "chunk.h"
 #include "value.h"
 
 /**
@@ -11,10 +12,35 @@
 #define OBJ_TYPE(value) ( AS_OBJ(value)->type )
 
 /**
+ * @brief Macro to check if a value is of function type
+ *
+ */ 
+#define IS_FUNCTION(value) isObjType(value, OBJ_FUNCTION)
+
+/**
+ * @brief Macro to check if a value is of native function type
+ *
+ */ 
+#define IS_NATIVE(value)   isObjType(value, OBJ_NATIVE);
+
+/**
  * @brief Macro to check if a value is of string type
  *
  */ 
-#define IS_STRING(value) isObjType(value, OBJ_STRING)
+#define IS_STRING(value)   isObjType(value, OBJ_STRING)
+
+/**
+ * @brief Macro to convert into function object
+ *
+ */ 
+#define AS_FUNCTION(value)       ( (ObjFunction*)AS_OBJ(value) )
+
+/**
+ * @brief Macro to convert into a native function object
+ *
+ */
+#define AS_NATIVE(value) \
+    ( ((ObjNative*)AS_OBJ(value))->function )
 
 /**
  * @brief Macro to convert into string implementation
@@ -33,6 +59,8 @@
  *
  */
 typedef enum {
+    OBJ_FUNCTION,
+    OBJ_NATIVE,
     OBJ_STRING,
 } ObjType;
 
@@ -47,6 +75,33 @@ struct Obj {
 };
 
 /**
+ * @class ObjFunction
+ * @brief Defining functions as first class.
+ */
+typedef struct {
+    Obj obj;
+    int arity;
+    Chunk chunk;
+    ObjString* name;
+} ObjFunction;
+
+/**
+ * @brief Declare NativeFn as a function pointer that has a return type of
+ * Value
+ *
+ */
+typedef Value (*NativeFn)(int argCount, Value* args);
+
+/**
+ * @class ObjNative
+ * @brief Struct to define native functions
+ */
+typedef struct {
+    Obj obj;
+    NativeFn function;
+} ObjNative;
+
+/**
  * @class ObjString
  * @brief Child struct for string type
  *
@@ -57,6 +112,21 @@ struct ObjString{
     char* chars;
     uint32_t hash;
 };
+
+/**
+ * @brief Method to create an ObjFunction.
+ *
+ * @return ObjFunction* A pointer to a new function object.
+ */
+ObjFunction* newFunction();
+
+/**
+ * @brief Method to create a new native function
+ *
+ * @param function A pointer to a native function
+ * @return ObjNative* A pointer to the native function created
+ */
+ObjNative* newNative(NativeFn function);
 
 /**
  * @brief Method to create an ObjString given a C-string. Assumes ownership

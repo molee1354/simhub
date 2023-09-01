@@ -11,6 +11,6 @@
  * @param chunk Chunk to write to
  * @return True if the parser encountered an error
  */
-bool compile(const char* source, Chunk* chunk);
+ObjFunction* compile(const char* source);
 
 #endif

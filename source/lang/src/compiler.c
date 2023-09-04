@@ -804,7 +804,7 @@ static void function(FunctionType type) {
 
     // end the compiler completely when we reach the end of the body
     ObjFunction* function = endCompiler();
-    emitBytes(OP_CONSTANT, makeConstant(OBJ_VAL(function)));
+    emitBytes(OP_CLOSURE, makeConstant(OBJ_VAL(function)));
 }
 
 /**

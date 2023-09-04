@@ -12,6 +12,12 @@
 #define OBJ_TYPE(value) ( AS_OBJ(value)->type )
 
 /**
+ * @brief Macro to check if a value is of closure type
+ *
+ */
+#define IS_CLOSURE(value) isObjType(value, OBJ_FUNCTION)
+
+/**
  * @brief Macro to check if a value is of function type
  *
  */ 
@@ -28,6 +34,12 @@
  *
  */ 
 #define IS_STRING(value)   isObjType(value, OBJ_STRING)
+
+/**
+ * @brief Macro to convert into closure object
+ *
+ */ 
+#define AS_CLOSURE(value)       ( (ObjClosure*)AS_OBJ(value) )
 
 /**
  * @brief Macro to convert into function object

@@ -15,7 +15,7 @@
  * @brief Macro to check if a value is of closure type
  *
  */
-#define IS_CLOSURE(value) isObjType(value, OBJ_FUNCTION)
+#define IS_CLOSURE(value) isObjType(value, OBJ_CLOSURE)
 
 /**
  * @brief Macro to check if a value is of function type

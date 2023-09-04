@@ -14,7 +14,7 @@
  *
  */
 typedef struct {
-    ObjFunction* function;
+    ObjClosure* closure;
     uint8_t* ip;
     Value* slots;
 } CallFrame;
@@ -30,9 +30,10 @@ typedef struct {
 
     Value stack[STACK_MAX];
     Value* stackTop;
-    Table globals; // hash table to hold global variables
-    Table strings; // every string that's created
-    Obj* objects;  // vm stores the head of the objects list
+    Table globals;            // hash table to hold global variables
+    Table strings;            // every string that's created
+    ObjUpvalue* openUpvalues; // upvalue array
+    Obj* objects;             // vm stores the head of the objects list
 } VM;
 
 typedef enum {

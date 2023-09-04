@@ -75,6 +75,7 @@ typedef enum {
     OBJ_FUNCTION,
     OBJ_NATIVE,
     OBJ_STRING,
+    OBJ_UPVALUE
 } ObjType;
 
 /**
@@ -94,6 +95,7 @@ struct Obj {
 typedef struct {
     Obj obj;
     int arity;
+    int upvalueCount;
     Chunk chunk;
     ObjString* name;
 } ObjFunction;
@@ -119,7 +121,7 @@ typedef struct {
  * @brief Child struct for string type
  *
  */
-struct ObjString{
+struct ObjString {
     Obj obj;
     int length;
     char* chars;
@@ -127,13 +129,27 @@ struct ObjString{
 };
 
 /**
- * @class ObjString
+ * @class ObjUpvalue
+ * @brief Upvalue type struct.
+ *
+ */
+typedef struct ObjUpvalue {
+    Obj obj;
+    Value* location;
+    Value closed;
+    struct ObjUpvalue* next;
+} ObjUpvalue;
+
+/**
+ * @class ObjClosure
  * @brief Closure-type struct
  *
  */
 typedef struct {
     Obj obj;
     ObjFunction* function;
+    ObjUpvalue** upvalues;
+    int upvalueCount;
 } ObjClosure;
 
 /**
@@ -178,6 +194,14 @@ ObjString* takeString(char* chars, int length);
  * @return ObjString* A pointer to an ObjString
  */
 ObjString* copyString(const char* chars, int length);
+
+/**
+ * @brief Method to create a new upvalue object
+ *
+ * @param slot The slot where the upvalue is slotted
+ * @return ObjUpvalue* A pointer to a ObjUpvalue
+ */
+ObjUpvalue* newUpvalue(Value* slot);
 
 /**
  * @brief Method to print the values of the object

@@ -152,6 +152,9 @@ static void skipWhiteSpace() {
                     return;
                 }
                 break;
+            case '#':
+                while( peek() != '\n' && !isAtEnd() ) advance();
+                break;
             default:
                 return;
         }

@@ -59,6 +59,7 @@
  *
  */
 typedef enum {
+    OBJ_CLOSURE,
     OBJ_FUNCTION,
     OBJ_NATIVE,
     OBJ_STRING,
@@ -112,6 +113,24 @@ struct ObjString{
     char* chars;
     uint32_t hash;
 };
+
+/**
+ * @class ObjString
+ * @brief Closure-type struct
+ *
+ */
+typedef struct {
+    Obj obj;
+    ObjFunction* function;
+} ObjClosure;
+
+/**
+ * @brief Method to create an ObjClosure.
+ *
+ * @param function The function object to hold.
+ * @return ObjClosure* Pointer to an Objclosure struct.
+ */
+ObjClosure* newClosure(ObjFunction* function);
 
 /**
  * @brief Method to create an ObjFunction.

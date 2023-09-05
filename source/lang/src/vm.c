@@ -31,7 +31,7 @@ VM vm;
 static void runtimeError(const char* format, ...);
 
 /**
- * @brief Defining native "clock()" function.
+ * @brief Defining the native "clock()" function.
  *
  * @param argcount The number of arguments 
  * @param args The arguments
@@ -41,6 +41,13 @@ static Value clockNative(int argCount, Value* args) {
     return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
 }
 
+/**
+ * @brief Defining the native "sleep()" function.
+ *
+ * @param argcount The number of arguments 
+ * @param args The arguments
+ * @return Value Null val.
+ */
 static Value sleepNative(int argCount, Value* args) {
     if (argCount > 1) {
         runtimeError("Too many arguments provided : %d", argCount);
@@ -60,13 +67,13 @@ static Value sleepNative(int argCount, Value* args) {
 }
 
 /**
- * @brief Defining native "puts()" function.
+ * @brief Defining the native "puts()" function.
  *
  * @param argcount The number of arguments 
  * @param args The arguments
  * @return Value NULL_VAL
  */
-static Value putsNative(int argCount, Value* args ) {
+static Value putsNative(int argCount, Value* args) {
     if (argCount > 1) {
         runtimeError("Too many arguments provided : %d", argCount);
         return NULL_VAL;
@@ -79,6 +86,29 @@ static Value putsNative(int argCount, Value* args ) {
     return NULL_VAL;
 }
 
+/**
+ * @brief Defining the native "system()" function.
+ *
+ * @param argcount The number of arguments 
+ * @param args The arguments
+ * @return Value NULL_VAL
+ */
+static Value systemNative(int argCount, Value* args) {
+    if (argCount > 1) {
+        runtimeError("Too many arguments provided : %d", argCount);
+        return NULL_VAL;
+    }
+    if (!IS_STRING(args[0])) {
+        runtimeError("Incorrect argument type.");
+        return NULL_VAL;
+    }
+    system(AS_CSTRING(args[0]));
+    return NULL_VAL;
+}
+
+/**
+ * @brief Method to reset the VM stack
+ */
 static void resetStack() {
     // setting the stackTop pointer to the beginning of the stack
     vm.stackTop = vm.stack;
@@ -150,6 +180,7 @@ void initVM() {
     defineNative("clock", clockNative);
     defineNative("puts", putsNative);
     defineNative("sleep", sleepNative);
+    defineNative("system", systemNative);
 }
 
 void freeVM() {

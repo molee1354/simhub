@@ -3,6 +3,13 @@
 #include <string.h>
 #include <time.h>
 
+// check for platform
+#ifdef _WIN64
+#include <dos.h>
+#else
+#include <unistd.h>
+#endif
+
 #include "chunk.h"
 #include "common.h"
 #include "compiler.h"
@@ -33,6 +40,31 @@ static Value clockNative(int argCount, Value* args) {
     return NUMBER_VAL((double)clock() / CLOCKS_PER_SEC);
 }
 
+static Value sleepNative(int argCount, Value* args) {
+    if (argCount > 1) {
+        runtimeError("Too many arguments provided : %d", argCount);
+        return NULL_VAL;
+    }
+    if (!IS_NUMBER(args[0])) {
+        runtimeError("Incorrect argument type.");
+        return NULL_VAL;
+    }
+    int waitFor = (int)AS_NUMBER(args[0]);
+
+    /* clock_t timeStart = clock();
+    while (clock() < timeStart + waitFor)
+        ; */
+    sleep(waitFor);
+    return NULL_VAL;
+}
+
+/**
+ * @brief Defining native "puts()" function.
+ *
+ * @param argcount The number of arguments 
+ * @param args The arguments
+ * @return Value NULL_VAL
+ */
 static Value putsNative(int argCount, Value* args ) {
     if (argCount > 1) {
         runtimeError("Too many arguments provided : %d", argCount);
@@ -116,6 +148,7 @@ void initVM() {
     // defining native functions
     defineNative("clock", clockNative);
     defineNative("puts", putsNative);
+    defineNative("sleep", sleepNative);
 }
 
 void freeVM() {

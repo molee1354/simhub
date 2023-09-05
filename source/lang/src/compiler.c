@@ -507,7 +507,7 @@ static void namedVariable(Token name, bool canAssign) {
     uint8_t getOp, setOp;
     int arg = resolveLocal(current, &name);
 
-    if (arg != -1) {
+    if (arg != -1) { // -1 for global state
         getOp = OP_GET_LOCAL;
         setOp = OP_SET_LOCAL;
     } else if ( (arg = resolveUpvalue(current, &name)) != -1) {
@@ -913,6 +913,7 @@ static void funDeclaration() {
 static void varDeclaration() {
     uint8_t global = parseVariable("Expect variable name.");
 
+    // consume(TOKEN_EQUAL, "HAHAHA trollface");
     if (match(TOKEN_EQUAL)) {
         expression();
     } else {

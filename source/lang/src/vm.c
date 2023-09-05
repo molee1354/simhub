@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
+#include <stdlib.h>
 #include <time.h>
 
 // check for platform
@@ -274,7 +275,56 @@ static bool isFalsey(Value value) {
     return IS_NULL(value) || (IS_BOOL(value) && !AS_BOOL(value));
 }
 
+/**
+ * @brief Method to convert a number to a string.
+ *
+ * @param num Number to convert
+ * @param length Number of characters in the number
+ * @return char* Pointer to the head of the character array representation.
+ */
+static char* toChar(double num, int length) {
+    char* str = (char*)malloc(length+1);
+    if (str == NULL) {
+        return NULL;
+    }
+    snprintf(str, length+1, "%g", num);
+    return str;
+}
+
+/**
+ * @brief Method to convert a number to a string. Pops the topmost value in
+ * the stack, converts it to a string, and pushes it back.
+ *
+ * @param value Number value to convert to string
+ */
+static void toString(Value value) {
+    if (!IS_NUMBER(value)) {
+        runtimeError("Unsupported type conversion to string.");
+    }
+    double num = (double)AS_NUMBER(value);
+    int length;
+    length = snprintf(NULL, 0, "%g", num);
+    char* numStr = toChar(num, length);
+    char* chars = ALLOCATE(char, length+1);
+    memcpy(chars, numStr, length);
+
+    ObjString* conversion = takeString(chars, length);
+    pop();
+    push(OBJ_VAL(conversion));
+    free(numStr);
+}
+
 static void concatenate() {
+    
+    if (!IS_STRING(peek(0)) && IS_STRING(peek(1))) {
+        toString(peek(0));
+    } else if (IS_STRING(peek(0)) && !IS_STRING(peek(1))) {
+        Value temp = peek(0);
+        pop();
+        toString(peek(0));
+        push(temp);
+    }
+
     ObjString* b = AS_STRING(peek(0));
     ObjString* a = AS_STRING(peek(1));
 
@@ -402,7 +452,7 @@ static InterpretResult run() {
             case OP_LESS:     BINARY_OP(BOOL_VAL, <); break;
 
             case OP_ADD: {
-                if ( IS_STRING(peek(0)) && IS_STRING(peek(1)) ) {
+                if ( IS_STRING(peek(0)) || IS_STRING(peek(1)) ) {
                     concatenate();
                 } else if( IS_NUMBER(peek(0)) && IS_NUMBER(peek(1)) ) {
                     double b = AS_NUMBER(pop());

@@ -4,3 +4,4 @@ bin/
 
 # ignoring test files
 test.*
+*.js

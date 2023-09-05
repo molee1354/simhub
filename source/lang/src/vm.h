@@ -33,7 +33,13 @@ typedef struct {
     Table globals;            // hash table to hold global variables
     Table strings;            // every string that's created
     ObjUpvalue* openUpvalues; // upvalue array
+
+    size_t bytesAllocated;
+    size_t nextGC;
     Obj* objects;             // vm stores the head of the objects list
+    int grayCount;
+    int grayCapacity;
+    Obj** grayStack;
 } VM;
 
 typedef enum {

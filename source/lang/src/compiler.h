@@ -13,4 +13,10 @@
  */
 ObjFunction* compile(const char* source);
 
+/**
+ * @brief Method to mark the compiler root
+ *
+ */
+void markCompilerRoots();
+
 #endif

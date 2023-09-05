@@ -85,4 +85,18 @@ void tableAddAll(Table* from, Table* to);
 ObjString* tableFindString(Table* table, const char* chars, int length,
                            uint32_t hash);
 
+/**
+ * @brief Method to remove the dangling string pointers in the table
+ *
+ * @param table The table to free string pointers from
+ */
+void tableRemoveWhite(Table* table);
+
+/**
+ * @brief Method to mark a table 
+ *
+ * @param table The table to mark
+ */
+void markTable(Table* table);
+
 #endif

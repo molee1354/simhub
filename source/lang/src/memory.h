@@ -53,6 +53,26 @@
 void* reallocate(void* pointer, size_t oldSize, size_t newSize);
 
 /**
+ * @brief Method to mark an object
+ *
+ * @param object Object to mark
+ */
+void markObject(Obj* object);
+
+/**
+ * @brief Method to mark a value
+ *
+ * @param value Value to mark
+ */
+void markValue(Value value);
+
+/**
+ * @brief Garbace collection
+ *
+ */
+void collectGarbage();
+
+/**
  * @brief Method to free all the remaining objects
  */
 void freeObjects();

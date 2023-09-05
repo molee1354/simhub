@@ -97,6 +97,7 @@ typedef struct Compiler {
 
     Local locals[UINT8_COUNT];
     int localCount;                // The number of local variables
+
     Upvalue upvalues[UINT8_COUNT]; // Upvalue array
     int scopeDepth;                // The depth of the scope (0 for global)
 } Compiler;
@@ -522,6 +523,8 @@ static void namedVariable(Token name, bool canAssign) {
     if (canAssign && match(TOKEN_EQUAL)) {
         expression();
         emitBytes(setOp, (uint8_t)arg);
+    } else if (!canAssign && match(TOKEN_EQUAL)) {
+        error("Cannot reassign values to constants.");
     } else {
         emitBytes(getOp, (uint8_t)arg);
     }
@@ -596,6 +599,7 @@ ParseRule rules[] = {
     [TOKEN_THIS]          = {NULL,     NULL,   PREC_NONE},
     [TOKEN_TRUE]          = {literal,  NULL,   PREC_NONE},
     [TOKEN_VAR]           = {NULL,     NULL,   PREC_NONE},
+    [TOKEN_CONST]         = {NULL,     NULL,   PREC_NONE},
     [TOKEN_WHILE]         = {NULL,     NULL,   PREC_NONE},
     [TOKEN_ERROR]         = {NULL,     NULL,   PREC_NONE},
     [TOKEN_EOF]           = {NULL,     NULL,   PREC_NONE},
@@ -924,6 +928,19 @@ static void varDeclaration() {
     defineVariable(global);
 }
 
+static void constDeclaration() {
+    uint8_t global = parseVariable("Expect variable name.");
+
+    if (!match(TOKEN_EQUAL)) {
+        error("Constant declarations must be followed by a value assignment.");
+    } else {
+        expression();
+    }
+    consume(TOKEN_SEMICOLON, "Expect ';' after constant declaration");
+
+    defineVariable(global);
+}
+
 /**
  * @brief Method to compile an expression followed by a semicolon.
  *
@@ -1063,6 +1080,7 @@ static void synchronize() {
             case TOKEN_CLASS:
             case TOKEN_FUN:
             case TOKEN_VAR:
+            case TOKEN_CONST:
             case TOKEN_FOR:
             case TOKEN_IF:
             case TOKEN_WHILE:
@@ -1086,6 +1104,8 @@ static void declaration() {
         funDeclaration();
     } else if (match(TOKEN_VAR)) {
         varDeclaration();
+    } else if (match(TOKEN_CONST)) {
+        constDeclaration();
     } else {
         statement();
     }

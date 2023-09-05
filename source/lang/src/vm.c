@@ -283,11 +283,11 @@ static bool isFalsey(Value value) {
  * @return char* Pointer to the head of the character array representation.
  */
 static char* toChar(double num, int length) {
-    char* str = (char*)malloc(length+1);
+    char* str = (char*)malloc(length);
     if (str == NULL) {
         return NULL;
     }
-    snprintf(str, length+1, "%g", num);
+    snprintf(str, length, "%g", num);
     return str;
 }
 
@@ -304,7 +304,7 @@ static void toString(Value value) {
     double num = (double)AS_NUMBER(value);
     int length;
     length = snprintf(NULL, 0, "%g", num);
-    char* numStr = toChar(num, length);
+    char* numStr = toChar(num, length+1);
     char* chars = ALLOCATE(char, length+1);
     memcpy(chars, numStr, length);
 

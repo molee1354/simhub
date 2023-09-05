@@ -63,8 +63,14 @@ typedef struct {
 typedef struct {
     Token name;
     int depth;       // Depth of local variable
+    bool isConst;    // if variable is declared constant
     bool isCaptured; // true if local is captured by any later nested func dec
 } Local;
+
+typedef struct {
+    int depth;
+    bool isConst;
+} ResolvedLocal;
 
 /**
  * @brief Struct to hold upvalues
@@ -382,7 +388,7 @@ static void declaration();
 static ParseRule* getRule(TokenType type);
 static void parsePrecedence(Precedence precedence);
 static uint8_t identifierConstant(Token* name);
-static int resolveLocal(Compiler* compiler, Token* name);
+static ResolvedLocal resolveLocal(Compiler* compiler, Token* name);
 static uint8_t argumentList();
 static int resolveUpvalue(Compiler* compiler, Token* name);
 
@@ -506,7 +512,9 @@ static void string(bool canAssign) {
  */
 static void namedVariable(Token name, bool canAssign) {
     uint8_t getOp, setOp;
-    int arg = resolveLocal(current, &name);
+    ResolvedLocal resLoc = resolveLocal(current, &name);
+    int arg = resLoc.depth;
+    bool isConst = resLoc.isConst;
 
     if (arg != -1) { // -1 for global state
         getOp = OP_GET_LOCAL;
@@ -521,10 +529,11 @@ static void namedVariable(Token name, bool canAssign) {
     }
 
     if (canAssign && match(TOKEN_EQUAL)) {
+        if (isConst) {
+            error("Cannot reassign values to constants.");
+        }
         expression();
         emitBytes(setOp, (uint8_t)arg);
-    } else if (!canAssign && match(TOKEN_EQUAL)) {
-        error("Cannot reassign values to constants.");
     } else {
         emitBytes(getOp, (uint8_t)arg);
     }
@@ -665,17 +674,20 @@ static bool identifiersEqual(Token* a, Token* b) {
  * @param name The name of the token
  * @return static int The local index where the variable is found, -1 if not. 
  */
-static int resolveLocal(Compiler* compiler, Token* name) {
+static ResolvedLocal resolveLocal(Compiler* compiler, Token* name) {
+    ResolvedLocal out = {-1, false};
     for (int i = compiler->localCount -1; i>=0; i--) {
         Local* local = &compiler->locals[i];
         if (identifiersEqual(name, &local->name)) {
             if (local->depth == -1) {
                 error("Can't read local variable in its own initializer.");
             }
-            return i;
+            out.depth = i;
+            out.isConst = local->isConst;
+            return out;
         }
     }
-    return -1;
+    return out;
 }
 
 /**
@@ -717,7 +729,7 @@ static int addUpvalue(Compiler* compiler, uint8_t index, bool isLocal) {
 static int resolveUpvalue(Compiler* compiler, Token* name) {
     if (compiler->enclosing == NULL) return -1;
 
-    int local = resolveLocal(compiler->enclosing, name);
+    int local = resolveLocal(compiler->enclosing, name).depth;
     if (local != -1) { // if local var is found
         // for resolving an identifier, mark it as "captured"
         compiler->enclosing->locals[local].isCaptured = true;
@@ -740,7 +752,7 @@ static int resolveUpvalue(Compiler* compiler, Token* name) {
  *
  * @param name Name of variable token.
  */
-static void addLocal(Token name) {
+static void addLocal(Token name, bool isConst) {
     // checking for local variable max count
     if (current->localCount == UINT8_COUNT) {
         error("Too many variables in current scope.");
@@ -749,6 +761,7 @@ static void addLocal(Token name) {
     Local* local = &current->locals[current->localCount++];
     local->name = name;
     local->depth = -1;
+    local->isConst = isConst;
     local->isCaptured = false;
 }
 
@@ -756,7 +769,7 @@ static void addLocal(Token name) {
  * @brief Method to declare and add a local variable.
  * 
  */
-static void declareVariable() {
+static void declareVariable(bool isConst) {
     if (current->scopeDepth == 0) return; // if at global scope, return
 
     Token* name = &parser.previous;
@@ -771,7 +784,7 @@ static void declareVariable() {
             error("Already a variable with this name in same scope.");
         }
     }
-    addLocal(*name);
+    addLocal(*name, isConst);
 }
 
 /**
@@ -780,10 +793,10 @@ static void declareVariable() {
  * @param errorMessage Error message to emit when no identifier is found
  * @return uint8_t index of the constant in the constant array
  */
-static uint8_t parseVariable(const char* errorMessage) {
+static uint8_t parseVariable(const char* errorMessage, bool isConst) {
     consume(TOKEN_IDENTIFIER, errorMessage);
 
-    declareVariable();
+    declareVariable(isConst);
     if (current->scopeDepth > 0) return 0; // exit the function if local scope
 
     return identifierConstant(&parser.previous);
@@ -879,7 +892,7 @@ static void function(FunctionType type) {
             if (current->function->arity > 255) {
                 errorAtCurrent("Can't have more than 255 parameters");
             }
-            uint8_t constant = parseVariable("Expect parameter name");
+            uint8_t constant = parseVariable("Expect parameter name", false);
             defineVariable(constant);
         } while (match(TOKEN_COMMA));
     }
@@ -905,7 +918,7 @@ static void function(FunctionType type) {
  * @brief Method to parse function declarations as a first class value.
  */
 static void funDeclaration() {
-    uint8_t global = parseVariable("Expect function name.");
+    uint8_t global = parseVariable("Expect function name.", false);
     markInitialized();
     function(TYPE_FUNCTION);
     defineVariable(global);
@@ -915,9 +928,8 @@ static void funDeclaration() {
  * @brief A method to handle variable declarations.
  */
 static void varDeclaration() {
-    uint8_t global = parseVariable("Expect variable name.");
+    uint8_t global = parseVariable("Expect variable name.", false);
 
-    // consume(TOKEN_EQUAL, "HAHAHA trollface");
     if (match(TOKEN_EQUAL)) {
         expression();
     } else {
@@ -929,7 +941,7 @@ static void varDeclaration() {
 }
 
 static void constDeclaration() {
-    uint8_t global = parseVariable("Expect variable name.");
+    uint8_t global = parseVariable("Expect variable name.", true);
 
     if (!match(TOKEN_EQUAL)) {
         error("Constant declarations must be followed by a value assignment.");

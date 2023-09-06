@@ -751,6 +751,8 @@ static int resolveUpvalue(Compiler* compiler, Token* name) {
     if (compiler->enclosing == NULL) return -1;
 
     int local = resolveLocal(compiler->enclosing, name).depth;
+    bool isScoped = resolveLocal(compiler->enclosing, name).isScoped;
+    if (isScoped) return -1;
     if (local != -1) { // if local var is found
         // for resolving an identifier, mark it as "captured"
         compiler->enclosing->locals[local].isCaptured = true;
@@ -915,7 +917,7 @@ static void function(FunctionType type) {
             if (current->function->arity > 255) {
                 errorAtCurrent("Can't have more than 255 parameters");
             }
-            uint8_t constant = parseVariable("Expect parameter name", false);
+            uint8_t constant = parseVariable("Expect parameter name", false, false);
             defineVariable(constant);
         } while (match(TOKEN_COMMA));
     }
@@ -979,7 +981,7 @@ static void varDeclaration() {
 }
 
 static void constDeclaration() {
-    uint8_t global = parseVariable("Expect variable name.", true);
+    uint8_t global = parseVariable("Expect variable name.", true, false);
 
     if (!match(TOKEN_EQUAL)) {
         error("Constant declarations must be followed by a value assignment.");
@@ -991,11 +993,15 @@ static void constDeclaration() {
     defineVariable(global);
 }
 
-static void letDeclaration() {
-    uint8_t global = parseVariable("Expect variable name.", true);
+static void letDeclaration(bool isConst) {
+    uint8_t global = parseVariable("Expect variable name.", isConst, true);
 
-    if (!match(TOKEN_EQUAL)) {
+    if (isConst && !match(TOKEN_EQUAL)) {
         error("Constant declarations must be followed by a value assignment.");
+    } else if (!isConst && match(TOKEN_EQUAL)) {
+        expression();
+    } else if (!isConst && !match(TOKEN_EQUAL)) {
+        emitByte(OP_NULL);
     } else {
         expression();
     }
@@ -1170,12 +1176,12 @@ static void declaration() {
     } else if (match(TOKEN_VAR)) {
         varDeclaration();
     } else if (match(TOKEN_LET)) {
-        letDeclaration();
+        letDeclaration(false);
     } else if (match(TOKEN_CONST)) {
         if (match(TOKEN_VAR)) {
             constDeclaration();
         } else if (match(TOKEN_LET)) {
-            letDeclaration();
+            letDeclaration(true);
         } else {
             error("Expected variable declaration after 'const'.");
         }

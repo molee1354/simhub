@@ -12,6 +12,12 @@
 #define OBJ_TYPE(value) ( AS_OBJ(value)->type )
 
 /**
+ * @brief Macro to check if a value is of class type
+ *
+ */
+#define IS_CLASS(value) isObjType(value, OBJ_CLASS);
+
+/**
  * @brief Macro to check if a value is of closure type
  *
  */
@@ -34,6 +40,12 @@
  *
  */ 
 #define IS_STRING(value)   isObjType(value, OBJ_STRING)
+
+/**
+ * @brief Macro to convert into class object
+ *
+ */ 
+#define AS_CLASS(value)       ( (ObjClass*)AS_OBJ(value) )
 
 /**
  * @brief Macro to convert into closure object
@@ -71,6 +83,7 @@
  *
  */
 typedef enum {
+    OBJ_CLASS,
     OBJ_CLOSURE,
     OBJ_FUNCTION,
     OBJ_NATIVE,
@@ -152,6 +165,24 @@ typedef struct {
     ObjUpvalue** upvalues;
     int upvalueCount;
 } ObjClosure;
+
+/**
+ * @class ObjClosure
+ * @brief Class-type struct
+ *
+ */
+typedef struct {
+    Obj obj;
+    ObjString* name;
+} ObjClass;
+
+/**
+ * @brief Method to create an ObjClass.
+ *
+ * @param name The name of the class.
+ * @return ObjClass* Pointer to a the new ObjClass struct.
+ */
+ObjClass* newClass(ObjString* name);
 
 /**
  * @brief Method to create an ObjClosure.

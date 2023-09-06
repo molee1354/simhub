@@ -64,12 +64,14 @@ typedef struct {
     Token name;
     int depth;       // Depth of local variable
     bool isConst;    // if variable is declared constant
+    bool isScoped;   // if variable is strictly local
     bool isCaptured; // true if local is captured by any later nested func dec
 } Local;
 
 typedef struct {
     int depth;
     bool isConst;
+    bool isScoped;
 } ResolvedLocal;
 
 /**
@@ -532,11 +534,12 @@ static void namedVariable(Token name, bool canAssign) {
     ResolvedLocal resLoc = resolveLocal(current, &name);
     int arg = resLoc.depth;
     bool isConst = resLoc.isConst;
+    bool isScoped = resLoc.isScoped;
 
     if (arg != -1) { // -1 for global state
         getOp = OP_GET_LOCAL;
         setOp = OP_SET_LOCAL;
-    } else if ( (arg = resolveUpvalue(current, &name)) != -1) {
+    } else if ( !isScoped && (arg = resolveUpvalue(current, &name)) != -1) {
         getOp = OP_GET_UPVALUE;
         setOp = OP_SET_UPVALUE;
     } else {
@@ -692,7 +695,7 @@ static bool identifiersEqual(Token* a, Token* b) {
  * @return static int The local index where the variable is found, -1 if not. 
  */
 static ResolvedLocal resolveLocal(Compiler* compiler, Token* name) {
-    ResolvedLocal out = {-1, false};
+    ResolvedLocal out = {-1, false, false};
     for (int i = compiler->localCount -1; i>=0; i--) {
         Local* local = &compiler->locals[i];
         if (identifiersEqual(name, &local->name)) {
@@ -701,10 +704,11 @@ static ResolvedLocal resolveLocal(Compiler* compiler, Token* name) {
             }
             out.depth = i;
             out.isConst = local->isConst;
+            out.isScoped = local->isScoped;
             return out;
         }
     }
-    return out;
+    return out; // TODO: Fix global scope errors
 }
 
 /**
@@ -769,7 +773,7 @@ static int resolveUpvalue(Compiler* compiler, Token* name) {
  *
  * @param name Name of variable token.
  */
-static void addLocal(Token name, bool isConst) {
+static void addLocal(Token name, bool isConst, bool isScoped) {
     // checking for local variable max count
     if (current->localCount == UINT8_COUNT) {
         error("Too many variables in current scope.");
@@ -779,6 +783,7 @@ static void addLocal(Token name, bool isConst) {
     local->name = name;
     local->depth = -1;
     local->isConst = isConst;
+    local->isScoped = isScoped;
     local->isCaptured = false;
 }
 
@@ -786,7 +791,7 @@ static void addLocal(Token name, bool isConst) {
  * @brief Method to declare and add a local variable.
  * 
  */
-static void declareVariable(bool isConst) {
+static void declareVariable(bool isConst, bool isScoped) {
     if (current->scopeDepth == 0) return; // if at global scope, return
 
     Token* name = &parser.previous;
@@ -801,7 +806,7 @@ static void declareVariable(bool isConst) {
             error("Already a variable with this name in same scope.");
         }
     }
-    addLocal(*name, isConst);
+    addLocal(*name, isConst, isScoped);
 }
 
 /**
@@ -810,10 +815,11 @@ static void declareVariable(bool isConst) {
  * @param errorMessage Error message to emit when no identifier is found
  * @return uint8_t index of the constant in the constant array
  */
-static uint8_t parseVariable(const char* errorMessage, bool isConst) {
+static uint8_t parseVariable(const char* errorMessage,
+                             bool isConst, bool isScoped) {
     consume(TOKEN_IDENTIFIER, errorMessage);
 
-    declareVariable(isConst);
+    declareVariable(isConst, isScoped);
     if (current->scopeDepth > 0) return 0; // exit the function if local scope
 
     return identifierConstant(&parser.previous);
@@ -937,7 +943,7 @@ static void function(FunctionType type) {
 static void classDeclaration() {
     consume(TOKEN_IDENTIFIER, "Expect class name.");
     uint8_t nameConstant = identifierConstant(&parser.previous);
-    declareVariable(true);
+    declareVariable(false, false);
 
     emitBytes(OP_CLASS, nameConstant);
     defineVariable(nameConstant);
@@ -950,7 +956,7 @@ static void classDeclaration() {
  * @brief Method to parse function declarations as a first class value.
  */
 static void funDeclaration() {
-    uint8_t global = parseVariable("Expect function name.", false);
+    uint8_t global = parseVariable("Expect function name.", false, false);
     markInitialized();
     function(TYPE_FUNCTION);
     defineVariable(global);
@@ -960,7 +966,7 @@ static void funDeclaration() {
  * @brief A method to handle variable declarations.
  */
 static void varDeclaration() {
-    uint8_t global = parseVariable("Expect variable name.", false);
+    uint8_t global = parseVariable("Expect variable name.", false, false);
 
     if (match(TOKEN_EQUAL)) {
         expression();
@@ -973,6 +979,19 @@ static void varDeclaration() {
 }
 
 static void constDeclaration() {
+    uint8_t global = parseVariable("Expect variable name.", true);
+
+    if (!match(TOKEN_EQUAL)) {
+        error("Constant declarations must be followed by a value assignment.");
+    } else {
+        expression();
+    }
+    consume(TOKEN_SEMICOLON, "Expect ';' after constant declaration");
+
+    defineVariable(global);
+}
+
+static void letDeclaration() {
     uint8_t global = parseVariable("Expect variable name.", true);
 
     if (!match(TOKEN_EQUAL)) {
@@ -1150,9 +1169,13 @@ static void declaration() {
         funDeclaration();
     } else if (match(TOKEN_VAR)) {
         varDeclaration();
+    } else if (match(TOKEN_LET)) {
+        letDeclaration();
     } else if (match(TOKEN_CONST)) {
         if (match(TOKEN_VAR)) {
             constDeclaration();
+        } else if (match(TOKEN_LET)) {
+            letDeclaration();
         } else {
             error("Expected variable declaration after 'const'.");
         }

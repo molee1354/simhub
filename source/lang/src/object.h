@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "chunk.h"
+#include "table.h"
 #include "value.h"
 
 /**
@@ -15,7 +16,7 @@
  * @brief Macro to check if a value is of class type
  *
  */
-#define IS_CLASS(value) isObjType(value, OBJ_CLASS);
+#define IS_CLASS(value) isObjType(value, OBJ_CLASS)
 
 /**
  * @brief Macro to check if a value is of closure type
@@ -30,10 +31,16 @@
 #define IS_FUNCTION(value) isObjType(value, OBJ_FUNCTION)
 
 /**
+ * @brief Macro to check if a value is of instance type
+ *
+ */
+#define IS_INSTANCE(value) isObjType(value, OBJ_INSTANCE)
+
+/**
  * @brief Macro to check if a value is of native function type
  *
  */ 
-#define IS_NATIVE(value)   isObjType(value, OBJ_NATIVE);
+#define IS_NATIVE(value)   isObjType(value, OBJ_NATIVE)
 
 /**
  * @brief Macro to check if a value is of string type
@@ -58,6 +65,8 @@
  *
  */ 
 #define AS_FUNCTION(value)       ( (ObjFunction*)AS_OBJ(value) )
+
+#define AS_INSTANCE(value)       ( (ObjInstance*)AS_OBJ(value) )
 
 /**
  * @brief Macro to convert into a native function object
@@ -86,6 +95,7 @@ typedef enum {
     OBJ_CLASS,
     OBJ_CLOSURE,
     OBJ_FUNCTION,
+    OBJ_INSTANCE,
     OBJ_NATIVE,
     OBJ_STRING,
     OBJ_UPVALUE
@@ -177,6 +187,17 @@ typedef struct {
 } ObjClass;
 
 /**
+ * @class ObjInstance
+ * @brief Struct to represent an obj instance
+ *
+ */
+typedef struct {
+    Obj obj;
+    ObjClass* klass;
+    Table fields;
+} ObjInstance;
+
+/**
  * @brief Method to create an ObjClass.
  *
  * @param name The name of the class.
@@ -198,6 +219,14 @@ ObjClosure* newClosure(ObjFunction* function);
  * @return ObjFunction* A pointer to a new function object.
  */
 ObjFunction* newFunction();
+
+/**
+ * @brief Method to create an ObjInstance
+ *
+ * @param klass The class that the instance is a part of
+ * @return 
+ */
+ObjInstance* newInstance(ObjClass* klass);
 
 /**
  * @brief Method to create a new native function

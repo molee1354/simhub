@@ -1,3 +1,4 @@
+#include "table.h"
 #include <stdio.h>
 #include <stdarg.h>
 #include <string.h>
@@ -240,6 +241,11 @@ static bool call(ObjClosure* closure, int argCount) {
 static bool callValue(Value callee, int argCount) {
     if (IS_OBJ(callee)) {
         switch (OBJ_TYPE(callee)) {
+            case OBJ_CLASS: { // calling a new class to create an instance
+                ObjClass* klass = AS_CLASS(callee);
+                vm.stackTop[-argCount-1] = OBJ_VAL(newInstance(klass));
+                return true;
+            }
             case OBJ_CLOSURE:
                 return call(AS_CLOSURE(callee), argCount);
             case OBJ_NATIVE:
@@ -470,6 +476,39 @@ static InterpretResult run() {
             case OP_SET_UPVALUE: {
                 uint8_t slot = READ_BYTE();
                 *frame->closure->upvalues[slot]->location = peek(0);
+                break;
+            }
+            case OP_GET_PROPERTY: {
+                if (!IS_INSTANCE(peek(0))) {
+                    runtimeError("Only instances have callable properties.");
+                    return INTERPRET_RUNTIME_ERROR;
+                }
+                ObjInstance* instance = AS_INSTANCE(peek(0));
+                ObjString* name = READ_STRING();
+
+                Value value;
+                // if the instance has the field with the name
+                if (tableGet(&instance->fields, name, &value)) {
+                    pop();
+                    push(value);
+                    break;
+                }
+
+                runtimeError("Undefined property '%s' in '%s'.",
+                        name->chars,
+                        instance->klass->name->chars);
+                return INTERPRET_RUNTIME_ERROR;
+            }
+            case OP_SET_PROPERTY: {
+                if (!IS_INSTANCE(peek(1))) {
+                    runtimeError("Only instances have fields.");
+                    return INTERPRET_RUNTIME_ERROR;
+                }
+                ObjInstance* instance = AS_INSTANCE(peek(1));
+                tableSet(&instance->fields, READ_STRING(), peek(0));
+                Value value = pop();
+                pop();
+                push(value);
                 break;
             }
             case OP_EQUAL: {

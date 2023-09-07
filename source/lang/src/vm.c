@@ -68,6 +68,27 @@ static Value sleepNative(int argCount, Value* args) {
 }
 
 /**
+ * @brief Method to exit the code with an exitcode
+ *
+ * @param argcount The number of arguments 
+ * @param args The arguments
+ * @return Value No return value
+ */
+static Value exitNative(int argCount, Value* args) {
+    if (argCount > 1) {
+        runtimeError("Too many arguments provided : %d", argCount);
+        return NULL_VAL;
+    }
+    if (!IS_NUMBER(args[0])) {
+        runtimeError("Incorrect argument type.");
+        return NULL_VAL;
+    }
+    int exitCode = (int)AS_NUMBER(args[0]);
+    printf("Program exit with exitcode %d\n", exitCode);
+    exit(exitCode);
+}
+
+/**
  * @brief Defining the native "puts()" function.
  *
  * @param argcount The number of arguments 
@@ -180,6 +201,7 @@ void initVM() {
     // defining native functions
     defineNative("clock", clockNative);
     defineNative("puts", putsNative);
+    defineNative("exit", exitNative);
     defineNative("sleep", sleepNative);
     defineNative("system", systemNative);
 }

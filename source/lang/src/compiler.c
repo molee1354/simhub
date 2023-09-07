@@ -321,7 +321,7 @@ static void initCompiler(Compiler* compiler, FunctionType type) {
     compiler->function = newFunction();
     current = compiler;
 
-    // storing the function's name (if not top-level/script)
+    // storing the function's name (if not top-level/sc__main__ript)
     if (type != TYPE_SCRIPT) {
         current->function->name = copyString(parser.previous.start,
                                              parser.previous.length);
@@ -993,15 +993,24 @@ static void constDeclaration() {
     defineVariable(global);
 }
 
-static void letDeclaration(bool isConst) {
-    uint8_t global = parseVariable("Expect variable name.", isConst, true);
+static void letDeclaration() {
+    uint8_t global = parseVariable("Expect variable name.", false, true);
 
-    if (isConst && !match(TOKEN_EQUAL)) {
-        error("Constant declarations must be followed by a value assignment.");
-    } else if (!isConst && match(TOKEN_EQUAL)) {
+    if (match(TOKEN_EQUAL)) {
         expression();
-    } else if (!isConst && !match(TOKEN_EQUAL)) {
+    } else {
         emitByte(OP_NULL);
+    }
+    consume(TOKEN_SEMICOLON, "Expect ';' after constant declaration");
+
+    defineVariable(global);
+}
+
+static void lconstDeclaration() {
+    uint8_t global = parseVariable("Expect variable name.", true, true);
+
+    if (!match(TOKEN_EQUAL)) {
+        error("Constant declarations must be followed by a value assignment.");
     } else {
         expression();
     }
@@ -1176,12 +1185,12 @@ static void declaration() {
     } else if (match(TOKEN_VAR)) {
         varDeclaration();
     } else if (match(TOKEN_LET)) {
-        letDeclaration(false);
+        letDeclaration();
     } else if (match(TOKEN_CONST)) {
         if (match(TOKEN_VAR)) {
             constDeclaration();
         } else if (match(TOKEN_LET)) {
-            letDeclaration(true);
+            lconstDeclaration();
         } else {
             error("Expected variable declaration after 'const'.");
         }

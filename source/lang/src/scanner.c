@@ -197,7 +197,14 @@ static TokenType identifierType() {
               }
             }
             break;
-        case 'e': return checkKeyword(1, 3, "lse", TOKEN_ELSE);
+        case 'e':
+            if (scanner.current-scanner.start > 1) {
+              switch (scanner.start[1]) {
+                  case 'l': return checkKeyword(2,2, "se", TOKEN_ELSE);
+                  case 'x': return checkKeyword(2,5, "tends", TOKEN_INHERIT);
+              }
+            }
+            break;
         case 'f':
             if (scanner.current-scanner.start > 1) {
               switch (scanner.start[1]) {

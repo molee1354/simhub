@@ -312,7 +312,7 @@ static bool invokeFromClass(ObjClass* klass, ObjString* name, int argCount) {
     Value method;
     if (!tableGet(&klass->methods, name, &method)) {
         runtimeError("Undefined property '%s' in class '%s'.",
-                name->chars, klass->name);
+                name->chars, klass->name->chars);
         return false;
     }
     return call(AS_CLOSURE(method), argCount);
@@ -328,7 +328,8 @@ static bool invokeFromClass(ObjClass* klass, ObjString* name, int argCount) {
 static bool invoke(ObjString* name, int argCount) {
     Value receiver = peek(argCount);
     if (!IS_INSTANCE(receiver)) {
-        runtimeError("Method invocation can only be done on object instances.");
+        runtimeError("Only instances have methods. Method %s not found.",
+                     name->chars);
         return false;
     }
     ObjInstance* instance = AS_INSTANCE(receiver);
@@ -611,8 +612,7 @@ static InterpretResult run() {
                     push(value);
                     break;
                 }
-                if(!bindMethod(instance->klass, name)) { // TODO: Define bindMethod
-                                                         // 230908 0153
+                if(!bindMethod(instance->klass, name)) {
                     return INTERPRET_RUNTIME_ERROR;
                 }
 
@@ -631,6 +631,15 @@ static InterpretResult run() {
                 Value value = pop();
                 pop();
                 push(value);
+                break;
+            }
+            case OP_GET_SUPER: {
+                ObjString* name = READ_STRING();
+                ObjClass* superclass = AS_CLASS(pop());
+
+                if (!bindMethod(superclass, name)) {
+                    return INTERPRET_RUNTIME_ERROR;
+                }
                 break;
             }
             case OP_EQUAL: {
@@ -726,6 +735,16 @@ static InterpretResult run() {
                 frame = &vm.frames[vm.frameCount-1];
                 break;
             }
+            case OP_SUPER_INVOKE: {
+                ObjString* method = READ_STRING();
+                int argCount = READ_BYTE();
+                ObjClass* superclass = AS_CLASS(pop());
+                if (!invokeFromClass(superclass, method, argCount)) {
+                    return INTERPRET_RUNTIME_ERROR;
+                }
+                frame = &vm.frames[vm.frameCount-1];
+                break;
+            }
             case OP_CLOSURE: {
                 ObjFunction* function = AS_FUNCTION(READ_CONSTANT());
                 ObjClosure* closure = newClosure(function);
@@ -763,6 +782,19 @@ static InterpretResult run() {
             case OP_CLASS:
                 push( OBJ_VAL(newClass(READ_STRING())) );
                 break;
+            case OP_INHERIT: {
+                Value superclass = peek(1); // superclass def top 
+                                            //[<subclass>, <superclass>]
+                if (!IS_CLASS(superclass)) {
+                    runtimeError("Cannot inherit from non-class object.");
+                    return INTERPRET_RUNTIME_ERROR;
+                }
+                ObjClass* subclass = AS_CLASS(peek(0));
+                tableAddAll(&AS_CLASS(superclass)->methods,
+                            &subclass->methods);
+                pop();
+                break;
+            }
             case OP_METHOD:
                 defineMethod(READ_STRING());
                 break;

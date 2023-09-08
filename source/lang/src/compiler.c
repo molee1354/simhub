@@ -119,6 +119,7 @@ typedef struct Compiler {
  */
 typedef struct ClassCompiler {
     struct ClassCompiler* enclosing;
+    bool hasSuperClass;
 } ClassCompiler;
 
 Parser parser;
@@ -126,7 +127,7 @@ Parser parser;
 // global compilers bad for multithreading
 Compiler* current = NULL; 
 
-//
+// Compiler for class scope
 ClassCompiler* currentClass = NULL;
 
 /**
@@ -595,6 +596,45 @@ static void variable(bool canAssign) {
 }
 
 /**
+ * @brief Method to create a token on demand
+ *
+ * @param text The name value of token
+ * @return Token Token with the name text
+ */
+static Token syntheticToken(const char* text) {
+    Token token;
+    token.start = text;
+    token.length = (int)strlen(text);
+    return token;
+}
+
+static void super_(bool canAssign) {
+    // limiting the use of super
+    if (currentClass == NULL) {
+        error("Can't use 'super' outside of a class.");
+    } else if (!currentClass->hasSuperClass) {
+        error("Can't use 'super' in a class with no parent.");
+    }
+
+    consume(TOKEN_DOT, "Expect '.' after 'super'.");
+    consume(TOKEN_IDENTIFIER, "Expect superclass method name.");
+    uint8_t name = identifierConstant(&parser.previous);
+
+    namedVariable(syntheticToken("this"), false);
+
+    // Differentiating "invocations" and "gets"
+    if (match(TOKEN_LEFT_PAREN)) {
+        uint8_t argCount = argumentList();
+        namedVariable(syntheticToken("super"), false);
+        emitBytes(OP_SUPER_INVOKE, name);
+        emitByte(argCount);
+    } else {
+        namedVariable(syntheticToken("super"), false);
+        emitBytes(OP_GET_SUPER, name);
+    }
+}
+
+/**
  * @brief Method to parse the 'this' keyword. Treated as a lexically scoped
  * local variable whose value gets initialized. 
  *
@@ -665,7 +705,7 @@ ParseRule rules[] = {
     [TOKEN_OR]            = {NULL,     or_,    PREC_OR},
     [TOKEN_PRINT]         = {NULL,     NULL,   PREC_NONE},
     [TOKEN_RETURN]        = {NULL,     NULL,   PREC_NONE},
-    [TOKEN_SUPER]         = {NULL,     NULL,   PREC_NONE},
+    [TOKEN_SUPER]         = {super_,   NULL,   PREC_NONE},
     [TOKEN_THIS]          = {this_,    NULL,   PREC_NONE},
     [TOKEN_TRUE]          = {literal,  NULL,   PREC_NONE},
     [TOKEN_VAR]           = {NULL,     NULL,   PREC_NONE},
@@ -1002,16 +1042,38 @@ static void classDeclaration() {
     consume(TOKEN_IDENTIFIER, "Expect class name.");
     Token className = parser.previous;
     uint8_t nameConstant = identifierConstant(&parser.previous);
-    declareVariable(false, false);
+    declareVariable(true, true);
 
     emitBytes(OP_CLASS, nameConstant);
     defineVariable(nameConstant);
 
     ClassCompiler classCompiler;
+    classCompiler.hasSuperClass = false;
     classCompiler.enclosing = currentClass; // at toplevel set to global class
     currentClass = &classCompiler; // subsequent nested levels point to new
                                    // class compiler
 
+    // class inheritance
+    if (match(TOKEN_INHERIT)) {
+        consume(TOKEN_IDENTIFIER, "Expect superclass name.");
+        variable(false);
+
+        if (identifiersEqual(&className, &parser.previous)) {
+            error("Invalid inheritance from self.");
+        }
+        // add a superclass local variable
+        beginScope(); // each class has a local scope store "super"
+
+        // default behavior "false, false" : re-assignable, not-scoped.
+        addLocal( syntheticToken("super"), true, true);
+        defineVariable(0);
+
+        namedVariable(className, false);
+        emitByte(OP_INHERIT);
+        classCompiler.hasSuperClass = true;
+    }
+
+    // class definition
     namedVariable(className, false);
     consume(TOKEN_LEFT_BRACE, "Expect '{' before class body.");
     while (!check(TOKEN_RIGHT_BRACE) && !check(TOKEN_EOF)) {
@@ -1019,6 +1081,10 @@ static void classDeclaration() {
     }
     consume(TOKEN_RIGHT_BRACE, "Expect '}' before class body.");
     emitByte(OP_POP);
+
+    if (classCompiler.hasSuperClass) {
+        endScope();
+    }
 
     // set current class to it's enclosing class after it's done declaring.
     // NULL if at global scope.
@@ -1192,7 +1258,7 @@ static void returnStatement() {
         emitReturn();
     } else {
         if (current->type == TYPE_INITIALIZER) {
-            error("Invalid attemt to return from an initializer.");
+            error("Invalid attempt to return from an initializer.");
         }
         expression();
         consume(TOKEN_SEMICOLON, "Expected ';' after return statement.");

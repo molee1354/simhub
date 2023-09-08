@@ -1042,7 +1042,7 @@ static void classDeclaration() {
     consume(TOKEN_IDENTIFIER, "Expect class name.");
     Token className = parser.previous;
     uint8_t nameConstant = identifierConstant(&parser.previous);
-    declareVariable(true, true);
+    declareVariable(false, false);
 
     emitBytes(OP_CLASS, nameConstant);
     defineVariable(nameConstant);
@@ -1065,7 +1065,7 @@ static void classDeclaration() {
         beginScope(); // each class has a local scope store "super"
 
         // default behavior "false, false" : re-assignable, not-scoped.
-        addLocal( syntheticToken("super"), true, true);
+        addLocal( syntheticToken("super"), false, false);
         defineVariable(0);
 
         namedVariable(className, false);

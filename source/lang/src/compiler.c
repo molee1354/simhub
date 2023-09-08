@@ -1051,7 +1051,7 @@ static void varDeclaration() {
     defineVariable(global);
 }
 
-static void constDeclaration() {
+static void constVarDec() {
     uint8_t global = parseVariable("Expect variable name.", true, false);
 
     if (!match(TOKEN_EQUAL)) {
@@ -1077,7 +1077,7 @@ static void letDeclaration() {
     defineVariable(global);
 }
 
-static void lconstDeclaration() {
+static void constLetDec() {
     uint8_t global = parseVariable("Expect variable name.", true, true);
 
     if (!match(TOKEN_EQUAL)) {
@@ -1262,9 +1262,9 @@ static void declaration() {
         letDeclaration();
     } else if (match(TOKEN_CONST)) {
         if (match(TOKEN_VAR)) {
-            constDeclaration();
+            constVarDec();
         } else if (match(TOKEN_LET)) {
-            lconstDeclaration();
+            constLetDec();
         } else {
             error("Expected variable declaration after 'const'.");
         }

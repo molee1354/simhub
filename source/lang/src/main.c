@@ -35,17 +35,19 @@ static char* readFile(const char* path) {
     rewind(file);
 
     // allocating enough memory to hold the file size + 1
-    char* buffer = (char*)malloc(fileSize+1);
+    char* buffer = (char*)malloc(fileSize+3);
     if (buffer==NULL) {
         fprintf(stderr, "Not enough memory to read \"%s\".\n", path);
         exit(74);
     }
-    size_t bytesRead = fread(buffer, sizeof(char), fileSize, file);
+    buffer[0] = '{';
+    size_t bytesRead = fread(buffer+1, sizeof(char), fileSize, file);
     if(bytesRead < fileSize) {
         fprintf(stderr, "Could not read file \"%s\".\n", path);
         exit(74);
     }
-    buffer[bytesRead] = '\0';
+    buffer[bytesRead+1] = '}';
+    buffer[bytesRead+2] = '\0';
 
     fclose(file);
     return buffer;

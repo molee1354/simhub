@@ -13,6 +13,12 @@
 #define OBJ_TYPE(value) ( AS_OBJ(value)->type )
 
 /**
+ * @brief Macro to check if a value is of bound-method type
+ *
+ */
+#define IS_BOUND_METHOD(value) isObjType(value, OBJ_BOUND_METHOD)
+
+/**
  * @brief Macro to check if a value is of class type
  *
  */
@@ -47,6 +53,12 @@
  *
  */ 
 #define IS_STRING(value)   isObjType(value, OBJ_STRING)
+
+/**
+ * @brief Macro to convert into a bound-method object
+ *
+ */ 
+#define AS_BOUND_METHOD(value)       ( (ObjBoundMethod*)AS_OBJ(value) )
 
 /**
  * @brief Macro to convert into class object
@@ -92,6 +104,7 @@
  *
  */
 typedef enum {
+    OBJ_BOUND_METHOD,
     OBJ_CLASS,
     OBJ_CLOSURE,
     OBJ_FUNCTION,
@@ -184,6 +197,7 @@ typedef struct {
 typedef struct {
     Obj obj;
     ObjString* name;
+    Table methods;
 } ObjClass;
 
 /**
@@ -196,6 +210,27 @@ typedef struct {
     ObjClass* klass;
     Table fields;
 } ObjInstance;
+
+/**
+ * @class ObjBoundMethod
+ * @brief Struct to represent a method bound to an object
+ *
+ */
+typedef struct {
+    Obj obj;
+    Value receiver;
+    ObjClosure* method;
+} ObjBoundMethod;
+
+/**
+ * @brief Method to create a new bound method
+ *
+ * @param receiver The receiver of the binding. Set to value to avoid 
+ * casting it to the correct value every time.
+ * @param method The method implementation as a closure
+ * @return 
+ */
+ObjBoundMethod* newBoundMethod(Value receiver, ObjClosure* method);
 
 /**
  * @brief Method to create an ObjClass.

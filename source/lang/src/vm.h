@@ -32,6 +32,7 @@ typedef struct {
     Value* stackTop;
     Table globals;            // hash table to hold global variables
     Table strings;            // every string that's created
+    ObjString* initString;
     ObjUpvalue* openUpvalues; // upvalue array
 
     size_t bytesAllocated;

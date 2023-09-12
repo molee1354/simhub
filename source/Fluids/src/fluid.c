@@ -91,6 +91,17 @@ static double* initArray(int size, double elem) {
     return out;
 }
 
+static void printProp(double* prop) {
+    int n = 0;
+    for (int i = 0; i < fluid.numY; i++) {
+        for (int j = 0; j < fluid.numX; j++) {
+            printf("%g ", prop[n++]);
+        }
+        puts("");
+    }
+    puts("");
+}
+
 /**
  * @brief Function to integrate with dt
  *

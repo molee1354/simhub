@@ -6,8 +6,8 @@
 #define ENDMIN DBL_MAX
 #define ENDMAX DBL_MIN
 
-double findMin(double first, ...);
+double findMin(double first, double second);
 
-double findMax(double first, ...);
+double findMax(double first, double second);
 
 #endif

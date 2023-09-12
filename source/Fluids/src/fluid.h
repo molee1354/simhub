@@ -21,6 +21,7 @@ typedef struct {
     int numCells;
 
     double h;
+
     double* u;
     double* v;
     double* newU;
@@ -33,6 +34,8 @@ typedef struct {
 
     int num;
 } Fluid;
+
+extern Fluid fluid;
 
 typedef enum {
     U_FIELD,
@@ -48,7 +51,9 @@ typedef enum {
  * @param numY The number of Y cells
  * @param h The height (TODO)
  */
-void initFluid(double density, int numX, int numY, double h);
+Fluid* initFluid(double density, int numX, int numY, double h);
+
+void freeFluid(Fluid* fluid);
 
 /**
  * @brief Function to calculate the fluid simulations
@@ -57,6 +62,6 @@ void initFluid(double density, int numX, int numY, double h);
  * @param gravity 
  * @param numIters 
  */
-void simulate(double dt, double gravity, int numIters);
+void simulate(Fluid* fluid, double dt, double gravity, int numIters);
 
 #endif

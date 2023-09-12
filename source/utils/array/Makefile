@@ -43,4 +43,4 @@ $(BINDIR):
 	mkdir -p $(BINDIR)
 
 clean:
-	rm -f $(OBJ) $(TEST_OBJ) $(TARGET) $(TEST_TARGET)
+	rm -rf $(OBJDIR) $(BINDIR) $(TEST_OBJ) $(TARGET) $(TEST_TARGET)

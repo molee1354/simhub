@@ -28,8 +28,13 @@ int main() {
     append(this, 1);
     append(this, 1);
 
+    Array* ones = onesArray(sizeof(double), 5);
+    append(ones, 3.3);
+
     printArray(this);
+    printArray(ones);
     freeArray(this);
+    freeArray(ones);
 
     return 0;
 

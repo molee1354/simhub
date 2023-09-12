@@ -1,10 +1,17 @@
-#include <math.h>
+#include <stdlib.h>
+
 #include "fluid.h"
 #include "utils.h"
 
+#define ZEROS() initArray(fluid.numCells, 0.)
+#define ONES() initArray(fluid.numCells, 1.)
 
 /* Global Fluid instance */
 Fluid fluid;
+
+static int count = 0;
+
+static double* initArray(int size, double elem);
 
 void initFluid(double density, int numX, int numY, double h) {
     fluid.density = density;
@@ -13,24 +20,35 @@ void initFluid(double density, int numX, int numY, double h) {
     fluid.numCells = fluid.numX * fluid.numY;
     fluid.h = h;
 
-    Vector* uVec = zeros(fluid.numCells, ROW);
-    fluid.u = makeModifiable(uVec);
-    Vector* vVec = zeros(fluid.numCells, ROW);
-    fluid.v = makeModifiable(vVec);
-    Vector* newUVec = zeros(fluid.numCells, ROW);
-    fluid.newU = makeModifiable(newUVec);
-    Vector* newVVec = zeros(fluid.numCells, ROW);
-    fluid.newV = makeModifiable(newVVec);
-    Vector* pVec = zeros(fluid.numCells, ROW);
-    fluid.p = makeModifiable(pVec);
-    Vector* sVec = zeros(fluid.numCells, ROW);
-    fluid.s = makeModifiable(sVec);
-    Vector* mVec = ones(fluid.numCells, ROW);
-    fluid.m = makeModifiable(mVec);
-    Vector* newMVec = zeros(fluid.numCells, ROW);
-    fluid.newM = makeModifiable(newMVec);
+    fluid.u = ZEROS();
+    fluid.v = ZEROS();
+    fluid.newU = ZEROS();
+    fluid.newV = ZEROS();
+    fluid.p = ZEROS();
+    fluid.s = ZEROS();
+    fluid.m = ONES();
+    fluid.newM = ZEROS();
 
     fluid.num = numX * numY;
+}
+
+void freeFluid() {
+    free(fluid.u);
+    free(fluid.v);
+    free(fluid.p);
+    free(fluid.s);
+    free(fluid.m);
+    free(fluid.newU);
+    free(fluid.newV);
+    free(fluid.newM);
+}
+
+static double* initArray(int size, double elem) {
+    double* out = (double*)malloc(sizeof(double) * size);
+    for (int i = 0; i < size; i++) {
+        out[i] = elem;
+    }
+    return out;
 }
 
 /**
@@ -128,13 +146,13 @@ static double sampleField(double x, double y, FieldType field) {
         }
     }
 
-    double x0 = findMin( floor((x-dx)*h1), (double)fluid.numX-1);
+    double x0 = findMin( floor((x-dx)*h1), (double)fluid.numX-1.);
     double tx = ((x-dx) - x0*h) * h1;
-    double x1 = findMin( x0+1, (double)fluid.numX-1 );
+    double x1 = findMin( x0+1., (double)fluid.numX-1. );
 
-    double y0 = findMin( floor((y-dy)*h1), (double)fluid.numY-1);
+    double y0 = findMin( floor((y-dy)*h1), (double)fluid.numY-1.);
     double ty = ((y-dy) - y0*h) * h1;
-    double y1 = findMin( y0+1, (double)fluid.numY-1 );
+    double y1 = findMin( y0+1., (double)fluid.numY-1. );
 
     double sx = 1. - tx;
     double sy = 1. - ty;
@@ -164,4 +182,80 @@ static double avgV(int i, int j) {
 static void advectVel(double dt) {
     memcpy(fluid.newU, fluid.u, fluid.numCells);
     memcpy(fluid.newV, fluid.v, fluid.numCells);
+    
+    int n = fluid.numY;
+    double h = fluid.h;
+    double h2 = .5 * h;
+
+    for (int i = 1; i < fluid.numX; i++) {
+        for (int j = 1; j < fluid.numY; j++) {
+            count++;
+
+            // u component
+            if (fluid.s[i*n + j] != 0. &&
+                fluid.s[(i-1)*n + j] != 0. && 
+                j < fluid.numY - 1) {
+                double x = ((double)i) * h;
+                double y = ((double)j) * h + h2;
+
+                double u = fluid.u[i*n + j];
+                double v = avgV(i, j);
+
+                x = x - dt*u;
+                y = y - dt*v;
+                u = sampleField(x, y, U_FIELD);
+                fluid.newU[i*n + j] = u;
+            }
+
+            // v component
+            if (fluid.s[i*n + j] != 0. &&
+                fluid.s[i*n + j-1] != 0. &&
+                i < fluid.numX - 1) {
+                double x = ((double)i) * h + h2;
+                double y = ((double)j) * h;
+                double u = avgU(i, j);
+                double v = fluid.v[i*n + j];
+                x = x - dt*u;
+                y = y - dt*v;
+                v = sampleField(x, y, V_FIELD);
+                fluid.newV[i*n + j] = v;
+            }
+        }
+    }
+    memcpy(fluid.u, fluid.newU, fluid.numCells);
+    memcpy(fluid.v, fluid.newV, fluid.numCells);
+
 }
+
+static void advectSmoke(double dt) {
+    memcpy(fluid.newM, fluid.m, fluid.numCells);
+
+    int n = fluid.numY;
+    double h = fluid.h;
+    double h2 = .5 * h;
+
+    for (int i = 1; i < fluid.numX-1; i++) {
+        for (int j = 1; j < fluid.numY-1; j++) {
+            if (fluid.s[i*n + j] != 0.) {
+                double u = ( fluid.u[i*n + j] + fluid.u[(i+1)*n + j] )*.5;
+                double v = ( fluid.v[i*n + j] + fluid.v[i*n + j] )*.5;
+                double x = ((double)i)*h + h2 - dt*u;
+                double y = ((double)j)*h + h2 - dt*v;
+                fluid.newM[i*n + j] = sampleField(x,y, S_FIELD);
+            }
+        }
+    }
+    memcpy(fluid.m, fluid.newM, fluid.numCells);
+}
+
+void simulate(double dt, double gravity, int numIters) {
+    integrate(dt, gravity);
+
+    solveIncompress(numIters, dt);
+    extrapolate();
+    advectVel(dt);
+    advectSmoke(dt);
+
+    freeFluid();
+}
+

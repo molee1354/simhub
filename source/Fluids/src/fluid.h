@@ -3,11 +3,6 @@
 
 #include "deps.h"
 
-#ifdef DEV_DEPS
-#include "../../utils/matrix/src/matrix.h"
-#endif
-
-
 /**
  * @brief Define some scene things here for now
  *
@@ -54,5 +49,14 @@ typedef enum {
  * @param h The height (TODO)
  */
 void initFluid(double density, int numX, int numY, double h);
+
+/**
+ * @brief Function to calculate the fluid simulations
+ *
+ * @param dt 
+ * @param gravity 
+ * @param numIters 
+ */
+void simulate(double dt, double gravity, int numIters);
 
 #endif

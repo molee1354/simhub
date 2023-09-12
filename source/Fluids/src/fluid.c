@@ -1,5 +1,4 @@
 #include <math.h>
-#include <stdlib.h>
 #include "fluid.h"
 #include "utils.h"
 
@@ -163,5 +162,6 @@ static double avgV(int i, int j) {
 }
 
 static void advectVel(double dt) {
-
+    memcpy(fluid.newU, fluid.u, fluid.numCells);
+    memcpy(fluid.newV, fluid.v, fluid.numCells);
 }

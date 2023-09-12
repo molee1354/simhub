@@ -4,6 +4,8 @@
 #include "fluid.h"
 #include "utils.h"
 
+#define ZEROS() initArray(fluid.numCells, 0.)
+#define ONES() initArray(fluid.numCells, 1.)
 
 /* Global Fluid instance */
 
@@ -68,6 +70,25 @@ static void printProp(Fluid* fluid, double* prop) {
         puts("");
     }
     puts("");
+}
+
+void freeFluid() {
+    free(fluid.u);
+    free(fluid.v);
+    free(fluid.p);
+    free(fluid.s);
+    free(fluid.m);
+    free(fluid.newU);
+    free(fluid.newV);
+    free(fluid.newM);
+}
+
+static double* initArray(int size, double elem) {
+    double* out = (double*)malloc(sizeof(double) * size);
+    for (int i = 0; i < size; i++) {
+        out[i] = elem;
+    }
+    return out;
 }
 
 /**

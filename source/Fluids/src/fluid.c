@@ -1,4 +1,5 @@
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "fluid.h"
 #include "utils.h"
@@ -49,6 +50,17 @@ static double* initArray(int size, double elem) {
         out[i] = elem;
     }
     return out;
+}
+
+static void printProp(double* prop) {
+    int n = 0;
+    for (int i = 0; i < fluid.numY; i++) {
+        for (int j = 0; j < fluid.numX; j++) {
+            printf("%g ", prop[n++]);
+        }
+        puts("");
+    }
+    puts("");
 }
 
 /**
@@ -224,7 +236,6 @@ static void advectVel(double dt) {
     }
     memcpy(fluid.u, fluid.newU, fluid.numCells);
     memcpy(fluid.v, fluid.newV, fluid.numCells);
-
 }
 
 static void advectSmoke(double dt) {
@@ -255,6 +266,18 @@ void simulate(double dt, double gravity, int numIters) {
     extrapolate();
     advectVel(dt);
     advectSmoke(dt);
+
+
+    puts("\nprint m");
+    printProp(fluid.m);
+    puts("\nprint v");
+    printProp(fluid.v);
+    puts("\nprint u");
+    printProp(fluid.u);
+    puts("\nprint p");
+    printProp(fluid.p);
+    puts("\nprint s");
+    printProp(fluid.s);
 
     freeFluid();
 }

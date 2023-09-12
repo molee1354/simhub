@@ -71,6 +71,6 @@ void simulate(Fluid* fluid, double dt, double gravity, int numIters);
  * @param gravity 
  * @param numIters 
  */
-void simulate(double dt, double gravity, int numIters);
+void simulate(Fluid* fluid, double dt, double gravity, int numIters);
 
 #endif

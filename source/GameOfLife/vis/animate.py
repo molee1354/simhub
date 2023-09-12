@@ -4,11 +4,11 @@ import gameoflife as gol
 
 def main() -> None:
     try:
-        filename = sys.argv[1]
+        dumps_dir = sys.argv[1]
     except IndexError:
-        filename = "dump.out"
-        print(f"Simulation file {sys.argv[1]} not found. Using ../{filename}!")
-    obj = gol.Animator(filename)
+        dumps_dir = "../dumps"
+        print(f"Simulation directory not found. Using {dumps_dir}!")
+    obj = gol.Animator(dumps_dir)
     obj.animate_data()
 
 

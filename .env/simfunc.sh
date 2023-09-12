@@ -7,7 +7,7 @@ function sim() {
     # setting the user call to the correct directory
     if [[ $(pwd) != ${SIM_ROOT} ]]; then
         printf "\"sim\" command evoked from wrong directory.\nRun the command from \"%s\".\n" ${SIMROOT}
-        return
+        return 0
     fi
 
     case $1 in
@@ -25,22 +25,27 @@ function sim() {
                 utils-matrix)
                     DEST="${SRC_DIR}/utils/matrix"
                     __call_simulation ${SIM_CALL} ${DEST}
+                    __create_symlinks
                     ;;
                 utils-array)
                     DEST="${SRC_DIR}/utils/array"
                     __call_simulation ${SIM_CALL} ${DEST}
+                    __create_symlinks
                     ;;
                 projectile-3d)
                     DEST="${SRC_DIR}/Projectile/3d"
                     __call_simulation ${SIM_CALL} ${DEST}
+                    __create_symlinks "src/sim.input"
                     ;;
                 projectile-2d)
                     DEST="${SRC_DIR}/Projectile/2d"
                     __call_simulation ${SIM_CALL} ${DEST}
+                    __create_symlinks "src/sim.input"
                     ;;
                 gameoflife)
                     DEST="${SRC_DIR}/GameOfLife"
                     __call_simulation ${SIM_CALL} ${DEST}
+                    __create_symlinks "src/sim.input"
                     ;;
                 *)
                     if [[ -z "${SIM_CALL}" ]]; then
@@ -91,7 +96,14 @@ function sim() {
                 echo "No animator module found in current simulation!"
                 return 0
             fi
-            python3 ${SIM_DIR}/vis/animate.py ${SIM_DIR}/dump.out
+            if [[ -d "${SIM_DIR}/dumps/" ]]; then
+                python3 ${SIM_DIR}/vis/animate.py ${SIM_DIR}/dumps
+                return 0
+            fi
+            if [[ -f "${SIM_DIR}/dump.out" ]]; then
+                python3 ${SIM_DIR}/vis/animate.py ${SIM_DIR}/dump.out
+                return 0
+            fi
             ;;
 
         plot)
@@ -103,7 +115,14 @@ function sim() {
                 echo "No plotting module found in current simulation!"
                 return 0
             fi
-            python3 ${SIM_DIR}/vis/plot.py ${SIM_DIR}/dump.out
+            if [[ -d "${SIM_DIR}/dumps/" ]]; then
+                python3 ${SIM_DIR}/vis/animate.py ${SIM_DIR}/dumps
+                return 0
+            fi
+            if [[ -f "${SIM_DIR}/dump.out" ]]; then
+                python3 ${SIM_DIR}/vis/animate.py ${SIM_DIR}/dump.out
+                return 0
+            fi
             ;;
         
         which)
@@ -133,4 +152,20 @@ function __call_simulation() {
     fi
     SIM_CUR="${SIM_CALL}"
     echo Done!
+}
+
+function __create_symlinks() {
+    if [[ $# -eq 0 ]]; then
+        return 0
+    fi
+
+    for i in "$@"; do
+        if [[ ! -f ${SIM_DIR}/${i} ]]; then
+            echo "${SIM_DIR}/${i} not found..."
+            continue
+        fi
+        mv "${SIM_DIR}/${i}" "${SIM_DIR}/${i##*/}" 
+        ln -P "${SIM_DIR}/${i##*/}" "${SIM_DIR}/${i}" 
+        printf "created hard link %s/%s\n" "${i##*/}" "${SIM_DIR}" 
+    done
 }

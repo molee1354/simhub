@@ -1,10 +1,12 @@
+#include <omp.h>
 #include <stdlib.h>
 #include "gameOfLife.h"
 
 
-void generateNext( Board* currentBoard ) {
+void generateNext_mp( Board* currentBoard ) {
     Board* nextBoard = makeEmptyBoard(currentBoard->numRows, currentBoard->numCols);
 
+    #pragma omp parallel for
     for (int i = 0; i < currentBoard->numRows; i++) {
         for (int j = 0; j < currentBoard->numCols; j++) {
             int neighborCount = countNeighbors(currentBoard, i, j);

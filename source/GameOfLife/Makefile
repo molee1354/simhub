@@ -1,8 +1,9 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra -fopenmp -g
 SRCDIR = src
 BINDIR = bin
 OBJDIR = obj
+DUMPSDIR = dumps
 DUMPS = $(wildcard ./dump.*)
 DEPS = require
 
@@ -20,17 +21,21 @@ $(TARGET): $(OBJ) | $(BINDIR)
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-$(OBJDIR):
+$(OBJDIR): $(DUMPSDIR)
 	mkdir -p $(OBJDIR)
 
 $(BINDIR):
 	mkdir -p $(BINDIR)
 
+$(DUMPSDIR):
+	mkdir -p $(DUMPSDIR)
+
 run: $(TARGET) | $(BINDIR)
 	$(TARGET)
 
 clean:
-	rm -f $(OBJ) $(TEST_OBJ) $(TARGET) $(TEST_TARGET) $(DUMPS)
+	rm -f $(OBJ) $(TEST_OBJ) $(TARGET) $(TEST_TARGET) $(DUMPS); \
+	rm -rf $(DUMPSDIR)
 
 deps:
 	@while IFS= read -r line; do \

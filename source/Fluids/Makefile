@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -fopenmp -g
+CFLAGS = -Wall -Wextra -g -I/usr/include/SDL2 -lSDL2 -lm
 SRCDIR = src
 BINDIR = bin
 OBJDIR = obj

@@ -23,6 +23,18 @@ typedef struct LinkedList  Array;
 Array* makeArray( size_t dtype );
 
 /*
+ * create a zero array of a certain size and of certain type
+ *
+ */
+Array* initArray( size_t dtype, int size );
+
+/*
+ * create a ones array of a certain size and of certain type
+ *
+ */
+Array* onesArray( size_t dtype, int size );
+
+/*
  * converts a normal C array into an array object of the
  * same size
  */

@@ -1,6 +1,4 @@
-#include <stdlib.h>
-#include "array.h"
-#include "_array.h"
+#include "array_commonincl.h"
 
 void deleteHead_i( Array* array ) {
     iNode* temp = ((iNode*)array->head)->next;

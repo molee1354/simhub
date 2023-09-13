@@ -1,6 +1,4 @@
-#include <stdlib.h>
-#include "array.h"
-#include "_array.h"
+#include "array_commonincl.h"
 
 void append_i( Array* list, int num ) {
     iNode* newNode = (iNode*)malloc(sizeof(iNode));

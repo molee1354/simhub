@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include "array.h"
-#include "_array.h"
+#include "array_commonincl.h"
 
 int listRepr_i( Array* array ) {
     iNode* currentNode = ((iNode*)array->head)->next;

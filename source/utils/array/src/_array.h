@@ -1,7 +1,11 @@
 #ifndef _guard_h
 #define _guard_h
 
-#include <stddef.h>
+#ifdef NAME_MANGLE
+#include "array_array.h"
+#else
+#include "array.h"
+#endif
 
 /*
  * Different node types based on datatype

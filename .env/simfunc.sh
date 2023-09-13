@@ -65,7 +65,7 @@ function sim() {
         run)
             cd ${SIM_DIR} || return 0
             make
-            ./main
+            ./bin/main || ./main
             cd ../
             ;;
 

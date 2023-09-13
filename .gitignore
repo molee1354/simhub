@@ -1,7 +1,6 @@
 # directories
 .idea/
 .vscode/
-.idea/
 ./*/.idea/
 ./*/.vscode/
 __pycache__/
@@ -11,14 +10,5 @@ venv/
 simulation/
 
 # files
+./*/.clangd
 *.o
-
-# reference files
-./Matrix/invert.c
-
-# data files
-./Projectile/*/dump.out
-
-# replit
-.replit
-replit.nix

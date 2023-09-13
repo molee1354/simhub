@@ -47,6 +47,11 @@ deps:
 			then \
 				continue; \
 			fi; \
+			if [[ -n $$(echo $${file} | grep "_commonincl.h") ]]; \
+			then \
+				cp $$f ./$(SRCDIR)/{file}; \
+				continue; \
+			fi; \
 			cp $$f ./$(SRCDIR)/$${TARG}_$${file}; \
 		done; \
 		echo "...Copied dependency [$${TARG}] into ./$(notdir $(shell pwd))/$(SRCDIR)"; \

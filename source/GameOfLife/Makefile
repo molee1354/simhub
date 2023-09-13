@@ -43,8 +43,13 @@ deps:
 		for f in "$${SIM_ROOT}"/source/"$${line}"src/*; \
 		do \
 			file="$$(basename $${f})"; \
-			if [[ $${file} == "main.c" || $${file} == "sim.input" ]]; \
+			if [[ $${file} == "main.c" ]]; \
 			then \
+				continue; \
+			fi; \
+			if [[ -n $$(echo $${file} | grep "_commonincl.h") ]]; \
+			then \
+				cp $$f ./$(SRCDIR)/{file}; \
 				continue; \
 			fi; \
 			cp $$f ./$(SRCDIR)/$${TARG}_$${file}; \

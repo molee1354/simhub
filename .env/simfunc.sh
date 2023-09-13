@@ -167,6 +167,7 @@ function __call_simulation() {
                     continue;
                 fi
                 if [[ -n $(echo ${file} | grep "_commonincl.h") ]]; then
+                    cp $f ${SIM_DIR}/src/{file}
                     continue;
                 fi
                 cp $f ${SIM_DIR}/src/${TARG}_${file}

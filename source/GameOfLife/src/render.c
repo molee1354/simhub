@@ -12,8 +12,6 @@
 #define WINDOW_WIDTH NCOLS*CELL_SIZE + 4*CELL_SIZE
 #define WINDOW_HEIGHT NROWS*CELL_SIZE + 4*CELL_SIZE
 
-#define FRAME_RATE 10.
-
 #define BLACK 0, 0, 0, 255
 #define WHITE 211, 211, 211, 255
 
@@ -26,8 +24,8 @@ static void draw_grid(Board* board) {
             SDL_Rect rect;
             rect.x = j * CELL_SIZE + (2*CELL_SIZE);
             rect.y = i * CELL_SIZE + (2*CELL_SIZE);
-            rect.w = CELL_SIZE*.8;
-            rect.h = CELL_SIZE*.8;
+            rect.w = (int)(CELL_SIZE*.8);
+            rect.h = (int)(CELL_SIZE*.8);
 
             if (board->boardMatrix[i][j] == 1) {
                 SDL_SetRenderDrawColor(renderer, BLACK);

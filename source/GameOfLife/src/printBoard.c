@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include "gameOfLife.h"
+#include "../rules.h"
+#include "gol_commonincl.h"
 
 void printBoard( Board* board ) {
     for (int i=0; i<board->numRows; i++) {

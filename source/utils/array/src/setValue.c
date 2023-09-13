@@ -1,5 +1,4 @@
-#include "array.h"
-#include "_array.h"
+#include "array_commonincl.h"
 
 iNode* getNode_i( Array* array, int index ) {
     int count = 0;

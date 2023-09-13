@@ -1,9 +1,5 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <time.h>
-
-#include "gameOfLife.h"
-#include "sim.input"
+#include "gol_commonincl.h"
 
 #define RAD_V NROWS/2
 #define RAD_H NCOLS/2

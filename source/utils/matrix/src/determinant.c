@@ -1,7 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include "matrix.h" 
-#include "_matrix.h" 
+#include "matrix_commonincl.h"
 
 double determinant( Matrix* matrix ) {
     if (matrix->isSquare!=1) {

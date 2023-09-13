@@ -1,7 +1,4 @@
-#include<stdio.h>
-#include<stdlib.h>
-
-#include "matrix.h"
+#include "matrix_commonincl.h"
 
 #define NROW 10
 #define NCOL 10

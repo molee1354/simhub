@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include "array.h"
-#include "_array.h"
+#include "array_commonincl.h"
 
 void printArray_i( Array* array ) {
     iNode* currentNode = ((iNode*)array->head)->next;

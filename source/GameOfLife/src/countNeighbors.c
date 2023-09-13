@@ -1,5 +1,4 @@
-#include "gameOfLife.h"
-#include "sim.input"
+#include "gol_commonincl.h"
 
 int countNorthWest( Board* currentBoard, int rowIdx, int colIdx ) {
     if (rowIdx <= 0 || colIdx <= 0) {

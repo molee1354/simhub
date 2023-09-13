@@ -1,6 +1,9 @@
 # current simulation called
 SIM_CUR="."
 
+# the dependency name manling rules
+SIM_NAMERULES="rules.h"
+
 # sim [option] function to call and interact with different simulations
 function sim() {
 
@@ -20,7 +23,8 @@ function sim() {
                 rm -rf ${SIM_DIR}
             fi
             
-            mkdir ${SIM_DIR}
+            mkdir -p ${SIM_DIR}
+            cp ${SIM_ROOT}/.env/${SIM_NAMERULES} ${SIM_DIR}
             case "${SIM_CALL}" in
                 utils-matrix)
                     DEST="${SRC_DIR}/utils/matrix"
@@ -140,13 +144,34 @@ function __call_simulation() {
     DEST=$2
     
     rsync -a ${DEST}/* ${SIM_DIR} \
-        --exclude tests/
+        --exclude tests/ \
+        --exclude rules.h
+    HEADER=$(basename ${DEST})
+    for f in ${SIM_DIR}/src/*; do
+        file=$(basename ${f})
+        if [[ ${file} == "sim.input" ]]; then
+            continue;
+        fi
+        if [[ -n $(echo ${file} | grep "_commonincl.h") ]]; then
+            continue;
+        fi
+        mv ${f} ${SIM_DIR}/src/${HEADER}_${file}
+    done
     printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
     if [[ -e ${DEST}/${DEPS} ]]; then
         while IFS= read -r LINE; do
             TARG="$(basename ${LINE})"
-            rsync -a ${SRC_DIR}/${LINE}src/* ${SIM_DIR}/src \
-                --exclude 'main.c'
+            for f in "${SIM_ROOT}"/source/"${LINE}"src/*; do
+                file=$(basename ${f})
+                if [[ ${file} == "main.c" ]]; then
+                    continue;
+                fi
+                if [[ -n $(echo ${file} | grep "_commonincl.h") ]]; then
+                    cp $f ${SIM_DIR}/src/${file}
+                    continue;
+                fi
+                cp $f ${SIM_DIR}/src/${TARG}_${file}
+            done
             printf "...Copied dependency [%s] into %s/src\n" "${TARG}" "${SIM_DIR}"
         done < ${DEST}/${DEPS}
     fi

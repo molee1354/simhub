@@ -1,5 +1,4 @@
-#include "array.h"
-#include "_array.h"
+#include "array_commonincl.h"
 
 int getIndex_i( Array* array, int num ) {
     iNode* currentNode = ((iNode*)array->head)->next;

@@ -2,6 +2,7 @@
 #define _gameOfLife_h
 
 #include <stdio.h>
+#include <stdlib.h>
 #include "sim.input"
 
 /*

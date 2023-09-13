@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include "matrix.h"
-#include "_matrix.h"
+#include "matrix_commonincl.h"
 
 
 /*

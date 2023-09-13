@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include "gameOfLife.h"
+#include "../rules.h"
+#include "gol_commonincl.h"
 
 void writeBoard( FILE* file, Board* board, int timestep ) {
     fprintf(file, "\nTimestep : %d\n", timestep);

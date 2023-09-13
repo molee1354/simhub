@@ -1,6 +1,5 @@
 #include <omp.h>
-#include <stdlib.h>
-#include "gameOfLife.h"
+#include "gol_commonincl.h"
 
 
 void generateNext_mp2( Board* currentBoard ) {

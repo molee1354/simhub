@@ -1,4 +1,11 @@
+#ifndef _matrix_guard_h
+#define _matrix_guard_h
+
+#ifdef NAME_MANGLE
+#include "matrix_matrix.h"
+#else
 #include "matrix.h"
+#endif
 
 /*
  * Define vector struct
@@ -21,3 +28,5 @@ typedef struct DoubleMatrix {
     int size[2];
     int isSquare;
 } Matrix;
+
+#endif

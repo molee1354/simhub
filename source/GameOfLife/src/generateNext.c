@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include "gameOfLife.h"
+#include "gol_commonincl.h"
 
 
 void generateNext( Board* currentBoard ) {

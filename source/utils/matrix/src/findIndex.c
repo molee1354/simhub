@@ -1,7 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include "matrix.h"
-#include "_matrix.h"
+#include "matrix_commonincl.h"
 
 int* findIndex_M( Matrix* matrix, double target ) {
     int* out = (int*)malloc(sizeof(int)*2);

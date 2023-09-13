@@ -1,6 +1,4 @@
-#include <stdlib.h>
-#include "array.h"
-#include "_array.h"
+#include "array_commonincl.h"
 
 Array* toArray_i( int* nArray, int size ) {
     Array* array = makeArray(sizeof(int));

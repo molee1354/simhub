@@ -1,5 +1,4 @@
-#include <stdlib.h>
-#include "gameOfLife.h"
+#include "gol_commonincl.h"
 
 void freeBoard( Board* board ) {
     for (int i=0; i<board->numRows; i++) {

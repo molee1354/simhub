@@ -1,6 +1,4 @@
-#include <stdlib.h>
-#include "array.h"
-#include "_array.h"
+#include "array_commonincl.h"
 
 int freeArray_i( Array* array ) {
     while ( ((iNode*)array->head)->next->next != NULL ) {

@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <stddef.h>
-#include "array.h"
-#include "_array.h"
+#include "array_commonincl.h"
 
 Array* makeArray(size_t dtype) {
     Array* array = (Array*)malloc(sizeof(Array));

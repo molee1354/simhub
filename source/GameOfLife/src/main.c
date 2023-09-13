@@ -1,9 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 #include <omp.h>
-
-#include "gameOfLife.h"
+#include "gol_commonincl.h"
 
 
 int main() {

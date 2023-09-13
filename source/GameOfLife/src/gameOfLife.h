@@ -57,5 +57,13 @@ void writeBoard( FILE* file, Board* board, int timestep );
 void freeBoard( Board* board );
 #endif
 
-// reference:
-// https://github.com/noahhaasis/conwaysGameOfLife
+/*
+ * Function to save the simulation to a dump file
+ */
+void saveSim();
+
+/*
+ * Function to render a live animation of the simulation
+ */
+void render();
+

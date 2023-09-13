@@ -113,10 +113,16 @@ int checkMethods(void) {
     Vector* onesVector = ones(NCOL, ROW);
     puts("\nprintVector() zeros");
     double* modVector = makeModifiable(myVector);
+    double* modVectorOnes = makeModifiable(onesVector);
     modVector[1] = targ;
     printVector(myVector);
 
-    puts("\nprintVector() zeros");
+    modVector = modVectorOnes;
+    for (int i = 0; i < NCOL; i++) {
+        printf("%g ", modVector[i]);
+    }
+
+    puts("\nprintVector() ones");
     printVector(onesVector);
 
     puts("\nVector sum");

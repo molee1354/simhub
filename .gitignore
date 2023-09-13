@@ -1,7 +1,6 @@
 # directories
 .idea/
 .vscode/
-.idea/
 ./*/.idea/
 ./*/.vscode/
 __pycache__/

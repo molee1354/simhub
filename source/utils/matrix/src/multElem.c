@@ -1,7 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include "matrix.h"
-#include "_matrix.h"
+#include "matrix_commonincl.h"
 
 /*
  * All math operations will create a new matrix

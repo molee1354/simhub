@@ -1,4 +1,4 @@
-#ifndef _deps_namemangle_rules_h
-#define _deps_namemangle_rules_h
+#ifndef _gameoflife_rules_h
+#define _gameoflife_rules_h
 
 #endif

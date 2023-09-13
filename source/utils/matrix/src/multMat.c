@@ -1,7 +1,4 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include "matrix.h"
-#include "_matrix.h"
+#include "matrix_commonincl.h"
 
 
 Matrix* multMat_M( Matrix* mat1, Matrix* mat2 ) {

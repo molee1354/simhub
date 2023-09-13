@@ -1,5 +1,4 @@
-#include "matrix.h"
-#include "_matrix.h"
+#include "matrix_commonincl.h"
 
 double** makeModifiable_M( Matrix* matrix ) {
     return matrix->e;

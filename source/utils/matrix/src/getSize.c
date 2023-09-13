@@ -1,5 +1,4 @@
-#include "matrix.h"
-#include "_matrix.h"
+#include "matrix_commonincl.h"
 
 int* getSize_M( Matrix* matrix ) {
     return matrix->size;

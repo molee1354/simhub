@@ -1,6 +1,4 @@
-#include <stdlib.h>
-#include "matrix.h"
-#include "_matrix.h"
+#include "matrix_commonincl.h"
 
 
 Matrix* ones_M( int numRows, int numCols ) {

@@ -1,6 +1,4 @@
-#include <stdlib.h>
-#include "matrix.h"
-#include "_matrix.h"
+#include "matrix_commonincl.h"
 
 int freeMatrix( Matrix* matrix ) {
     for (int i = 0; i<matrix->nRows; i++) {

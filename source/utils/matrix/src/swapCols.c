@@ -1,5 +1,4 @@
-#include "matrix.h"
-#include "_matrix.h"
+#include "matrix_commonincl.h"
 
 void swapCols( Matrix* matrix, int thisCol, int thatCol ) {
     for (int i = 0; i<matrix->nCols; i++) {

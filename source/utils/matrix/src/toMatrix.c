@@ -1,7 +1,4 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include "matrix.h"
-#include "_matrix.h"
+#include "matrix_commonincl.h"
 
 Matrix* toMatrix( double** nMatrix, int numRows, int numCols ) {
     Matrix* out = (Matrix*)malloc(sizeof(Matrix));

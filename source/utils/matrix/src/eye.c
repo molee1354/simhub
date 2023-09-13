@@ -1,6 +1,4 @@
-#include <stdlib.h>
-#include "matrix.h"
-#include "_matrix.h"
+#include "matrix_commonincl.h"
 
 Matrix* eye( int sideLength ) {
     Matrix* out = (Matrix*)malloc(sizeof(Matrix));

@@ -1,4 +1,4 @@
-#include "matrix.h"
+#include "matrix_commonincl.h"
 
 /*
  * Define vector struct

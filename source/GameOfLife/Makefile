@@ -49,7 +49,7 @@ deps:
 			fi; \
 			if [[ -n $$(echo $${file} | grep "_commonincl.h") ]]; \
 			then \
-				cp $$f ./$(SRCDIR)/{file}; \
+				cp $$f ./$(SRCDIR)/$${file}; \
 				continue; \
 			fi; \
 			cp $$f ./$(SRCDIR)/$${TARG}_$${file}; \

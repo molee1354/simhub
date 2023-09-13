@@ -1,5 +1,7 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g -I/usr/include/SDL2 -lSDL2 -lm
+INCLUDE = $(shell pkg-config --cflags gtk+-3.0)
+CFLAGS = -Wall -Wextra -g $(INCLUDE)
+LDFLAGS = $(shell pkg-config --libs gtk+-3.0) -lm
 SRCDIR = src
 BINDIR = bin
 OBJDIR = obj
@@ -16,7 +18,7 @@ TARGET = $(BINDIR)/main ./main
 all: $(TARGET) | $(BINDIR)
 
 $(TARGET): $(OBJ) | $(BINDIR)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -35,7 +37,7 @@ run: $(TARGET) | $(BINDIR)
 
 clean:
 	rm -f $(OBJ) $(TEST_OBJ) $(TARGET) $(TEST_TARGET) $(DUMPS); \
-	rm -rf $(DUMPSDIR)
+	rm -rf $(DUMPSDIR) $(OBJDIR) $(BINDIR)
 
 deps:
 	@while IFS= read -r line; do \

@@ -152,6 +152,9 @@ function __call_simulation() {
         if [[ ${file} == "sim.input" ]]; then
             continue;
         fi
+        if [[ -n $(echo ${file} | grep "_commonincl.h") ]]; then
+            continue;
+        fi
         mv ${f} ${SIM_DIR}/src/${HEADER}_${file}
     done
     printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
@@ -161,6 +164,9 @@ function __call_simulation() {
             for f in "${SIM_ROOT}"/source/"${LINE}"src/*; do
                 file=$(basename ${f})
                 if [[ ${file} == "main.c" ]]; then
+                    continue;
+                fi
+                if [[ -n $(echo ${file} | grep "_commonincl.h") ]]; then
                     continue;
                 fi
                 cp $f ${SIM_DIR}/src/${TARG}_${file}

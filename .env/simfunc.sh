@@ -1,6 +1,9 @@
 # current simulation called
 SIM_CUR="."
 
+# the dependency name manling rules
+SIM_NAMERULES="rules.h"
+
 # sim [option] function to call and interact with different simulations
 function sim() {
 
@@ -20,7 +23,8 @@ function sim() {
                 rm -rf ${SIM_DIR}
             fi
             
-            mkdir ${SIM_DIR}
+            mkdir -p ${SIM_DIR}
+            cp ${SIM_ROOT}/.env/${SIM_NAMERULES} ${SIM_DIR}
             case "${SIM_CALL}" in
                 utils-matrix)
                     DEST="${SRC_DIR}/utils/matrix"

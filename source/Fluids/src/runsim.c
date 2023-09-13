@@ -4,7 +4,7 @@
 #include "fluid.h"
 #include "sim.input"
 
-int main(int argc, char* argv[]) {
+int runfluid(int argc, char* argv[]) {
     Fluid* fluid = initFluid(DENSITY, NUM_X, NUM_Y, DEF_H);
 
     for (int i = 0; i < 10; i++) {

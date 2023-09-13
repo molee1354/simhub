@@ -12,6 +12,7 @@ simulation/
 
 # files
 *.o
+**/.clangd
 
 # reference files
 ./Matrix/invert.c

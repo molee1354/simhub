@@ -10,5 +10,5 @@ venv/
 simulation/
 
 # files
-./*/.clangd
+./.clangd
 *.o

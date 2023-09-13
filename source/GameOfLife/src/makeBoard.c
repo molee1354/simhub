@@ -1,11 +1,5 @@
 #include <time.h>
-#include "../rules.h"
-
-#ifdef NAME_MANGLE
-#include "GameOfLife_gameOfLife.h"
-#else
-#include "gameOfLife.h"
-#endif
+#include "gol_commonincl.h"
 
 #define RAD_V NROWS/2
 #define RAD_H NCOLS/2

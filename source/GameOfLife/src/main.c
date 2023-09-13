@@ -1,12 +1,6 @@
 #include <unistd.h>
 #include <omp.h>
-#include "../rules.h"
-
-#ifdef NAME_MANGLE
-#include "GameOfLife_gameOfLife.h"
-#else
-#include "gameOfLife.h"
-#endif
+#include "gol_commonincl.h"
 
 
 int main() {

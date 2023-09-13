@@ -1,10 +1,5 @@
 #include "../rules.h"
-
-#ifdef NAME_MANGLE
-#include "GameOfLife_gameOfLife.h"
-#else
-#include "gameOfLife.h"
-#endif
+#include "gol_commonincl.h"
 
 void writeBoard( FILE* file, Board* board, int timestep ) {
     fprintf(file, "\nTimestep : %d\n", timestep);

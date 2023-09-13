@@ -1,5 +1,10 @@
+#include "../rules.h"
+
+#ifdef NAME_MANGLE
+#include "GameOfLife_gameOfLife.h"
+#else
 #include "gameOfLife.h"
-#include "sim.input"
+#endif
 
 int countNorthWest( Board* currentBoard, int rowIdx, int colIdx ) {
     if (rowIdx <= 0 || colIdx <= 0) {

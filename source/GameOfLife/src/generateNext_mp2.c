@@ -1,6 +1,11 @@
 #include <omp.h>
-#include <stdlib.h>
+#include "../rules.h"
+
+#ifdef NAME_MANGLE
+#include "GameOfLife_gameOfLife.h"
+#else
 #include "gameOfLife.h"
+#endif
 
 
 void generateNext_mp2( Board* currentBoard ) {

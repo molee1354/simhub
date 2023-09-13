@@ -146,13 +146,13 @@ function __call_simulation() {
     
     rsync -a ${DEST}/* ${SIM_DIR} \
         --exclude tests/
-    printf "%s called in %s.\n" "${SIM_CALL}" "${SIM_DIR}"
+    printf "'%s' called in '%s'.\n" "${SIM_CALL}" "${SIM_DIR}"
     if [[ -e ${DEST}/${DEPS} ]]; then
         while IFS= read -r LINE; do
             TARG="$(basename ${LINE})"
             rsync -a ${SRC_DIR}/${LINE}src/* ${SIM_DIR}/src \
                 --exclude 'main.c'
-            printf "...Copied dependency [%s] into %s/src\n" "${TARG}" "${SIM_DIR}"
+            printf "...Copied dependency [%s] into '%s/src'\n" "${TARG}" "${SIM_DIR}"
         done < ${DEST}/${DEPS}
     fi
     SIM_CUR="${SIM_CALL}"
@@ -171,6 +171,6 @@ function __create_symlinks() {
         fi
         mv "${SIM_DIR}/${i}" "${SIM_DIR}/${i##*/}" 
         ln -P "${SIM_DIR}/${i##*/}" "${SIM_DIR}/${i}" 
-        printf "created hard link %s/%s\n" "${i##*/}" "${SIM_DIR}" 
+        printf "created hard link '%s/%s'\n" "${SIM_DIR}" "${i##*/}" 
     done
 }

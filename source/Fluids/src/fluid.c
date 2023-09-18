@@ -70,37 +70,6 @@ static void printProp(Fluid* fluid, double* prop) {
     puts("");
 }
 
-void freeFluid(Fluid* fluid) {
-    free(fluid->u);
-    free(fluid->v);
-    free(fluid->p);
-    free(fluid->s);
-    free(fluid->m);
-    free(fluid->newU);
-    free(fluid->newV);
-    free(fluid->newM);
-    free(fluid);
-}
-
-static double* initArray(int size, double elem) {
-    double* out = (double*)malloc(sizeof(double) * size);
-    for (int i = 0; i < size; i++) {
-        out[i] = elem;
-    }
-    return out;
-}
-
-static void printProp(Fluid* fluid, double* prop) {
-    int n = 0;
-    for (int i = 0; i < fluid->numY; i++) {
-        for (int j = 0; j < fluid->numX; j++) {
-            printf("%g ", prop[n++]);
-        }
-        puts("");
-    }
-    puts("");
-}
-
 /**
  * @brief Function to integrate with dt
  *

@@ -64,13 +64,4 @@ void freeFluid(Fluid* fluid);
  */
 void simulate(Fluid* fluid, double dt, double gravity, int numIters);
 
-/**
- * @brief Function to calculate the fluid simulations
- *
- * @param dt 
- * @param gravity 
- * @param numIters 
- */
-void simulate(Fluid* fluid, double dt, double gravity, int numIters);
-
 #endif

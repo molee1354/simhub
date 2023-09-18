@@ -1,26 +1,20 @@
 #include <SDL.h>
 #include <stdio.h>
-#include <unistd.h>
 #include <stdbool.h>
 
-#include "SDL_render.h"
-#include "SDL_video.h"
 #include "fluid.h"
 #include "sim.input"
 
+#define WINDOW_WIDTH 1280
+#define WINDOW_HEIGHT 800
+
 #define CELL_SIZE 5
 
-#define WINDOW_WIDTH NUM_X*CELL_SIZE + 4*CELL_SIZE
-#define WINDOW_HEIGHT NUM_Y*CELL_SIZE + 4*CELL_SIZE
-
-#define OBSTACLE_RADIUS 50
+#define OBSTACLE_RADIUS 10
 #define OBSTACLE_COLOR 211, 211, 211
 
-#define BACKGROUND_COLOR 255, 255, 255
+#define WHITE 255, 255, 255
 #define BLACK 0, 0, 0
-
-SDL_Window* window = NULL;
-SDL_Renderer* renderer = NULL;
 
 // Obstacle
 bool drawing = false;
@@ -28,47 +22,92 @@ bool drawing = false;
 static int obstacle_x = WINDOW_WIDTH/2;
 static int obstacle_y = WINDOW_HEIGHT/2;
 
-void drawObstacle(SDL_Renderer* render, int x, int y) {
-    for (int dy = -OBSTACLE_RADIUS; dy <= OBSTACLE_RADIUS; dy++) {
-        for (int dx = -OBSTACLE_RADIUS; dx <= OBSTACLE_RADIUS; dx++) {
-            int dist = dx * dx + dy * dy;
-            
-            if (dist >= (OBSTACLE_RADIUS - 5) * (OBSTACLE_RADIUS - 5) &&
-                dist <= OBSTACLE_RADIUS * OBSTACLE_RADIUS) {
-                SDL_SetRenderDrawColor(render, BLACK, 255);
-                SDL_RenderDrawPoint(render, x + dx, y + dy);
-            } else if (dist > OBSTACLE_RADIUS * OBSTACLE_RADIUS) {
-                SDL_SetRenderDrawColor(render, BACKGROUND_COLOR, 255);
-                SDL_RenderDrawPoint(render, x + dx, y + dy);
-            } else {
-                SDL_SetRenderDrawColor(render, OBSTACLE_COLOR, 255); // Black outline
-                SDL_RenderDrawPoint(render, x + dx, y + dy);
+double simHeight;
+double cScale;
+double simWidth;
+
+SDL_Window* window = NULL;
+SDL_Renderer* renderer = NULL;
+
+static double cX(int x) {
+    return (double)x * cScale;
+}
+
+static double cY(int y) {
+    return WINDOW_HEIGHT - (double)y * cScale;
+}
+
+static void setObstacle(Fluid* fluid, int x, int y) {
+    double vx = (x - obstacle_x) / DT;
+    double vy = (y - obstacle_y) / DT;
+
+    obstacle_x = x;
+    obstacle_y = y;
+
+    int n = fluid->numY;
+    int r = OBSTACLE_RADIUS;
+
+    for (int i = 1; i < fluid->numX-2; i++) {
+        for (int j = 1; j < fluid->numY-2; j++) {
+            fluid->s[i*n + j] = 1.;
+
+            double dx = ((double)i + .5) * fluid->h - x;
+            double dy = ((double)j + .5) * fluid->h - y;
+            double rad2 = (double)(r*r);
+
+            if (dx*dx + dy*dy < rad2*2) {
+                puts("yes");
+                fluid->s[i*n + j] = 0.;
+                fluid->m[i*n + j] = 1.;
+
+                fluid->u[i*n + j] = vx;
+                fluid->u[(i+1)*n + j] = vx;
+                fluid->v[i*n + j] = vy;
+                fluid->v[i*n + j+1] = vy;
             }
         }
     }
+
 }
 
-static void drawGrid(Fluid* fluid) {
+static void draw(Fluid* fluid) {
     int n = fluid->numY;
     for (int i = 0; i < fluid->numX; i++) {
         for (int j = 0; j < fluid->numY; j++) {
             SDL_Rect point;
             point.x = i * CELL_SIZE + (2*CELL_SIZE);
             point.y = j * CELL_SIZE + (2*CELL_SIZE);
-            point.w = (int)(CELL_SIZE*.8);
-            point.h = (int)(CELL_SIZE*.8);
+            point.w = (int)(CELL_SIZE*.9);
+            point.h = (int)(CELL_SIZE*.9);
 
             double smoke = fluid->m[i*n + j];
 
-            if (smoke == 0.) {
-                SDL_SetRenderDrawColor(renderer, 211, 211, 211, 255);
-            } else {
-                SDL_SetRenderDrawColor(renderer,
-                        smoke*255,
-                        smoke*255,
-                        smoke*255, 255);
+            SDL_SetRenderDrawColor(renderer,
+                                   smoke*255,
+                                   smoke*255,
+                                   smoke*255,
+                                   255);
+            if (fluid->s[i*n + j] == 0.) {
+                SDL_SetRenderDrawColor(renderer, BLACK, 255);
             }
             SDL_RenderFillRect(renderer, &point);
+        }
+    }
+
+    for (int dy = -OBSTACLE_RADIUS; dy <= OBSTACLE_RADIUS; dy++) {
+        for (int dx = -OBSTACLE_RADIUS; dx <= OBSTACLE_RADIUS; dx++) {
+            int dist = dx * dx + dy * dy;
+            
+            if (dist >= (OBSTACLE_RADIUS - 5) * (OBSTACLE_RADIUS - 5) &&
+                dist <= OBSTACLE_RADIUS * OBSTACLE_RADIUS) {
+                SDL_SetRenderDrawColor(renderer, BLACK, 255);
+                SDL_RenderDrawPoint(renderer, obstacle_x + dx, obstacle_y + dy);
+            } else if (dist > OBSTACLE_RADIUS * OBSTACLE_RADIUS) {
+                continue;
+            } else {
+                SDL_SetRenderDrawColor(renderer, OBSTACLE_COLOR, 255); // Black outline
+                SDL_RenderDrawPoint(renderer, obstacle_x + dx, obstacle_y + dy);
+            }
         }
     }
 }
@@ -88,8 +127,8 @@ static void initialState(Fluid* fluid, double inVel) {
     }
 
     double pipeHeight = .1 * fluid->numY;
-    double minJ = floor(.5 * fluid->numY - .5*pipeHeight);
-    double maxJ = floor(.5 * fluid->numY + .5*pipeHeight);
+    double minJ = (int)floor(.5 * fluid->numY - .5*pipeHeight);
+    double maxJ = (int)floor(.5 * fluid->numY + .5*pipeHeight);
 
     for (int j = minJ; j < maxJ; j++) {
         fluid->m[j] = 0.;
@@ -129,27 +168,43 @@ static void mainLoop(Fluid* fluid) {
             } else if (event.type == SDL_MOUSEBUTTONDOWN) {
                 if (event.button.button == SDL_BUTTON_LEFT) {
                     drawing = true;
-                    obstacle_x = event.button.x;
-                    obstacle_y = event.button.y;
+//                    obstacle_x = event.button.x;
+//                    obstacle_y = event.button.y;
+                    setObstacle(fluid, event.button.x, event.button.y);
                 }
             } 
 
         }
         SDL_Delay(16);
 
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+        SDL_SetRenderDrawColor(renderer, WHITE, 255);
         SDL_RenderClear(renderer);
 
         simulate(fluid, DT, GRAVITY, NUM_ITER);
-        drawGrid(fluid);
-        drawObstacle(renderer, obstacle_x, obstacle_y);
+//        setObstacle(fluid, obstacle_x, obstacle_y);
+        draw(fluid);
 
         SDL_RenderPresent(renderer);
     }
 }
 int main(int argc, char* argv[]) {
-    Fluid* fluid = initFluid(DENSITY, NUM_X, NUM_Y, DEF_H);
-    initialState(fluid, 5.);
+    simHeight = 1.1;
+    cScale = WINDOW_HEIGHT / simHeight;
+    simWidth = WINDOW_WIDTH / cScale;
+
+    double domainHeight = 1.;
+    double domainWidth = domainHeight / simHeight * simWidth;
+    double res = 100.;
+    double h = domainHeight / res;
+
+    int numX = floor(domainWidth/h);
+    int numY = floor(domainHeight/h);
+
+    printf("numX = %d\n", numX);
+    printf("numY = %d\n", numY);
+
+    Fluid* fluid = initFluid(DENSITY, numX, numY, h);
+    initialState(fluid, IN_VEL);
 
     if (!initGraphics()) {
         SDL_Quit();

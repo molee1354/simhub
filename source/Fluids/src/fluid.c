@@ -36,7 +36,7 @@ Fluid* initFluid(double density, int numX, int numY, double h) {
 
 #undef ZEROS
 #undef ONES
-    // return out;
+    return out;
 }
 
 void freeFluid(Fluid* fluid) {
@@ -57,17 +57,6 @@ static double* initArray(int size, double elem) {
         out[i] = elem;
     }
     return out;
-}
-
-static void printProp(Fluid* fluid, double* prop) {
-    int n = 0;
-    for (int i = 0; i < fluid->numY; i++) {
-        for (int j = 0; j < fluid->numX; j++) {
-            printf("%g ", prop[n++]);
-        }
-        puts("");
-    }
-    puts("");
 }
 
 /**

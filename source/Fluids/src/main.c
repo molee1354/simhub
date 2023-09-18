@@ -6,9 +6,7 @@
 #include "sim.input"
 
 #define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 800
-
-#define CELL_SIZE 5
+#define WINDOW_HEIGHT 780
 
 #define OBSTACLE_RADIUS 10
 #define OBSTACLE_COLOR 211, 211, 211
@@ -25,6 +23,7 @@ static int obstacle_y = WINDOW_HEIGHT/2;
 double simHeight;
 double cScale;
 double simWidth;
+int cellSize;
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
@@ -75,10 +74,10 @@ static void draw(Fluid* fluid) {
     for (int i = 0; i < fluid->numX; i++) {
         for (int j = 0; j < fluid->numY; j++) {
             SDL_Rect point;
-            point.x = i * CELL_SIZE + (2*CELL_SIZE);
-            point.y = j * CELL_SIZE + (2*CELL_SIZE);
-            point.w = (int)(CELL_SIZE*.9);
-            point.h = (int)(CELL_SIZE*.9);
+            point.x = i * cellSize;
+            point.y = j * cellSize;
+            point.w = (int)(cellSize*.9);
+            point.h = (int)(cellSize*.9);
 
             double smoke = fluid->m[i*n + j];
 
@@ -187,10 +186,15 @@ static void mainLoop(Fluid* fluid) {
         SDL_RenderPresent(renderer);
     }
 }
-int main(int argc, char* argv[]) {
+
+static void initSimParam() {
     simHeight = 1.1;
     cScale = WINDOW_HEIGHT / simHeight;
     simWidth = WINDOW_WIDTH / cScale;
+}
+
+int main(int argc, char* argv[]) {
+    initSimParam();
 
     double domainHeight = 1.;
     double domainWidth = domainHeight / simHeight * simWidth;
@@ -200,8 +204,13 @@ int main(int argc, char* argv[]) {
     int numX = floor(domainWidth/h);
     int numY = floor(domainHeight/h);
 
-    printf("numX = %d\n", numX);
-    printf("numY = %d\n", numY);
+    cellSize = 0.99*WINDOW_WIDTH / numX;
+
+    printf("        numX = %d\n", numX);
+    printf("        numY = %d\n", numY);
+    printf("    cellSize = %d\n", cellSize);
+    printf(" domainWidth = %g\n", domainWidth);
+    printf("domainHeight = %g\n", domainHeight);
 
     Fluid* fluid = initFluid(DENSITY, numX, numY, h);
     initialState(fluid, IN_VEL);

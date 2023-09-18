@@ -1,10 +1,10 @@
 
 #define DENSITY    1000.
-#define NUM_X      10
-#define NUM_Y      5
+#define NUM_X      150
+#define NUM_Y      75
 #define DEF_H      .5
 
-#define DT         .1
-#define GRAVITY    9.8
-#define NUM_ITER   10
+#define DT         1.0/60.
+#define GRAVITY    0.
+#define NUM_ITER   40
 

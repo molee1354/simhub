@@ -1,7 +1,7 @@
 CC = gcc
-INCLUDE = $(shell pkg-config --cflags gtk+-3.0)
+INCLUDE = $(shell pkg-config --cflags sdl2)
 CFLAGS = -Wall -Wextra -g $(INCLUDE)
-LDFLAGS = $(shell pkg-config --libs gtk+-3.0) -lm
+LDFLAGS = $(shell pkg-config --libs sdl2) -lm
 SRCDIR = src
 BINDIR = bin
 OBJDIR = obj
@@ -11,14 +11,14 @@ DEPS = require
 
 SRC = $(wildcard $(SRCDIR)/*.c)
 OBJ = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SRC))
-TARGET = $(BINDIR)/main ./main
+TARGET = $(BINDIR)/main
 
 .PHONY: all clean deps
 
 all: $(TARGET) | $(BINDIR)
 
 $(TARGET): $(OBJ) | $(BINDIR)
-	$(CC) $(CFLAGS) $(LDFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 $(OBJDIR)/%.o: $(SRCDIR)/%.c | $(OBJDIR)
 	$(CC) $(CFLAGS) -c $< -o $@

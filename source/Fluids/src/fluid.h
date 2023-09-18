@@ -35,8 +35,6 @@ typedef struct {
     int num;
 } Fluid;
 
-extern Fluid fluid;
-
 typedef enum {
     U_FIELD,
     V_FIELD,

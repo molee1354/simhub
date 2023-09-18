@@ -36,7 +36,7 @@ Fluid* initFluid(double density, int numX, int numY, double h) {
 
 #undef ZEROS
 #undef ONES
-    return out;
+    // return out;
 }
 
 void freeFluid(Fluid* fluid) {
@@ -273,16 +273,5 @@ void simulate(Fluid* fluid, double dt, double gravity, int numIters) {
     extrapolate(fluid);
     advectVel(fluid, dt);
     advectSmoke(fluid, dt);
-
-    puts("\nprint m");
-    printProp(fluid, fluid->m);
-    puts("\nprint v");
-    printProp(fluid, fluid->v);
-    puts("\nprint u");
-    printProp(fluid, fluid->u);
-    puts("\nprint p");
-    printProp(fluid, fluid->p);
-    puts("\nprint s");
-    printProp(fluid, fluid->s);
 }
 

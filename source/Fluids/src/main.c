@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <stdio.h>
 #include <unistd.h>
+#include <stdbool.h>
 
 #include "SDL_render.h"
 #include "SDL_video.h"
@@ -12,10 +13,42 @@
 #define WINDOW_WIDTH NUM_X*CELL_SIZE + 4*CELL_SIZE
 #define WINDOW_HEIGHT NUM_Y*CELL_SIZE + 4*CELL_SIZE
 
+#define OBSTACLE_RADIUS 50
+#define OBSTACLE_COLOR 211, 211, 211
+
+#define BACKGROUND_COLOR 255, 255, 255
+#define BLACK 0, 0, 0
+
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 
-static void draw_grid(Fluid* fluid) {
+// Obstacle
+bool drawing = false;
+
+static int obstacle_x = WINDOW_WIDTH/2;
+static int obstacle_y = WINDOW_HEIGHT/2;
+
+void drawObstacle(SDL_Renderer* render, int x, int y) {
+    for (int dy = -OBSTACLE_RADIUS; dy <= OBSTACLE_RADIUS; dy++) {
+        for (int dx = -OBSTACLE_RADIUS; dx <= OBSTACLE_RADIUS; dx++) {
+            int dist = dx * dx + dy * dy;
+            
+            if (dist >= (OBSTACLE_RADIUS - 5) * (OBSTACLE_RADIUS - 5) &&
+                dist <= OBSTACLE_RADIUS * OBSTACLE_RADIUS) {
+                SDL_SetRenderDrawColor(render, BLACK, 255);
+                SDL_RenderDrawPoint(render, x + dx, y + dy);
+            } else if (dist > OBSTACLE_RADIUS * OBSTACLE_RADIUS) {
+                SDL_SetRenderDrawColor(render, BACKGROUND_COLOR, 255);
+                SDL_RenderDrawPoint(render, x + dx, y + dy);
+            } else {
+                SDL_SetRenderDrawColor(render, OBSTACLE_COLOR, 255); // Black outline
+                SDL_RenderDrawPoint(render, x + dx, y + dy);
+            }
+        }
+    }
+}
+
+static void drawGrid(Fluid* fluid) {
     int n = fluid->numY;
     for (int i = 0; i < fluid->numX; i++) {
         for (int j = 0; j < fluid->numY; j++) {
@@ -64,11 +97,7 @@ static void initialState(Fluid* fluid, double inVel) {
     
 }
 
-
-int main(int argc, char* argv[]) {
-    Fluid* fluid = initFluid(DENSITY, NUM_X, NUM_Y, DEF_H);
-    initialState(fluid, 5.);
-
+static bool initGraphics() {
     window = SDL_CreateWindow("Eulerian Fluid",
             SDL_WINDOWPOS_CENTERED, 
             SDL_WINDOWPOS_CENTERED, 
@@ -76,7 +105,7 @@ int main(int argc, char* argv[]) {
             WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
     if (!window) {
         SDL_Log("SDL_CreateWindow failed: %s", SDL_GetError());
-        SDL_Quit();
+        return false;
     }
 
     renderer = SDL_CreateRenderer(window, -1,
@@ -84,29 +113,49 @@ int main(int argc, char* argv[]) {
     if (!renderer) {
         SDL_Log("SDL_CreateRenderer failed: %s", SDL_GetError());
         SDL_DestroyWindow(window);
-        SDL_Quit();
+        return false;
     }
+    return true;
+}
 
-    SDL_Event e;
+static void mainLoop(Fluid* fluid) {
     int quit = 0;
+    SDL_Event event;
 
     while (!quit) {
-        while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) {
+        while (SDL_PollEvent(&event)) {
+            if (event.type == SDL_QUIT) {
                 quit = 1;
-            }
-        }
+            } else if (event.type == SDL_MOUSEBUTTONDOWN) {
+                if (event.button.button == SDL_BUTTON_LEFT) {
+                    drawing = true;
+                    obstacle_x = event.button.x;
+                    obstacle_y = event.button.y;
+                }
+            } 
 
+        }
         SDL_Delay(16);
 
         SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
         SDL_RenderClear(renderer);
 
         simulate(fluid, DT, GRAVITY, NUM_ITER);
-        draw_grid(fluid);
+        drawGrid(fluid);
+        drawObstacle(renderer, obstacle_x, obstacle_y);
 
         SDL_RenderPresent(renderer);
     }
+}
+int main(int argc, char* argv[]) {
+    Fluid* fluid = initFluid(DENSITY, NUM_X, NUM_Y, DEF_H);
+    initialState(fluid, 5.);
+
+    if (!initGraphics()) {
+        SDL_Quit();
+    }
+
+    mainLoop(fluid);
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);

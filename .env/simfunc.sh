@@ -197,6 +197,5 @@ function __create_symlinks() {
         mv "${SIM_DIR}/${i}" "${SIM_DIR}/${i##*/}" 
         ln -P "${SIM_DIR}/${i##*/}" "${SIM_DIR}/${i}" 
         printf "created hard link '%s/%s'\n" "${SIM_DIR}" "${i##*/}" 
-        printf "created hard link '%s/%s'\n" "${SIM_DIR}" "${i##*/}" 
     done
 }

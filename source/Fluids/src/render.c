@@ -20,18 +20,23 @@ bool drawing = false;
 static int obstacle_x = WINDOW_WIDTH/2;
 static int obstacle_y = WINDOW_HEIGHT/2;
 
-double simHeight;
-double cScale;
-double simWidth;
-int cellSize;
+static double domainHeight;
+static double domainWidth;
+static double simHeight;
+static double cScale;
+static double simWidth;
+static int cellSize;
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 
 static void initSimParam() {
-    simHeight = 1.2;
+    simHeight = 1.1;
     cScale = WINDOW_HEIGHT / simHeight;
     simWidth = WINDOW_WIDTH / cScale;
+
+    domainHeight = 1.;
+    domainWidth = domainHeight / simHeight * simWidth;
 }
 
 static double cX(int x) {
@@ -61,10 +66,9 @@ static void setObstacle(Fluid* fluid, int x, int y, bool reset) {
         for (int j = 1; j < fluid->numY-2; j++) {
             fluid->s[i*n + j] = 1.;
 
-            double dx = ((double)i + .5) * fluid->h - (double)x/WINDOW_WIDTH ;
-            double dy = ((double)j + .5) * fluid->h - (double)y/WINDOW_HEIGHT;
+            double dx = ((double)i + .5) * fluid->h - ((double)x/WINDOW_WIDTH)*domainWidth;
+            double dy = ((double)j + .5) * fluid->h - ((double)y/WINDOW_HEIGHT)*domainHeight;
             double rad2 = (double)(obsRad*obsRad);
-
 
             if (dx*dx + dy*dy < rad2) {
                 fluid->s[i*n + j] = 0.;
@@ -87,8 +91,8 @@ static void draw(Fluid* fluid) {
             SDL_Rect point;
             point.x = i * cellSize;
             point.y = j * cellSize;
-            point.w = (int)(cellSize*1.);
-            point.h = (int)(cellSize*1.);
+            point.w = (int)(cellSize);
+            point.h = (int)(cellSize);
 
             double smoke = fluid->m[i*n + j];
 
@@ -98,7 +102,7 @@ static void draw(Fluid* fluid) {
                                    smoke*255,
                                    255);
             if (fluid->s[i*n + j] == 0.) {
-                SDL_SetRenderDrawColor(renderer, BLACK, 255);
+                SDL_SetRenderDrawColor(renderer, WHITE, 255);
             }
             SDL_RenderFillRect(renderer, &point);
         }
@@ -110,7 +114,7 @@ static void draw(Fluid* fluid) {
         for (int xx = -obsRad; xx <= obsRad; xx++) {
             int dist = xx * xx + yy * yy;
             
-            if (dist >= (obsRad - 2) * (obsRad - 2) &&
+            if (dist >= (obsRad - 4) * (obsRad - 4) &&
                 dist <= obsRad * obsRad) {
                 SDL_SetRenderDrawColor(renderer, BLACK, 255);
                 SDL_RenderDrawPoint(renderer,
@@ -207,8 +211,6 @@ static void mainLoop(Fluid* fluid) {
 void render() {
     initSimParam();
 
-    double domainHeight = 1.;
-    double domainWidth = domainHeight / simHeight * simWidth;
     double res = 100.;
     double h = domainHeight / res;
     

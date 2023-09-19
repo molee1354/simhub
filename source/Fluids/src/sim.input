@@ -2,7 +2,11 @@
 
 #define DENSITY    1000.
 
-#define IN_VEL     3.
+#define INLET_VEL     2.
+
+// size dimensions are based on window ratios.
+#define OBSTACLE_RADIUS .1
+#define INLET_HEIGHT    .15
 
 #define DT         (1.0/60.)
 #define GRAVITY    0.

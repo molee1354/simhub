@@ -8,7 +8,6 @@
 #define WINDOW_WIDTH 1600
 #define WINDOW_HEIGHT 900
 
-#define OBSTACLE_RADIUS .1
 #define OBSTACLE_COLOR 211, 211, 211
 
 #define WHITE 255, 255, 255
@@ -146,7 +145,7 @@ static void initialState(Fluid* fluid, double inVel) {
         }
     }
 
-    double pipeHeight = .1 * fluid->numY;
+    double pipeHeight = INLET_HEIGHT * (double)(fluid->numY);
     double minJ = (int)floor(.5 * fluid->numY - .5*pipeHeight);
     double maxJ = (int)floor(.5 * fluid->numY + .5*pipeHeight);
 
@@ -188,8 +187,6 @@ static void mainLoop(Fluid* fluid) {
             } else if (event.type == SDL_MOUSEBUTTONDOWN) {
                 if (event.button.button == SDL_BUTTON_LEFT) {
                     drawing = true;
-//                    obstacle_x = event.button.x;
-//                    obstacle_y = event.button.y;
                     setObstacle(fluid, event.button.x, event.button.y, true);
                 }
             } 
@@ -217,19 +214,15 @@ void render() {
     int numX = floor(domainWidth/h);
     int numY = floor(domainHeight/h);
 
-    cellSize = 1.*WINDOW_WIDTH / numX;
+    cellSize = WINDOW_WIDTH / numX;
 
-    printf("        numX = %d\n", numX);
-    printf("        numY = %d\n", numY);
-    printf("    cellSize = %d\n", cellSize);
-    printf(" domainWidth = %g\n", domainWidth);
-    printf("domainHeight = %g\n", domainHeight);
-    printf("    simWidth = %g\n", simWidth);
-    printf("   simHeight = %g\n", simHeight);
+    printf("\tFluid Density (kg/m^3) : %g\n", DENSITY);
+    printf("\t  Inlet Velocity (m/s) : %g\n", INLET_VEL);
+    printf("\t       Gravity (m/s^2) : %g\n", GRAVITY);
 
 
     Fluid* fluid = initFluid(DENSITY, numX, numY, h);
-    initialState(fluid, IN_VEL);
+    initialState(fluid, INLET_VEL);
 
     if (!initGraphics()) {
         SDL_Quit();

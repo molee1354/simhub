@@ -1,14 +1,17 @@
 
 
+/* Physical parameters */
 #define DENSITY    1000.
+#define GRAVITY    0.
 
+/* Inlet parameters */
 #define INLET_VEL     2.
-
-// size dimensions are based on window ratios.
-#define OBSTACLE_RADIUS .1
 #define INLET_HEIGHT    .15
 
+/* Obstacle size */
+#define OBSTACLE_RADIUS .1
+
+/* Other simulation parameters */
 #define DT         (1.0/60.)
-#define GRAVITY    0.
 #define NUM_ITER   40
 

@@ -14,11 +14,11 @@
 #define INLET_VEL             2.
     // inlet velocity in m/s
 
-#define INLET_HEIGHT          .15
+#define INLET_HEIGHT          .1
     // inlet height--1.0 is window height
 
 /* Obstacle size */
-#define OBSTACLE_RADIUS       .1 
+#define OBSTACLE_RADIUS       .1
     // obstacle radius--1.0 is window height
 
 /* Other simulation parameters */
@@ -29,10 +29,10 @@
     // number of iterations per each calculation cycle
 
 /* Window size */
-#define WINDOW_WIDTH    1200
-#define WINDOW_HEIGHT   800
+#define WINDOW_WIDTH    800
+#define WINDOW_HEIGHT   600
 
 /* Simulation mode */
 #define SMOKE           1
-#define PRESSURE        0
+#define PRESSURE        1
 

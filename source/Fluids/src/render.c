@@ -5,10 +5,10 @@
 #include "fluid.h"
 #include "sim.input"
 
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 780
+#define WINDOW_WIDTH 1600
+#define WINDOW_HEIGHT 900
 
-#define OBSTACLE_RADIUS .15
+#define OBSTACLE_RADIUS .1
 #define OBSTACLE_COLOR 211, 211, 211
 
 #define WHITE 255, 255, 255
@@ -29,7 +29,7 @@ SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
 
 static void initSimParam() {
-    simHeight = 1.1;
+    simHeight = 1.2;
     cScale = WINDOW_HEIGHT / simHeight;
     simWidth = WINDOW_WIDTH / cScale;
 }
@@ -61,12 +61,12 @@ static void setObstacle(Fluid* fluid, int x, int y, bool reset) {
         for (int j = 1; j < fluid->numY-2; j++) {
             fluid->s[i*n + j] = 1.;
 
-            dx = ((double)i + .5) * fluid->h - x;
-            dy = ((double)j + .5) * fluid->h - y;
+            double dx = ((double)i + .5) * fluid->h - (double)x/WINDOW_WIDTH ;
+            double dy = ((double)j + .5) * fluid->h - (double)y/WINDOW_HEIGHT;
             double rad2 = (double)(obsRad*obsRad);
 
+
             if (dx*dx + dy*dy < rad2) {
-                puts("yes!");
                 fluid->s[i*n + j] = 0.;
                 fluid->m[i*n + j] = 1.;
 
@@ -222,6 +222,9 @@ void render() {
     printf("    cellSize = %d\n", cellSize);
     printf(" domainWidth = %g\n", domainWidth);
     printf("domainHeight = %g\n", domainHeight);
+    printf("    simWidth = %g\n", simWidth);
+    printf("   simHeight = %g\n", simHeight);
+
 
     Fluid* fluid = initFluid(DENSITY, numX, numY, h);
     initialState(fluid, IN_VEL);

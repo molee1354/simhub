@@ -41,9 +41,6 @@ typedef enum {
     S_FIELD
 } FieldType;
 
-extern double dx;
-extern double dy;
-
 /**
  * @brief Constructor to initialize the fluid
  *

@@ -9,9 +9,6 @@
 
 static int count = 0;
 
-double dx;
-double dy;
-
 static double* initArray(int size, double elem);
 
 Fluid* initFluid(double density, int numX, int numY, double h) {
@@ -133,8 +130,8 @@ static double sampleField(Fluid* fluid, double x, double y, FieldType field) {
     x = findMax( findMin(x, fluid->numX * h), h );
     y = findMax( findMin(y, fluid->numY * h), h );
 
-    dx = 0.;
-    dy = 0.;
+    double dx = 0.;
+    double dy = 0.;
 
     double* f;
 

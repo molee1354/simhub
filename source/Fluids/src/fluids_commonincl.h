@@ -2,6 +2,9 @@
 #define _fluids_commonincl_h
 
 #include "../rules.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include <stdbool.h>
 
 #ifdef NAME_MANGLE
 #include "Fluids_fluid.h"

@@ -1,21 +1,22 @@
 
 
 /* Physical parameters */
-#define DENSITY    1000.
-#define GRAVITY    0.
+#define DENSITY           1000.
+#define GRAVITY              0.
+#define OVER_RELAX           1.9
 
 /* Inlet parameters */
-#define INLET_VEL     2.
-#define INLET_HEIGHT    .15
+#define INLET_VEL            2.
+#define INLET_HEIGHT          .15
 
 /* Obstacle size */
-#define OBSTACLE_RADIUS .1
+#define OBSTACLE_RADIUS       .1
 
 /* Other simulation parameters */
-#define DT         (1.0/60.)
-#define NUM_ITER   40
+#define DT            (1.0/60.)
+#define NUM_ITER       40
 
 /* Window size */
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 800
+#define WINDOW_WIDTH    1280
+#define WINDOW_HEIGHT   800
 

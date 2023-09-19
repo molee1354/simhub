@@ -5,7 +5,7 @@
  * @brief Define some scene things here for now
  *
  */
-#define OVER_RELAX 1.9
+#include "sim.input"
 
 /**
  * @class Fluid

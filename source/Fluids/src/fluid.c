@@ -31,7 +31,7 @@ Fluid* initFluid(double density, int numX, int numY, double h) {
     out->v = ZEROS();
     out->newU = ZEROS();
     out->newV = ZEROS();
-    out->p = ZEROS();
+
     out->s = ZEROS();
     out->m = ONES();
     out->newM = ZEROS();
@@ -260,7 +260,11 @@ static void advectSmoke(Fluid* fluid, double dt) {
 }
 
 void simulate(Fluid* fluid, double dt, double gravity, int numIters) {
+
     integrate(fluid, dt, gravity);
+
+    // initialize P each time.
+    fluid->p = initArray(fluid->numCells, 0.);
 
     solveIncompress(fluid, numIters, dt);
     extrapolate(fluid);

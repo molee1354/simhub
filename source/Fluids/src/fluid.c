@@ -267,5 +267,7 @@ void simulate(Fluid* fluid, double dt, double gravity, int numIters) {
     extrapolate(fluid);
     advectVel(fluid, dt);
     advectSmoke(fluid, dt);
+
+    free(fluid->p);
 }
 

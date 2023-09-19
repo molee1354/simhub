@@ -40,6 +40,24 @@ typedef enum {
 } FieldType;
 
 /**
+ * @brief Utility function to find the minimum value between two values
+ *
+ * @param first 
+ * @param second 
+ * @return double Minimum value
+ */
+double findMin(double first, double second);
+
+/**
+ * @brief Utility function to find the maximum value between two values
+ *
+ * @param first 
+ * @param second 
+ * @return double Maximul value
+ */
+double findMax(double first, double second);
+
+/**
  * @brief Constructor to initialize the fluid
  *
  * @param density The density of the fluid
@@ -49,6 +67,11 @@ typedef enum {
  */
 Fluid* initFluid(double density, int numX, int numY, double h);
 
+/**
+ * @brief Function to free the memory allocated for the fluid struct
+ *
+ * @param fluid 
+ */
 void freeFluid(Fluid* fluid);
 
 /**

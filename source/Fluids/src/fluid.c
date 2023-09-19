@@ -7,11 +7,11 @@ static int count = 0;
 
 static double* initArray(int size, double elem);
 
-static double findMin(double first, double second) {
+double findMin(double first, double second) {
     return (first < second) ? first : second;
 }
 
-static double findMax(double first, double second) {
+double findMax(double first, double second) {
     return (first > second) ? first : second;
 }
 

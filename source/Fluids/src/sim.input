@@ -1,17 +1,17 @@
 
 
 /* Physical parameters */
-#define DENSITY           1000.
+#define DENSITY               1000.
     // fluid density in units of kg/m^3
 
-#define GRAVITY              0.
+#define GRAVITY               0.
     // gravity in units of m/s^2
 
-#define OVER_RELAX           1.9
+#define OVER_RELAX            1.9
     // pressure unit
 
 /* Inlet parameters */
-#define INLET_VEL            2.
+#define INLET_VEL             4.
     // inlet velocity in m/s
 
 #define INLET_HEIGHT          .15

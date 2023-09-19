@@ -5,9 +5,6 @@
 #include "fluid.h"
 #include "sim.input"
 
-#define WINDOW_WIDTH 1600
-#define WINDOW_HEIGHT 900
-
 #define OBSTACLE_COLOR 211, 211, 211
 
 #define WHITE 255, 255, 255

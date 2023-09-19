@@ -1,6 +1,3 @@
-#include <stdlib.h>
-#include <stdio.h>
-
 #include "fluids_commonincl.h"
 
 static int count = 0;
@@ -270,5 +267,7 @@ void simulate(Fluid* fluid, double dt, double gravity, int numIters) {
     extrapolate(fluid);
     advectVel(fluid, dt);
     advectSmoke(fluid, dt);
+
+    free(fluid->p);
 }
 

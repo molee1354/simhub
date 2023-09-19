@@ -2,19 +2,31 @@
 
 /* Physical parameters */
 #define DENSITY           1000.
+    // fluid density in units of kg/m^3
+
 #define GRAVITY              0.
+    // gravity in units of m/s^2
+
 #define OVER_RELAX           1.9
+    // pressure unit
 
 /* Inlet parameters */
 #define INLET_VEL            2.
+    // inlet velocity in m/s
+
 #define INLET_HEIGHT          .15
+    // inlet height--1.0 is window height
 
 /* Obstacle size */
-#define OBSTACLE_RADIUS       .1
+#define OBSTACLE_RADIUS       .1 
+    // obstacle radius--1.0 is window height
 
 /* Other simulation parameters */
-#define DT            (1.0/60.)
+#define DT            (1./60.)
+    // dt parameter for integration
+
 #define NUM_ITER       40
+    // number of iterations per each calculation cycle
 
 /* Window size */
 #define WINDOW_WIDTH    1280

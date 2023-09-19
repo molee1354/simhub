@@ -1,4 +1,4 @@
-#include "fluid.h"
+#include "fluids_commonincl.h"
 
 int main(int argc, char* argv[]) {
     render();

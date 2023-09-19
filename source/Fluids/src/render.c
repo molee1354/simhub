@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-#include "fluid.h"
+#include "fluids_commonincl.h"
 #include "sim.input"
 
 #define OBSTACLE_COLOR 211, 211, 211

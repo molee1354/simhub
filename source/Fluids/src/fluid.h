@@ -1,8 +1,6 @@
 #ifndef simhub_fluid_h
 #define simhub_fluid_h
 
-#include "deps.h"
-
 /**
  * @brief Define some scene things here for now
  *

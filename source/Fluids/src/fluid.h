@@ -7,7 +7,7 @@
  * @brief Define some scene things here for now
  *
  */
-#define OVER_RELAX 1.
+#define OVER_RELAX 1.9
 
 /**
  * @class Fluid
@@ -41,6 +41,9 @@ typedef enum {
     S_FIELD
 } FieldType;
 
+extern double dx;
+extern double dy;
+
 /**
  * @brief Constructor to initialize the fluid
  *
@@ -61,5 +64,10 @@ void freeFluid(Fluid* fluid);
  * @param numIters 
  */
 void simulate(Fluid* fluid, double dt, double gravity, int numIters);
+
+/**
+ * @brief Function to render the simulation
+ */
+void render();
 
 #endif

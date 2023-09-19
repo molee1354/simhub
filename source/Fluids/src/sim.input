@@ -2,7 +2,7 @@
 
 #define DENSITY    1000.
 
-#define IN_VEL     5.
+#define IN_VEL     3.
 
 #define DT         (1.0/60.)
 #define GRAVITY    0.

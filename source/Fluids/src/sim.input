@@ -11,7 +11,7 @@
     // pressure unit
 
 /* Inlet parameters */
-#define INLET_VEL             4.
+#define INLET_VEL             2.
     // inlet velocity in m/s
 
 #define INLET_HEIGHT          .15
@@ -29,6 +29,10 @@
     // number of iterations per each calculation cycle
 
 /* Window size */
-#define WINDOW_WIDTH    1280
+#define WINDOW_WIDTH    1200
 #define WINDOW_HEIGHT   800
+
+/* Simulation mode */
+#define SMOKE           1
+#define PRESSURE        0
 

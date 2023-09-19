@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 
+#include "fluid.h"
 #include "fluids_commonincl.h"
 
 #define OBSTACLE_COLOR 211, 211, 211
@@ -24,6 +25,12 @@ static int cellSize;
 
 SDL_Window* window = NULL;
 SDL_Renderer* renderer = NULL;
+
+typedef struct {
+    int red;
+    int green;
+    int blue;
+} RGB;
 
 static void initSimParam() {
     simHeight = 1.1;
@@ -76,11 +83,66 @@ static void setObstacle(Fluid* fluid, int x, int y, bool reset) {
             }
         }
     }
+}
 
+static RGB getColor(double value, double minVal, double maxVal) {
+    RGB out;
+    double red, green, blue;
+    
+    value = findMin( findMax(value, minVal), maxVal - 0.0001);
+    double diff = maxVal - minVal;
+
+    value = diff == 0. ? .5 : (value - minVal) / diff;
+
+    double m = .25;
+    int num = (int)floor(value/m);
+
+    double s = (value - (double)num*m) / m;
+    
+    switch (num) {
+        case 0: {
+            red = 0.;
+            green = s;
+            blue = 1.;
+            break;
+        }
+        case 1: {
+            red = 0.;
+            green = 1.;
+            blue = 1. - s;
+            break;
+        }
+        case 2: {
+            red = s;
+            green = 1.;
+            blue = 0.;
+            break;
+        }
+        case 3: {
+            red = 1.;
+            green = 1. - s;
+            blue = 0.;
+            break;
+        }
+    }
+    out.red = (int)(255*red);
+    out.green = (int)(255*green);
+    out.blue = (int)(255*blue);
+    return out;
 }
 
 static void draw(Fluid* fluid) {
     int n = fluid->numY;
+
+    double minP = fluid->p[0];
+    double maxP = fluid->p[0];
+
+    for (int i = 0; i < fluid->numCells; i++) {
+        minP = findMin(minP, fluid->p[i]);
+        maxP = findMax(maxP, fluid->p[i]);
+    }
+
+    RGB rgb = {255, 255, 255};
     for (int i = 0; i < fluid->numX; i++) {
         for (int j = 0; j < fluid->numY; j++) {
             SDL_Rect point;
@@ -89,16 +151,32 @@ static void draw(Fluid* fluid) {
             point.w = (int)(cellSize);
             point.h = (int)(cellSize);
 
-            double smoke = fluid->m[i*n + j];
+            if (PRESSURE == 1) {
+                double pressure = fluid->p[i*n + j];
+                double smoke = fluid->m[i*n + j];
+                rgb = getColor(pressure, minP, maxP);
 
-            SDL_SetRenderDrawColor(renderer,
-                                   smoke*255,
-                                   smoke*255,
-                                   smoke*255,
-                                   255);
-            if (fluid->s[i*n + j] == 0.) {
-                SDL_SetRenderDrawColor(renderer, WHITE, 255);
+                if (SMOKE == 1) {
+                    rgb.red = findMax(0., (double)rgb.red - 255*smoke);
+                    rgb.green = findMax(0., (double)rgb.green - 255*smoke);
+                    rgb.blue = findMax(0., (double)rgb.blue - 255*smoke);
+                }
+            } else if (SMOKE == 1) {
+                double smoke = fluid->m[i*n + j];
+
+                rgb.red = smoke*255;
+                rgb.green = smoke*255;
+                rgb.blue = smoke*255;
+            } else if (fluid->s[i*n + j] == 0.) {
+                rgb.red = 0;
+                rgb.green = 0;
+                rgb.blue = 0;
             }
+            SDL_SetRenderDrawColor(renderer,
+                    rgb.red,
+                    rgb.green,
+                    rgb.blue,
+                    255);
             SDL_RenderFillRect(renderer, &point);
         }
     }

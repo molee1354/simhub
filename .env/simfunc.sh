@@ -74,6 +74,13 @@ function sim() {
             cd ../
             ;;
 
+        rrun)
+            cd ${SIM_DIR} || return 0
+            make clean && make
+            ./bin/main || ./main
+            cd ../
+            ;;
+
         build | compile )
             cd ${SIM_DIR} || return 0
             make

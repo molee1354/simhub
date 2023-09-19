@@ -132,6 +132,7 @@ static RGB getColor(double value, double minVal, double maxVal) {
 }
 
 static void draw(Fluid* fluid) {
+    SDL_RenderClear(renderer);
     int n = fluid->numY;
 
     double minP = fluid->p[0];
@@ -148,8 +149,8 @@ static void draw(Fluid* fluid) {
             SDL_Rect point;
             point.x = i * cellSize;
             point.y = j * cellSize;
-            point.w = (int)(cellSize);
-            point.h = (int)(cellSize);
+            point.w = cellSize;
+            point.h = cellSize;
 
             if (PRESSURE == 1) {
                 double pressure = fluid->p[i*n + j];
@@ -157,16 +158,16 @@ static void draw(Fluid* fluid) {
                 rgb = getColor(pressure, minP, maxP);
 
                 if (SMOKE == 1) {
-                    rgb.red = findMax(0., (double)rgb.red - 255*smoke);
-                    rgb.green = findMax(0., (double)rgb.green - 255*smoke);
-                    rgb.blue = findMax(0., (double)rgb.blue - 255*smoke);
+                    rgb.red = findMax(0., (double)rgb.red - 255.*smoke);
+                    rgb.green = findMax(0., (double)rgb.green - 255.*smoke);
+                    rgb.blue = findMax(0., (double)rgb.blue - 255.*smoke);
                 }
             } else if (SMOKE == 1) {
                 double smoke = fluid->m[i*n + j];
 
-                rgb.red = smoke*255;
-                rgb.green = smoke*255;
-                rgb.blue = smoke*255;
+                rgb.red = smoke*255.;
+                rgb.green = smoke*255.;
+                rgb.blue = smoke*255.;
             } else if (fluid->s[i*n + j] == 0.) {
                 rgb.red = 0;
                 rgb.green = 0;
@@ -267,9 +268,6 @@ static void mainLoop(Fluid* fluid) {
 
         }
         SDL_Delay(16);
-
-        SDL_SetRenderDrawColor(renderer, WHITE, 255);
-        SDL_RenderClear(renderer);
 
         simulate(fluid, DT, GRAVITY, NUM_ITER);
         setObstacle(fluid, obstacle_x, obstacle_y, false);

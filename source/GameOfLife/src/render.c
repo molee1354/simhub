@@ -1,10 +1,13 @@
-#include <SDL.h>
+#include <GL/freeglut_std.h>
+#include <GL/glut.h>
 #include <time.h>
 
 #include "gol_commonincl.h"
 
 #if NCOLS > 200 || NROWS > 100
 #define CELL_SIZE 5
+#elif NCOLS > 500 || NROWS > 300
+#define CELL_SIZE 2
 #else
 #define CELL_SIZE 10
 #endif
@@ -12,36 +15,70 @@
 #define WINDOW_WIDTH NCOLS*CELL_SIZE + 4*CELL_SIZE
 #define WINDOW_HEIGHT NROWS*CELL_SIZE + 4*CELL_SIZE
 
-#define BLACK 0, 0, 0, 255
-#define WHITE 211, 211, 211, 255
+#define FPS 40
 
-SDL_Window* window = NULL;
-SDL_Renderer* renderer = NULL;
+const GLfloat black[3] = {0.0f, 0.0f, 0.0f};
+const GLfloat white[3] = {0.9f, 0.9f, 0.9f};
 
-static void draw_grid(Board* board) {
+#define BLACK black
+#define WHITE white
+
+void (*nextBoard)(Board*);
+Board* currentBoard = NULL;
+
+static void drawBoard(Board* board) {
+
+    glBegin(GL_QUADS);
+
     for (int i = 0; i < NROWS; i++) {
         for (int j = 0; j < NCOLS; j++) {
-            SDL_Rect rect;
-            rect.x = j * CELL_SIZE + (2*CELL_SIZE);
-            rect.y = i * CELL_SIZE + (2*CELL_SIZE);
-            rect.w = (int)(CELL_SIZE*.8);
-            rect.h = (int)(CELL_SIZE*.8);
 
             if (board->boardMatrix[i][j] == 1) {
-                SDL_SetRenderDrawColor(renderer, BLACK);
+                glColor3fv(BLACK);
             } else {
-                SDL_SetRenderDrawColor(renderer, WHITE);
+                glColor3fv(WHITE);
             }
 
-            SDL_RenderFillRect(renderer, &rect);
+            GLfloat x1 = j * CELL_SIZE + 2 * CELL_SIZE;
+            GLfloat y1 = i * CELL_SIZE + 2 * CELL_SIZE;
+
+            GLfloat x2 = x1 + CELL_SIZE * .8;
+            GLfloat y2 = y1;
+
+            GLfloat x3 = x2;
+            GLfloat y3 = y1 + CELL_SIZE * .8;
+
+            GLfloat x4 = x1;
+            GLfloat y4 = y3;
+
+            glVertex2f(x1, y1);
+            glVertex2f(x2, y2);
+            glVertex2f(x3, y3);
+            glVertex2f(x4, y4);
         }
     }
+    glEnd();
+    glFlush();
 }
 
-void render() {
-    Board* board = makeRandomBoard(NROWS, NCOLS);
-    void (*nextBoard)(Board*);
+static void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
 
+    nextBoard(currentBoard);
+    drawBoard(currentBoard);
+    glutSwapBuffers();
+}
+
+static void timer(int value) {
+    glutPostRedisplay();
+    glutTimerFunc(1000/FPS, timer, 0);
+}
+
+static void cleanup() {
+    freeBoard(currentBoard);
+}
+
+static void setFunction() {
     if (NCOLS > 512 && NROWS <=512) {
         puts("using openmp.");
         nextBoard = generateNext_mp;
@@ -51,53 +88,22 @@ void render() {
     } else {
         nextBoard = generateNext;
     }
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        SDL_Log("SDL_Init failed: %s", SDL_GetError());
-    }
+}
 
-    window = SDL_CreateWindow("Game of Life",
-        SDL_WINDOWPOS_CENTERED,
-        SDL_WINDOWPOS_CENTERED,
-        (WINDOW_WIDTH < 1900) ? WINDOW_WIDTH : 1900,
-        (WINDOW_HEIGHT < 1000) ? WINDOW_HEIGHT : 1000,
-        SDL_WINDOW_SHOWN);
+void render(int argc, char* argv[]) {
+    currentBoard = makeRandomBoard(NROWS, NCOLS);
+    setFunction();
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+    glutCreateWindow("Game of Life");
 
-    if (!window) {
-        SDL_Log("SDL_CreateWindow failed: %s", SDL_GetError());
-        SDL_Quit();
-    }
+    glClearColor(1.0, 1.0, 1.0, 1.0);
+    glOrtho(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT, -1, 1);
 
-    renderer = SDL_CreateRenderer(window, -1,
-            SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    glutDisplayFunc(display);
+    glutTimerFunc(0, timer, 0);
+    atexit(cleanup);
 
-    if (!renderer) {
-        SDL_Log("SDL_CreateRenderer failed: %s", SDL_GetError());
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-    }
-
-    SDL_Event e;
-    int quit = 0;
-
-    while (!quit) {
-        while (SDL_PollEvent(&e)) {
-            if (e.type == SDL_QUIT) {
-                quit = 1;
-            }
-        }
-
-        SDL_Delay(32);
-
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderClear(renderer);
-
-        nextBoard(board);
-        draw_grid(board);
-
-        SDL_RenderPresent(renderer);
-    }
-
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
+    glutMainLoop();
 }

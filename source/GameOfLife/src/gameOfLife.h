@@ -65,5 +65,5 @@ void saveSim();
 /*
  * Function to render a live animation of the simulation
  */
-void render();
+void render(int argc, char* argv[]);
 

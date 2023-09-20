@@ -1,7 +1,7 @@
 CC = gcc
-INCLUDE = $(shell pkg-config --cflags sdl2)
-CFLAGS = -Wall -Wextra -g -fopenmp $(INCLUDE)
-LDFLAGS = $(shell pkg-config --libs sdl2)
+CFLAGS = -Wall -Wextra -g -fopenmp
+CFLAGS += $(shell pkg-config --cflags glut)
+LDFLAGS = $(shell pkg-config --libs glut) -lGL
 SRCDIR = src
 BINDIR = bin
 OBJDIR = obj

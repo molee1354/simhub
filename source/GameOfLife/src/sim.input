@@ -1,10 +1,7 @@
-#ifndef _sim_param
-#define _sim_param
-
 
 // define board environment
-#define NROWS             64
-#define NCOLS             128
+#define NROWS             128
+#define NCOLS             256
 // output file
 #define DATA_OUT          "dump.out"
 
@@ -14,5 +11,3 @@
 #define SIM_FREQ          100 // stdout print frequency
 #define SIM_START_T       0.
 
-
-#endif

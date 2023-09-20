@@ -1,3 +1,4 @@
+#include <omp.h>
 #include "fluids_commonincl.h"
 
 static int count = 0;
@@ -81,6 +82,10 @@ static void solveIncompress(Fluid* fluid, int numIters, double dt) {
     double cp = fluid->density * fluid->h / dt;
 
     for (int iter = 0; iter < numIters; iter++) {
+
+#if RESOLUTION >= 300
+#pragma omp parallel for collapse(2)
+#endif
         for (int i = 0; i < fluid->numX-1; i++) {
             for (int j = 0; j < fluid->numY-1; j++) {
 
@@ -195,6 +200,9 @@ static void advectVel(Fluid* fluid, double dt) {
     double h = fluid->h;
     double h2 = .5 * h;
 
+#if RESOLUTION >= 300
+#pragma omp parallel for collapse(2)
+#endif
     for (int i = 1; i < fluid->numX; i++) {
         for (int j = 1; j < fluid->numY; j++) {
             count++;
@@ -241,6 +249,9 @@ static void advectSmoke(Fluid* fluid, double dt) {
     double h = fluid->h;
     double h2 = .5 * h;
 
+#if RESOLUTION >= 300
+#pragma omp parallel for collapse(2)
+#endif
     for (int i = 1; i < fluid->numX-1; i++) {
         for (int j = 1; j < fluid->numY-1; j++) {
             if (fluid->s[i*n + j] != 0.) {
@@ -256,7 +267,6 @@ static void advectSmoke(Fluid* fluid, double dt) {
 }
 
 void simulate(Fluid* fluid, double dt, double gravity, int numIters) {
-
     integrate(fluid, dt, gravity);
 
     // initialize P each time.

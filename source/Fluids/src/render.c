@@ -1,17 +1,19 @@
-#include <SDL.h>
+#include <GL/glut.h>
+#include <math.h>
 
 #include "fluids_commonincl.h"
 
-#define OBSTACLE_COLOR 211, 211, 211
-
-#define WHITE 255, 255, 255
-#define BLACK 0, 0, 0
-
-// Obstacle
-bool drawing = false;
+static int windowWidth = WINDOW_WIDTH;
+static int windowHeight = WINDOW_HEIGHT;
 
 static int obstacle_x = WINDOW_WIDTH/2;
 static int obstacle_y = WINDOW_HEIGHT/2;
+
+#define FPS 60
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 static double domainHeight;
 static double domainWidth;
@@ -20,13 +22,16 @@ static double cScale;
 static double simWidth;
 static int cellSize;
 
-SDL_Window* window = NULL;
-SDL_Renderer* renderer = NULL;
+Fluid* fluid = NULL;
+
+#define OBSTACLE_COLOR .82, .82, .82
+#define WHITE 1.0f, 1.0f, 1.0f
+#define BLACK 0.0f, 0.0f, 0.0f
 
 typedef struct {
-    int red;
-    int green;
-    int blue;
+    GLfloat red;
+    GLfloat green;
+    GLfloat blue;
 } RGB;
 
 static void initSimParam() {
@@ -36,14 +41,6 @@ static void initSimParam() {
 
     domainHeight = 1.;
     domainWidth = domainHeight / simHeight * simWidth;
-}
-
-static double cX(int x) {
-    return (double)x * cScale;
-}
-
-static double cY(int y) {
-    return WINDOW_HEIGHT - (double)y * cScale;
 }
 
 static void setObstacle(Fluid* fluid, int x, int y, bool reset) {
@@ -122,14 +119,15 @@ static RGB getColor(double value, double minVal, double maxVal) {
             break;
         }
     }
-    out.red = (int)(255*red);
-    out.green = (int)(255*green);
-    out.blue = (int)(255*blue);
+    out.red = (GLfloat)red;
+    out.green = (GLfloat)green;
+    out.blue = (GLfloat)blue;
     return out;
 }
 
-static void draw(Fluid* fluid) {
-    SDL_RenderClear(renderer);
+static void drawFluid(Fluid* fluid) {
+    glBegin(GL_QUADS);
+
     int n = fluid->numY;
 
     double minP = fluid->p[0];
@@ -139,68 +137,80 @@ static void draw(Fluid* fluid) {
         minP = findMin(minP, fluid->p[i]);
         maxP = findMax(maxP, fluid->p[i]);
     }
-
+    
     RGB rgb = {255, 255, 255};
     for (int i = 0; i < fluid->numX; i++) {
         for (int j = 0; j < fluid->numY; j++) {
-            SDL_Rect point;
-            point.x = i * cellSize;
-            point.y = j * cellSize;
-            point.w = cellSize;
-            point.h = cellSize;
-
             if (PRESSURE == 1) {
                 double pressure = fluid->p[i*n + j];
                 double smoke = fluid->m[i*n + j];
                 rgb = getColor(pressure, minP, maxP);
 
                 if (SMOKE == 1) {
-                    rgb.red = findMax(0., (double)rgb.red - 255.*smoke);
-                    rgb.green = findMax(0., (double)rgb.green - 255.*smoke);
-                    rgb.blue = findMax(0., (double)rgb.blue - 255.*smoke);
+                    rgb.red = (GLfloat)findMax(0., (double)rgb.red - smoke);
+                    rgb.green = (GLfloat)findMax(0., (double)rgb.green - smoke);
+                    rgb.blue = (GLfloat)findMax(0., (double)rgb.blue - smoke);
                 }
             } else if (SMOKE == 1) {
                 double smoke = fluid->m[i*n + j];
 
-                rgb.red = smoke*255.;
-                rgb.green = smoke*255.;
-                rgb.blue = smoke*255.;
+                rgb.red = (GLfloat)smoke;
+                rgb.green = (GLfloat)smoke;
+                rgb.blue = (GLfloat)smoke;
             } else if (fluid->s[i*n + j] == 0.) {
-                rgb.red = 0;
-                rgb.green = 0;
-                rgb.blue = 0;
+                rgb.red = 0.;
+                rgb.green = 0.;
+                rgb.blue = 0.;
             }
-            SDL_SetRenderDrawColor(renderer,
-                    rgb.red,
-                    rgb.green,
-                    rgb.blue,
-                    255);
-            SDL_RenderFillRect(renderer, &point);
+
+            // top left corner
+            GLfloat x1 = i * cellSize;
+            GLfloat y1 = j * cellSize;
+
+            GLfloat x2 = x1 + cellSize;
+            GLfloat y2 = y1;
+
+            GLfloat x3 = x2;
+            GLfloat y3 = y1 + cellSize;
+
+            GLfloat x4 = x1;
+            GLfloat y4 = y3;
+
+            glColor3f(rgb.red, rgb.green, rgb.blue);
+            glVertex2f(x1, y1);
+            glVertex2f(x2, y2);
+            glVertex2f(x3, y3);
+            glVertex2f(x4, y4);
         }
     }
+    glEnd();
+    glFlush();
+}
 
+static void drawObstacle(Fluid* fluid) {
     // draw obstacle
     double obsRad = (OBSTACLE_RADIUS + fluid->h) * cScale;
-    for (int yy = -obsRad; yy <= obsRad; yy++) {
-        for (int xx = -obsRad; xx <= obsRad; xx++) {
-            int dist = xx * xx + yy * yy;
-            
-            if (dist >= (obsRad - 4) * (obsRad - 4) &&
-                dist <= obsRad * obsRad) {
-                SDL_SetRenderDrawColor(renderer, BLACK, 255);
-                SDL_RenderDrawPoint(renderer,
-                        obstacle_x + xx,
-                        obstacle_y + yy);
-            } else if (dist > obsRad * obsRad) {
-                continue;
-            } else {
-                SDL_SetRenderDrawColor(renderer, OBSTACLE_COLOR, 255); // Black outline
-                SDL_RenderDrawPoint(renderer,
-                        obstacle_x + xx,
-                        obstacle_y + yy);
-            }
-        }
+    int numSegments = 100;
+    glBegin(GL_TRIANGLE_FAN);
+    glColor3f(OBSTACLE_COLOR);
+    for (int i = 0; i <= numSegments; i++) {
+        float theta = 2.0f * M_PI * (float)i / (float)numSegments;
+        float x = obsRad * cosf(theta);
+        float y = obsRad * sinf(theta);
+        glVertex2f(x + obstacle_x, y + obstacle_y);
     }
+    glEnd();
+
+    // Draw the black outline using GL_LINE_LOOP
+    glBegin(GL_LINE_LOOP);
+    glColor3f(BLACK);
+    for (int i = 0; i <= numSegments; i++) {
+        float theta = 2.0f * M_PI * (float)i / (float)numSegments;
+        float x = obsRad * cosf(theta);
+        float y = obsRad * sinf(theta);
+        glVertex2f(x + obstacle_x, y + obstacle_y);
+    }
+    glEnd();
 }
 
 static void initialState(Fluid* fluid, double inVel) {
@@ -224,62 +234,56 @@ static void initialState(Fluid* fluid, double inVel) {
     for (int j = minJ; j < maxJ; j++) {
         fluid->m[j] = 0.;
     }
+}
+
+static void display() {
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    simulate(fluid, DT, GRAVITY, NUM_ITER);
+    setObstacle(fluid, obstacle_x, obstacle_y, false);
+    drawFluid(fluid);
+    drawObstacle(fluid);
+    free(fluid->p);
+    glutSwapBuffers();
+}
+
+static void reshape(int w, int h) {
+    glViewport(0, 0, w, h);
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(0.0, (GLdouble)w, 0.0, (GLdouble)h);
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
     
+    windowWidth = w;
+    windowHeight = h;
 }
 
-static bool initGraphics() {
-    window = SDL_CreateWindow("Eulerian Fluid",
-            SDL_WINDOWPOS_CENTERED, 
-            SDL_WINDOWPOS_CENTERED, 
-            WINDOW_WIDTH, 
-            WINDOW_HEIGHT, SDL_WINDOW_SHOWN);
-    if (!window) {
-        SDL_Log("SDL_CreateWindow failed: %s", SDL_GetError());
-        return false;
-    }
+static void mouse(int button, int state, int x, int y) {
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        // Convert mouse coordinates to OpenGL coordinates
+        obstacle_x = (float)x;
+        obstacle_y = (float)(WINDOW_HEIGHT - y);
 
-    renderer = SDL_CreateRenderer(window, -1,
-            SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (!renderer) {
-        SDL_Log("SDL_CreateRenderer failed: %s", SDL_GetError());
-        SDL_DestroyWindow(window);
-        return false;
-    }
-    return true;
-}
-
-static void mainLoop(Fluid* fluid) {
-    int quit = 0;
-    SDL_Event event;
-
-    while (!quit) {
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                quit = 1;
-            } else if (event.type == SDL_MOUSEBUTTONDOWN) {
-                if (event.button.button == SDL_BUTTON_LEFT) {
-                    drawing = true;
-                    setObstacle(fluid, event.button.x, event.button.y, true);
-                }
-            } 
-
-        }
-        SDL_Delay(16);
-
-        simulate(fluid, DT, GRAVITY, NUM_ITER);
-        setObstacle(fluid, obstacle_x, obstacle_y, false);
-        draw(fluid);
-        free(fluid->p);
-
-        SDL_RenderPresent(renderer);
+        setObstacle(fluid, obstacle_x, obstacle_y, true);
+        
+        glutPostRedisplay(); // Trigger a redraw
     }
 }
 
-void render() {
+static void timer(int value) {
+    glutPostRedisplay();
+    glutTimerFunc(1000/FPS, timer, 0);
+}
+
+static void cleanup() {
+    freeFluid(fluid);
+}
+
+void render(int argc, char** argv) {
     initSimParam();
 
-    double res = 100.;
-    double h = domainHeight / res;
+    double h = domainHeight / RESOLUTION;
     
     int numX = floor(domainWidth/h);
     int numY = floor(domainHeight/h);
@@ -288,20 +292,25 @@ void render() {
 
     printf("\tFluid Density (kg/m^3) : %g\n", DENSITY);
     printf("\t  Inlet Velocity (m/s) : %g\n", INLET_VEL);
-    printf("\t       Gravity (m/s^2) : %g\n", GRAVITY);
+    printf("\t       Gravity (m/s^2) : %g\n\n", GRAVITY);
+    printf("\t      Window Size (px) : %dx%d\n", WINDOW_WIDTH, WINDOW_HEIGHT);
+    printf("\t        Num Cells X, Y : %dx%d\n", numX, numY);
 
-
-    Fluid* fluid = initFluid(DENSITY, numX, numY, h);
+    fluid = initFluid(DENSITY, numX, numY, h);
     initialState(fluid, INLET_VEL);
 
-    if (!initGraphics()) {
-        SDL_Quit();
-    }
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutInitWindowSize(windowWidth, windowHeight);
+    glutCreateWindow("Eulerian Fluid Simulation");
+    
+    glClearColor(1.0, 1.0, 1.0, 1.0); // White background
+    
+    glutDisplayFunc(display);
+    glutReshapeFunc(reshape);
+    glutMouseFunc(mouse);
+    glutTimerFunc(0, timer, 0);
 
-    mainLoop(fluid);
-
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
-    freeFluid(fluid);
-    SDL_Quit();
+    atexit(cleanup);
+    glutMainLoop();
 }

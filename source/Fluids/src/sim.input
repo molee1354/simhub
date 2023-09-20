@@ -31,6 +31,7 @@
 /* Window size */
 #define WINDOW_WIDTH    800
 #define WINDOW_HEIGHT   600
+#define RESOLUTION      200
 
 /* Simulation mode */
 #define SMOKE           1

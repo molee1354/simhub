@@ -25,7 +25,6 @@ static int cellSize;
 Fluid* fluid = NULL;
 
 #define OBSTACLE_COLOR .82, .82, .82
-
 #define WHITE 1.0f, 1.0f, 1.0f
 #define BLACK 0.0f, 0.0f, 0.0f
 
@@ -146,7 +145,7 @@ static void drawFluid(Fluid* fluid) {
         minP = findMin(minP, fluid->p[i]);
         maxP = findMax(maxP, fluid->p[i]);
     }
-
+    
     RGB rgb = {255, 255, 255};
     for (int i = 0; i < fluid->numX; i++) {
         for (int j = 0; j < fluid->numY; j++) {
@@ -292,8 +291,7 @@ static void cleanup() {
 void render(int argc, char** argv) {
     initSimParam();
 
-    double res = 100.;
-    double h = domainHeight / res;
+    double h = domainHeight / RESOLUTION;
     
     int numX = floor(domainWidth/h);
     int numY = floor(domainHeight/h);

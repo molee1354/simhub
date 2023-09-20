@@ -296,7 +296,7 @@ static void cleanup() {
 void render(int argc, char** argv) {
     initSimParam();
 
-    double res = 200.;
+    double res = 100.;
     double h = domainHeight / res;
     
     int numX = floor(domainWidth/h);
@@ -306,7 +306,9 @@ void render(int argc, char** argv) {
 
     printf("\tFluid Density (kg/m^3) : %g\n", DENSITY);
     printf("\t  Inlet Velocity (m/s) : %g\n", INLET_VEL);
-    printf("\t       Gravity (m/s^2) : %g\n", GRAVITY);
+    printf("\t       Gravity (m/s^2) : %g\n\n", GRAVITY);
+    printf("\t      Window Size (px) : %dx%d\n", WINDOW_WIDTH, WINDOW_HEIGHT);
+    printf("\t        Num Cells X, Y : %dx%d\n", numX, numY);
 
     fluid = initFluid(DENSITY, numX, numY, h);
     initialState(fluid, INLET_VEL);

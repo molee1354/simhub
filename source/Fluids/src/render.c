@@ -1,6 +1,4 @@
 #include <GL/glut.h>
-#include <math.h>
-
 #include "fluids_commonincl.h"
 
 static int windowWidth = WINDOW_WIDTH;

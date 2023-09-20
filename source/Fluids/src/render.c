@@ -303,6 +303,6 @@ void render() {
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
-    SDL_Quit();
     freeFluid(fluid);
+    SDL_Quit();
 }

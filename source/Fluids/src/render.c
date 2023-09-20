@@ -305,5 +305,4 @@ void render() {
     SDL_DestroyWindow(window);
     freeFluid(fluid);
     SDL_Quit();
-    freeFluid(fluid);
 }

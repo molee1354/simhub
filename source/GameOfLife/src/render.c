@@ -6,6 +6,8 @@
 
 #if NCOLS > 200 || NROWS > 100
 #define CELL_SIZE 5
+#elif NCOLS > 500 || NROWS > 300
+#define CELL_SIZE 2
 #else
 #define CELL_SIZE 10
 #endif
@@ -13,12 +15,15 @@
 #define WINDOW_WIDTH NCOLS*CELL_SIZE + 4*CELL_SIZE
 #define WINDOW_HEIGHT NROWS*CELL_SIZE + 4*CELL_SIZE
 
+#define FPS 40
+
 const GLfloat black[3] = {0.0f, 0.0f, 0.0f};
 const GLfloat white[3] = {0.9f, 0.9f, 0.9f};
 
 #define BLACK black
 #define WHITE white
 
+void (*nextBoard)(Board*);
 Board* currentBoard = NULL;
 
 static void drawBoard(Board* board) {
@@ -59,8 +64,17 @@ static void drawBoard(Board* board) {
 static void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    void (*nextBoard)(Board*);
+    nextBoard(currentBoard);
+    drawBoard(currentBoard);
+    glutSwapBuffers();
+}
 
+static void timer(int value) {
+    glutPostRedisplay();
+    glutTimerFunc(1000/FPS, timer, 0);
+}
+
+static void setFunction() {
     if (NCOLS > 512 && NROWS <=512) {
         puts("using openmp.");
         nextBoard = generateNext_mp;
@@ -70,35 +84,20 @@ static void display() {
     } else {
         nextBoard = generateNext;
     }
-
-    nextBoard(currentBoard);
-    drawBoard(currentBoard);
-    glutSwapBuffers();
 }
-
-static void timer(int value) {
-    glutPostRedisplay();
-    glutTimerFunc(1000/30, timer, 0);
-}
-
-/* static void idle() {
-    glutPostRedisplay();
-} */
 
 void render(int argc, char* argv[]) {
     currentBoard = makeRandomBoard(NROWS, NCOLS);
+    setFunction();
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    glutCreateWindow("OpenGL Grid Simulation");
+    glutCreateWindow("Game of Life");
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glOrtho(0, WINDOW_WIDTH, 0, WINDOW_HEIGHT, -1, 1);
 
-    // Initialize your 'board' array with initial state
-
     glutDisplayFunc(display);
-    // glutIdleFunc(idle);
     glutTimerFunc(0, timer, 0);
 
     glutMainLoop();

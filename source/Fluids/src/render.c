@@ -1,10 +1,6 @@
-#include <GL/freeglut_std.h>
-#include <GL/gl.h>
 #include <GL/glut.h>
 #include <math.h>
-#include <stdlib.h>
 
-#include "fluid.h"
 #include "fluids_commonincl.h"
 
 static int windowWidth = WINDOW_WIDTH;

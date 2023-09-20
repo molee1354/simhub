@@ -86,6 +86,6 @@ void simulate(Fluid* fluid, double dt, double gravity, int numIters);
 /**
  * @brief Function to render the simulation
  */
-void render();
+void render(int argc, char* argv[]);
 
 #endif

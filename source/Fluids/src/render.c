@@ -43,14 +43,6 @@ static void initSimParam() {
     domainWidth = domainHeight / simHeight * simWidth;
 }
 
-static double cX(int x) {
-    return (double)x * cScale;
-}
-
-static double cY(int y) {
-    return WINDOW_HEIGHT - (double)y * cScale;
-}
-
 static void setObstacle(Fluid* fluid, int x, int y, bool reset) {
     double vx = 0.;
     double vy = 0.;
@@ -310,7 +302,7 @@ void render(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(windowWidth, windowHeight);
-    glutCreateWindow("Eulerian Fluid Example");
+    glutCreateWindow("Eulerian Fluid Simulation");
     
     glClearColor(1.0, 1.0, 1.0, 1.0); // White background
     

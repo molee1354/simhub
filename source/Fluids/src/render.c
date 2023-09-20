@@ -1,5 +1,6 @@
 #include <SDL.h>
 
+#include "fluid.h"
 #include "fluids_commonincl.h"
 
 #define OBSTACLE_COLOR 211, 211, 211
@@ -269,6 +270,7 @@ static void mainLoop(Fluid* fluid) {
         simulate(fluid, DT, GRAVITY, NUM_ITER);
         setObstacle(fluid, obstacle_x, obstacle_y, false);
         draw(fluid);
+        free(fluid->p);
 
         SDL_RenderPresent(renderer);
     }
@@ -301,5 +303,7 @@ void render() {
 
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
+    freeFluid(fluid);
     SDL_Quit();
+    freeFluid(fluid);
 }

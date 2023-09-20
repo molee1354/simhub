@@ -43,7 +43,6 @@ Fluid* initFluid(double density, int numX, int numY, double h) {
 void freeFluid(Fluid* fluid) {
     free(fluid->u);
     free(fluid->v);
-    free(fluid->p);
     free(fluid->s);
     free(fluid->m);
     free(fluid->newU);
@@ -267,7 +266,5 @@ void simulate(Fluid* fluid, double dt, double gravity, int numIters) {
     extrapolate(fluid);
     advectVel(fluid, dt);
     advectSmoke(fluid, dt);
-
-    free(fluid->p);
 }
 

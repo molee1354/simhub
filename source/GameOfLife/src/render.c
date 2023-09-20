@@ -74,6 +74,10 @@ static void timer(int value) {
     glutTimerFunc(1000/FPS, timer, 0);
 }
 
+static void cleanup() {
+    freeBoard(currentBoard);
+}
+
 static void setFunction() {
     if (NCOLS > 512 && NROWS <=512) {
         puts("using openmp.");
@@ -99,7 +103,7 @@ void render(int argc, char* argv[]) {
 
     glutDisplayFunc(display);
     glutTimerFunc(0, timer, 0);
+    atexit(cleanup);
 
     glutMainLoop();
-    freeBoard(currentBoard);
 }

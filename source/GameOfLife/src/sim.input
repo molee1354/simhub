@@ -3,8 +3,8 @@
 
 
 // define board environment
-#define NROWS             64
-#define NCOLS             128
+#define NROWS             128
+#define NCOLS             256
 // output file
 #define DATA_OUT          "dump.out"
 

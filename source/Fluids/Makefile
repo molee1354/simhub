@@ -1,7 +1,7 @@
 CC = gcc
 CFLAGS = -Wall -Wextra -g
-CFLAGS += $(shell pkg-config --cflags glut sdl2)
-LDFLAGS = $(shell pkg-config --libs glut sdl2)
+CFLAGS += $(shell pkg-config --cflags glut)
+LDFLAGS = $(shell pkg-config --libs glut)
 LDFLAGS += -lm -lGL -lGLU -lGLEW
 SRCDIR = src
 BINDIR = bin

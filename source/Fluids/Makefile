@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -g
+CFLAGS = -Wall -Wextra -g -fopenmp
 CFLAGS += $(shell pkg-config --cflags glut)
 LDFLAGS = $(shell pkg-config --libs glut)
 LDFLAGS += -lm -lGL -lGLU -lGLEW

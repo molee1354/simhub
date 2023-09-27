@@ -1,4 +1,4 @@
-
+#!/bin/bash
 # setting up the simulation environment
 
 # binaries, versions, and directories
@@ -6,7 +6,7 @@ ENV_DIR="./.env"
 
 PY_BIN=$(which python3)
 PY_VER=$(python3 --version | grep -Eo "3\.[0-9]+")
-PY_VENV_DIR="./${ENV_DIR}/pyvenv-${PY_VER}"
+PY_VENV_DIR="./${ENV_DIR}/simhub-py${PY_VER}"
 
 # commands to run simulation
 source "${ENV_DIR}/simfunc.sh"
@@ -19,6 +19,8 @@ function activate_venv() {
 
     printf "\nSet Python interpreter to \n[%s]\n" $(which python3)
     printf "Set Python Pip to \n[%s]\n\n" $(which pip3)
+    export SIM_PY=$(which python3)
+    export SIM_PIP=$(which pip3)
 }
 
 if [[ -d "${PY_VENV_DIR}" ]]; then

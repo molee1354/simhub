@@ -1,0 +1,2 @@
+# exclude python virtual environments
+.env/simhub-*

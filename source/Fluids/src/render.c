@@ -1,6 +1,4 @@
 #include <GL/glut.h>
-#include <math.h>
-
 #include "fluids_commonincl.h"
 #include "obstacle.h"
 

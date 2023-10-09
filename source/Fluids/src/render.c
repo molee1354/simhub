@@ -2,12 +2,10 @@
 #include <math.h>
 
 #include "fluids_commonincl.h"
+#include "obstacle.h"
 
 static int windowWidth = WINDOW_WIDTH;
 static int windowHeight = WINDOW_HEIGHT;
-
-static int obstacle_x = WINDOW_WIDTH/2;
-static int obstacle_y = WINDOW_HEIGHT/2;
 
 #define FPS 60
 
@@ -59,7 +57,9 @@ static void initSimParam() {
     cellSize = WINDOW_WIDTH / numX;
 
     fluid = initFluid(DENSITY, numX, numY, h);
-    obstacle = initObstacle(obstacle_x, obstacle_y, OBSTACLE_RADIUS);
+    obstacle = initObstacle( WINDOW_WIDTH/2,
+                             WINDOW_HEIGHT/2,
+                             OBSTACLE_RADIUS );
 
     simPrompt(numX, numY);
 }
@@ -69,15 +69,14 @@ static void setObstacle(Fluid* fluid, int x, int y, bool reset) {
     double vy = 0.;
 
     if (!reset) {
-        vx = (x - obstacle_x) / DT;
-        vy = (y - obstacle_y) / DT;
+        vx = (x - obstacle->x) / DT;
+        vy = (y - obstacle->y) / DT;
     }
 
-    obstacle_x = x;
-    obstacle_y = y;
+    obstacle->x = x;
+    obstacle->y = y;
 
     int n = fluid->numY;
-    double obsRad = OBSTACLE_RADIUS;
 
     for (int i = 1; i < fluid->numX-2; i++) {
         for (int j = 1; j < fluid->numY-2; j++) {
@@ -85,7 +84,7 @@ static void setObstacle(Fluid* fluid, int x, int y, bool reset) {
 
             double dx = ((double)i + .5) * fluid->h - ((double)x/WINDOW_WIDTH)*domainWidth;
             double dy = ((double)j + .5) * fluid->h - ((double)y/WINDOW_HEIGHT)*domainHeight;
-            double rad2 = (double)(obsRad*obsRad);
+            double rad2 = (double)(obstacle->radius * obstacle->radius);
 
             if (dx*dx + dy*dy < rad2) {
                 fluid->s[i*n + j] = 0.;
@@ -219,7 +218,7 @@ static void drawObstacle(Fluid* fluid) {
         float theta = 2.0f * M_PI * (float)i / (float)numSegments;
         float x = obsRad * cosf(theta);
         float y = obsRad * sinf(theta);
-        glVertex2f(x + obstacle_x, y + obstacle_y);
+        glVertex2f(x + obstacle->x, y + obstacle->y);
     }
     glEnd();
 
@@ -230,7 +229,7 @@ static void drawObstacle(Fluid* fluid) {
         float theta = 2.0f * M_PI * (float)i / (float)numSegments;
         float x = obsRad * cosf(theta);
         float y = obsRad * sinf(theta);
-        glVertex2f(x + obstacle_x, y + obstacle_y);
+        glVertex2f(x + obstacle->x, y + obstacle->y);
     }
     glEnd();
 }
@@ -262,7 +261,7 @@ static void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     simulate(fluid, DT, GRAVITY, NUM_ITER);
-    setObstacle(fluid, obstacle_x, obstacle_y, false);
+    setObstacle(fluid, obstacle->x, obstacle->y, false);
     drawFluid(fluid);
     drawObstacle(fluid);
     free(fluid->p);
@@ -284,10 +283,10 @@ static void reshape(int w, int h) {
 static void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         // Convert mouse coordinates to OpenGL coordinates
-        obstacle_x = (float)x;
-        obstacle_y = (float)(WINDOW_HEIGHT - y);
+        obstacle->x = (float)x;
+        obstacle->y = (float)(WINDOW_HEIGHT - y);
 
-        setObstacle(fluid, obstacle_x, obstacle_y, true);
+        setObstacle(fluid, obstacle->x, obstacle->y, true);
         
         glutPostRedisplay(); // Trigger a redraw
     }
@@ -323,3 +322,4 @@ void render(int argc, char** argv) {
     atexit(cleanup);
     glutMainLoop();
 }
+

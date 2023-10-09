@@ -2,8 +2,8 @@
 #define simhub_obstacle_h
 
 typedef struct {
-    int posX;
-    int posY;
+    int x;
+    int y;
 
     double radius; // set double because units in terms of radio
 

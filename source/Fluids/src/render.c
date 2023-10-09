@@ -23,6 +23,7 @@ static double simWidth;
 static int cellSize;
 
 Fluid* fluid = NULL;
+Obstacle* obstacle = NULL;
 
 #define OBSTACLE_COLOR .82, .82, .82
 #define WHITE 1.0f, 1.0f, 1.0f
@@ -34,6 +35,14 @@ typedef struct {
     GLfloat blue;
 } RGB;
 
+static void simPrompt(int numX, int numY) {
+    printf("\tFluid Density (kg/m^3) : %g\n", DENSITY);
+    printf("\t  Inlet Velocity (m/s) : %g\n", INLET_VEL);
+    printf("\t       Gravity (m/s^2) : %g\n\n", GRAVITY);
+    printf("\t      Window Size (px) : %dx%d\n", WINDOW_WIDTH, WINDOW_HEIGHT);
+    printf("\t        Num Cells X, Y : %dx%d\n", numX, numY);
+}
+
 static void initSimParam() {
     simHeight = 1.1;
     cScale = WINDOW_HEIGHT / simHeight;
@@ -41,6 +50,18 @@ static void initSimParam() {
 
     domainHeight = 1.;
     domainWidth = domainHeight / simHeight * simWidth;
+
+    double h = domainHeight / RESOLUTION;
+    
+    int numX = floor(domainWidth/h);
+    int numY = floor(domainHeight/h);
+
+    cellSize = WINDOW_WIDTH / numX;
+
+    fluid = initFluid(DENSITY, numX, numY, h);
+    obstacle = initObstacle(obstacle_x, obstacle_y, OBSTACLE_RADIUS);
+
+    simPrompt(numX, numY);
 }
 
 static void setObstacle(Fluid* fluid, int x, int y, bool reset) {
@@ -158,6 +179,7 @@ static void drawFluid(Fluid* fluid) {
                 rgb.green = (GLfloat)smoke;
                 rgb.blue = (GLfloat)smoke;
             } else if (fluid->s[i*n + j] == 0.) {
+                // setting color zero for obstacles
                 rgb.red = 0.;
                 rgb.green = 0.;
                 rgb.blue = 0.;
@@ -278,25 +300,12 @@ static void timer(int value) {
 
 static void cleanup() {
     freeFluid(fluid);
+    freeObstacle(obstacle);
 }
 
 void render(int argc, char** argv) {
     initSimParam();
 
-    double h = domainHeight / RESOLUTION;
-    
-    int numX = floor(domainWidth/h);
-    int numY = floor(domainHeight/h);
-
-    cellSize = WINDOW_WIDTH / numX;
-
-    printf("\tFluid Density (kg/m^3) : %g\n", DENSITY);
-    printf("\t  Inlet Velocity (m/s) : %g\n", INLET_VEL);
-    printf("\t       Gravity (m/s^2) : %g\n\n", GRAVITY);
-    printf("\t      Window Size (px) : %dx%d\n", WINDOW_WIDTH, WINDOW_HEIGHT);
-    printf("\t        Num Cells X, Y : %dx%d\n", numX, numY);
-
-    fluid = initFluid(DENSITY, numX, numY, h);
     initialState(fluid, INLET_VEL);
 
     glutInit(&argc, argv);

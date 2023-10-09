@@ -117,7 +117,7 @@ Modifications to the simulation parameters can be made by changing the `./simula
 
 #### Re-running
 
-To re-run the simulation after modifying some of its parameters, you must recompile the simulation (this is indeed a roundabout way to get to things, which I indend on fixing in the future. But for now, the simulations are quite tiny, so it should work). To recompile, simply run:
+To re-run the simulation after modifying some of its parameters, you must recompile the simulation (this is indeed a roundabout way to get to things, which I intend on fixing in the future. But for now, the simulations are quite tiny, so it should work). To recompile, simply run:
 
 ```shell
 sim rrun

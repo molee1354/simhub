@@ -21,6 +21,8 @@
 #define OBSTACLE_RADIUS       .1
     // obstacle radius--1.0 is window height
 
+#define OBSTACLE_OMEGA        .9
+
 /* Other simulation parameters */
 #define DT            (1./60.)
     // dt parameter for integration

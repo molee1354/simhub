@@ -1,8 +1,6 @@
 #include <omp.h>
 #include "fluids_commonincl.h"
 
-static int count = 0;
-
 static double* initArray(int size, double elem);
 
 double findMin(double first, double second) {
@@ -241,7 +239,6 @@ static void advectVel(Fluid* fluid, double dt) {
 #endif
     for (int i = 1; i < fluid->numX; i++) {
         for (int j = 1; j < fluid->numY; j++) {
-            count++;
 
             // u component
             if (fluid->s[i*n + j] != 0. &&

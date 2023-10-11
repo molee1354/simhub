@@ -10,11 +10,11 @@ static int windowHeight = WINDOW_HEIGHT;
 #define M_PI 3.14159265358979323846
 #endif
 
-static double domainHeight;
+/* static double domainHeight;
 static double domainWidth;
 static double simHeight;
 static double cScale;
-static double simWidth;
+static double simWidth; */
 static int cellSize;
 
 Fluid* fluid = NULL;
@@ -39,12 +39,12 @@ static void simPrompt(int numX, int numY) {
 }
 
 static void initSimParam() {
-    simHeight = 1.1;
+    /* simHeight = 1.1;
     cScale = WINDOW_HEIGHT / simHeight;
     simWidth = WINDOW_WIDTH / cScale;
 
     domainHeight = 1.;
-    domainWidth = domainHeight / simHeight * simWidth;
+    domainWidth = domainHeight / simHeight * simWidth; */
 
     double h = domainHeight / RESOLUTION;
     
@@ -231,7 +231,7 @@ static void drawObstacle() {
 static void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
-    simulate(fluid, DT, GRAVITY, NUM_ITER);
+    simulate(fluid, obstacle, DT, GRAVITY, NUM_ITER);
     setObstacle(obstacle->x, obstacle->y, false);
     drawFluid();
     drawObstacle();

@@ -1,6 +1,5 @@
 #include <GL/glut.h>
 #include "fluids_commonincl.h"
-#include "obstacle.h"
 
 static int windowWidth = WINDOW_WIDTH;
 static int windowHeight = WINDOW_HEIGHT;
@@ -62,7 +61,7 @@ static void initSimParam() {
     simPrompt(numX, numY);
 }
 
-static void setObstacle(Fluid* fluid, int x, int y, bool reset) {
+static void setObstacle(int x, int y, bool reset) {
     double vx = 0.;
     double vy = 0.;
 
@@ -144,7 +143,7 @@ static RGB getColor(double value, double minVal, double maxVal) {
     return out;
 }
 
-static void drawFluid(Fluid* fluid) {
+static void drawFluid() {
     glBegin(GL_QUADS);
 
     int n = fluid->numY;
@@ -207,7 +206,7 @@ static void drawFluid(Fluid* fluid) {
     glFlush();
 }
 
-static void drawObstacle(Fluid* fluid) {
+static void drawObstacle() {
     // draw obstacle
     double obsRad = (OBSTACLE_RADIUS + fluid->h) * cScale;
     int numSegments = 100;
@@ -233,36 +232,13 @@ static void drawObstacle(Fluid* fluid) {
     glEnd();
 }
 
-static void initialState(Fluid* fluid, double inVel) {
-    int n = fluid->numY;
-    for (int i = 0; i < fluid->numX; i++) {
-        for (int j = 0; j < fluid->numY; j++) {
-            double s = 1.; // fluid
-            if (i == 0 || j == 0 || j == fluid->numY-1) s = 0.; // solid
-
-            fluid->s[i*n + j] = s;
-            if (i == 1) {
-                fluid->u[i*n + j] = inVel;
-            }
-        }
-    }
-
-    double pipeHeight = INLET_HEIGHT * (double)(fluid->numY);
-    double minJ = (int)floor(.5 * fluid->numY - .5*pipeHeight);
-    double maxJ = (int)floor(.5 * fluid->numY + .5*pipeHeight);
-
-    for (int j = minJ; j < maxJ; j++) {
-        fluid->m[j] = 0.;
-    }
-}
-
 static void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     simulate(fluid, DT, GRAVITY, NUM_ITER);
-    setObstacle(fluid, obstacle->x, obstacle->y, false);
-    drawFluid(fluid);
-    drawObstacle(fluid);
+    setObstacle(obstacle->x, obstacle->y, false);
+    drawFluid();
+    drawObstacle();
 
     free(fluid->p); // free fluid pressure every display
 
@@ -304,7 +280,7 @@ static void cleanup() {
 void render(int argc, char** argv) {
     initSimParam();
 
-    initialState(fluid, INLET_VEL);
+    initialState(fluid, INLET_VEL, INLET_HEIGHT);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);

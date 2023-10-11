@@ -20,9 +20,9 @@ static int cellSize;
 Fluid* fluid = NULL;
 Obstacle* obstacle = NULL;
 
-#define OBSTACLE_COLOR .82f, .82f, .82f
-#define WHITE 1.0f, 1.0f, 1.0f
-#define BLACK 0.0f, 0.0f, 0.0f
+#define OBSTACLE_COLOR  0.8f, 0.8f, 0.8f
+#define WHITE           1.0f, 1.0f, 1.0f
+#define BLACK           0.0f, 0.0f, 0.0f
 
 typedef struct {
     GLfloat red;
@@ -69,10 +69,6 @@ static void setObstacle(int x, int y, bool reset) {
         vx = (x - obstacle->x) / DT;
         vy = (y - obstacle->y) / DT;
     }
-
-    /* obstacle->x = x;
-    obstacle->y = y; */
-    // moveObstacle(obstacle, x, y);
 
     int n = fluid->numY;
 

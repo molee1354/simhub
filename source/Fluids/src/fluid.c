@@ -46,7 +46,16 @@ void initialState(Fluid* fluid, double inletVel, double inletHeight) {
     for (int i = 0; i < fluid->numX; i++) {
         for (int j = 0; j < fluid->numY; j++) {
             double s = 1.; // fluid
-            if (i == 0 || j == 0 || j == fluid->numY-1) s = 0.; // solid
+            
+            // setting boundaries
+            if (
+                    i == 0 ||             // left bound
+                    // i == fluid->numX-1 || // right bound
+                    j == 0 ||             // top bound
+                    j == fluid->numY-1    // bottom bound
+                ) {
+                s = 0.; // solid
+            }
 
             fluid->s[i*n + j] = s;
             if (i == 1) {

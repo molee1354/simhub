@@ -12,6 +12,11 @@ Obstacle* initObstacle(int setX, int setY, double radius) {
     return out;
 }
 
+void moveObstacle(Obstacle* obstacle, int newX, int newY) {
+    obstacle->x = newX;
+    obstacle->y = newY;
+}
+
 void freeObstacle(Obstacle* obstacle) {
     free(obstacle);
 }

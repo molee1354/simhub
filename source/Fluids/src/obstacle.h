@@ -21,6 +21,16 @@ typedef struct {
  */
 Obstacle* initObstacle(int setX, int setY, double radius);
 
+
+/**
+ * @brief Function to move the obstacle to a specific coordinate
+ *
+ * @param obstacle Pointer to the obstacle being moved
+ * @param newX New X coordinate
+ * @param newY New Y coordinate
+ */
+void moveObstacle(Obstacle* obstacle, int newX, int newY);
+
 /**
  * @brief Function to free the obstacle object
  *

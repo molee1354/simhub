@@ -178,17 +178,21 @@ static double sampleField(Fluid* fluid, double x, double y, FieldType field) {
 }
 
 static double avgU(Fluid* fluid, int i, int j) {
-			int n = fluid->numY;
-			double u = (fluid->u[i*n + j-1] + fluid->u[i*n + j] +
-				fluid->u[(i+1)*n + j-1] + fluid->u[(i+1)*n + j]) * 0.25;
-			return u;
-				
-		}
+    int n = fluid->numY;
+    double u = (fluid->u[i*n + j-1] +
+                fluid->u[i*n + j] +
+                fluid->u[(i+1)*n + j-1] +
+                fluid->u[(i+1)*n + j]) * 0.25;
+    return u;
+        
+}
 
 static double avgV(Fluid* fluid, int i, int j) {
     int n = fluid->numY;
-    double v = (fluid->v[(i-1)*n + j] + fluid->v[i*n + j] +
-        fluid->v[(i-1)*n + j+1] + fluid->v[i*n + j+1]) * 0.25;
+    double v = (fluid->v[(i-1)*n + j] +
+                fluid->v[i*n + j] +
+                fluid->v[(i-1)*n + j+1] +
+                fluid->v[i*n + j+1]) * 0.25;
     return v;
 }
 

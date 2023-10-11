@@ -23,7 +23,7 @@ Fluid* initFluid(double density, int numX, int numY, double h) {
     out->h = h;
 
 #define ZEROS() initArray(out->numCells, 0.)
-#define ONES() initArray(out->numCells, 1.)
+#define  ONES() initArray(out->numCells, 1.)
 
     out->u = ZEROS();
     out->v = ZEROS();

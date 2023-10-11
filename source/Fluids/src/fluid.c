@@ -109,8 +109,9 @@ static void integrate(Fluid* fluid, double dt, double gravity, Obstacle* obstacl
                 double rad2 = (double)(obstacle->radius * obstacle->radius);
 
                 if (dx*dx + dy*dy < rad2+h && dx*dx + dy*dy > rad2-h) {
-                    double vx = OBSTACLE_OMEGA * fabs(dx);
-                    double vy = OBSTACLE_OMEGA * fabs(dy);
+                    // DT to convert units
+                    double vx = (OBSTACLE_OMEGA * 1.) * fabs(dx);
+                    double vy = (OBSTACLE_OMEGA * 1.) * fabs(dy);
                     fluid->u[i*n + j]     += vx;
                     fluid->u[(i+1)*n + j] += vx;
                     fluid->v[i*n + j]     += vy;

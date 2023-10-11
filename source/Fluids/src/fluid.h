@@ -6,6 +6,7 @@
  *
  */
 #include "sim.input"
+#include "obstacle.h"
 
 /* Name mangling */
 #ifdef NAME_MANGLE

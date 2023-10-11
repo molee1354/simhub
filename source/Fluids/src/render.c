@@ -1,5 +1,6 @@
 #include <GL/glut.h>
 #include "fluids_commonincl.h"
+#include "obstacle.h"
 
 static int windowWidth = WINDOW_WIDTH;
 static int windowHeight = WINDOW_HEIGHT;
@@ -20,7 +21,7 @@ static int cellSize;
 Fluid* fluid = NULL;
 Obstacle* obstacle = NULL;
 
-#define OBSTACLE_COLOR .82, .82, .82
+#define OBSTACLE_COLOR .82f, .82f, .82f
 #define WHITE 1.0f, 1.0f, 1.0f
 #define BLACK 0.0f, 0.0f, 0.0f
 
@@ -70,8 +71,9 @@ static void setObstacle(Fluid* fluid, int x, int y, bool reset) {
         vy = (y - obstacle->y) / DT;
     }
 
-    obstacle->x = x;
-    obstacle->y = y;
+    /* obstacle->x = x;
+    obstacle->y = y; */
+    // moveObstacle(obstacle, x, y);
 
     int n = fluid->numY;
 
@@ -261,7 +263,9 @@ static void display() {
     setObstacle(fluid, obstacle->x, obstacle->y, false);
     drawFluid(fluid);
     drawObstacle(fluid);
-    free(fluid->p);
+
+    free(fluid->p); // free fluid pressure every display
+
     glutSwapBuffers();
 }
 
@@ -280,11 +284,9 @@ static void reshape(int w, int h) {
 static void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         // Convert mouse coordinates to OpenGL coordinates
-        obstacle->x = (float)x;
-        obstacle->y = (float)(WINDOW_HEIGHT - y);
+        obstacle->x = x;
+        obstacle->y = WINDOW_HEIGHT - y;
 
-        setObstacle(fluid, obstacle->x, obstacle->y, true);
-        
         glutPostRedisplay(); // Trigger a redraw
     }
 }

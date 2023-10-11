@@ -21,7 +21,7 @@
 #define OBSTACLE_RADIUS       .1
     // obstacle radius--1.0 is window height
 
-#define OBSTACLE_OMEGA        .9
+#define OBSTACLE_OMEGA        3.14
 
 /* Other simulation parameters */
 #define DT            (1./60.)
@@ -39,3 +39,10 @@
 #define SMOKE           1
 #define PRESSURE        1
 
+/* Other sim params */
+#define simHeight      1.1
+#define cScale         (WINDOW_HEIGHT / simHeight)
+#define simWidth       (WINDOW_WIDTH / cScale)
+
+#define domainHeight   1.
+#define domainWidth    (domainHeight / simHeight * simWidth)

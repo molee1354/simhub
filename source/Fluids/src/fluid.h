@@ -6,6 +6,7 @@
  *
  */
 #include "sim.input"
+#include "obstacle.h"
 
 /**
  * @class Fluid
@@ -90,7 +91,7 @@ void freeFluid(Fluid* fluid);
  * @param gravity 
  * @param numIters 
  */
-void simulate(Fluid* fluid, double dt, double gravity, int numIters);
+void simulate(Fluid* fluid, Obstacle* obstacle, double dt, double gravity, int numIters);
 
 /**
  * @brief Function to render the simulation

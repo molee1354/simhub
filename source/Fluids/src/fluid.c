@@ -96,12 +96,26 @@ static double* initArray(int size, double elem) {
  * @param dt
  * @param gravity 
  */
-static void integrate(Fluid* fluid, double dt, double gravity) {
+static void integrate(Fluid* fluid, double dt, double gravity, Obstacle* obstacle) {
     int n = fluid->numY;
+    double h = fluid->h;
     for (int i = 1; i < fluid->numX; i++) {
         for (int j = 1; j < fluid->numY-1; j++) {
             if (fluid->s[i*n + j] != 0. && fluid->s[i*n + j-1] != 0.) {
                 fluid->v[i*n + j] += gravity*dt;
+
+                double dx = ((double)i + .5) * fluid->h - ((double)obstacle->x/WINDOW_WIDTH)*domainWidth;
+                double dy = ((double)j + .5) * fluid->h - ((double)obstacle->y/WINDOW_HEIGHT)*domainHeight;
+                double rad2 = (double)(obstacle->radius * obstacle->radius);
+
+                if (dx*dx + dy*dy < rad2+h && dx*dx + dy*dy > rad2-h) {
+                    double vx = OBSTACLE_OMEGA * fabs(dx);
+                    double vy = OBSTACLE_OMEGA * fabs(dy);
+                    fluid->u[i*n + j]     += vx;
+                    fluid->u[(i+1)*n + j] += vx;
+                    fluid->v[i*n + j]     += vy;
+                    fluid->v[i*n + j+1]   += vy;
+                }
             }
         }
     }
@@ -299,8 +313,8 @@ static void advectSmoke(Fluid* fluid, double dt) {
     memcpy(fluid->m, fluid->newM, sizeof(double)*fluid->numCells);
 }
 
-void simulate(Fluid* fluid, double dt, double gravity, int numIters) {
-    integrate(fluid, dt, gravity);
+void simulate(Fluid* fluid, Obstacle* obstacle, double dt, double gravity, int numIters) {
+    integrate(fluid, dt, gravity, obstacle);
 
     // initialize P each time.
     fluid->p = initArray(fluid->numCells, 0.);

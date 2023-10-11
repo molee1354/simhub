@@ -58,7 +58,7 @@ double findMin(double first, double second);
 double findMax(double first, double second);
 
 /**
- * @brief Constructor to initialize the fluid
+ * @brief Constructor to initialize the fluid object
  *
  * @param density The density of the fluid
  * @param numX The number of X cells
@@ -66,6 +66,15 @@ double findMax(double first, double second);
  * @param h The height (TODO)
  */
 Fluid* initFluid(double density, int numX, int numY, double h);
+
+/**
+ * @brief Function to set the initial state of the fluid
+ *
+ * @param fluid Pointer to fluid object to set
+ * @param inletVel Inlet velocity
+ * @param inletHeight Inlet height
+ */
+void initialState(Fluid* fluid, double inletVel, double inletHeight);
 
 /**
  * @brief Function to free the memory allocated for the fluid struct

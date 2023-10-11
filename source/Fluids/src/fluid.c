@@ -41,6 +41,29 @@ Fluid* initFluid(double density, int numX, int numY, double h) {
     return out;
 }
 
+void initialState(Fluid* fluid, double inletVel, double inletHeight) {
+    int n = fluid->numY;
+    for (int i = 0; i < fluid->numX; i++) {
+        for (int j = 0; j < fluid->numY; j++) {
+            double s = 1.; // fluid
+            if (i == 0 || j == 0 || j == fluid->numY-1) s = 0.; // solid
+
+            fluid->s[i*n + j] = s;
+            if (i == 1) {
+                fluid->u[i*n + j] = inletVel;
+            }
+        }
+    }
+
+    double pipeHeight = inletHeight * (double)(fluid->numY);
+    double minJ = (int)floor(.5 * fluid->numY - .5*pipeHeight);
+    double maxJ = (int)floor(.5 * fluid->numY + .5*pipeHeight);
+
+    for (int j = minJ; j < maxJ; j++) {
+        fluid->m[j] = 0.;
+    }
+}
+
 void freeFluid(Fluid* fluid) {
     free(fluid->u);
     free(fluid->v);

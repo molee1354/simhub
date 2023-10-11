@@ -1,5 +1,6 @@
 #include <GL/glut.h>
 #include "fluids_commonincl.h"
+#include "obstacle.h"
 
 static int windowWidth = WINDOW_WIDTH;
 static int windowHeight = WINDOW_HEIGHT;

@@ -119,8 +119,10 @@ static void integrate(Fluid* fluid, double dt, double gravity, Obstacle* obstacl
                 double dy = yDistConv((double)j, h, obsY);
                 double rad2 = (double)(obstacle->radius * obstacle->radius);
 
+                // if current cell is right outside the obstacle boundary
                 if (dx*dx + dy*dy < rad2+h && dx*dx + dy*dy > rad2-h) {
                     // Convert units from Rev/s to radians / (1/60) sec
+                    // dt = 1/60
                     double vx = ( OBSTACLE_OMEGA*(2.*M_PI)*dt ) * fabs(dx);
                     double vy = ( OBSTACLE_OMEGA*(2.*M_PI)*dt ) * fabs(dy);
                     fluid->u[i*n + j]     += vx;

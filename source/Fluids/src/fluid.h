@@ -6,7 +6,13 @@
  *
  */
 #include "sim.input"
+
+/* Name mangling */
+#ifdef NAME_MANGLE
+#include "Fluids_obstacle.h"
+#else
 #include "obstacle.h"
+#endif
 
 /* Name mangling */
 #ifdef NAME_MANGLE

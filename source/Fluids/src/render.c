@@ -31,11 +31,17 @@ typedef struct {
 } RGB;
 
 static void simPrompt(int numX, int numY) {
-    printf("\tFluid Density (kg/m^3) : %g\n", DENSITY);
-    printf("\t  Inlet Velocity (m/s) : %g\n", INLET_VEL);
-    printf("\t       Gravity (m/s^2) : %g\n\n", GRAVITY);
-    printf("\t      Window Size (px) : %dx%d\n", WINDOW_WIDTH, WINDOW_HEIGHT);
-    printf("\t        Num Cells X, Y : %dx%d\n", numX, numY);
+    printf("\t  Fluid Density (kg/m^3) : %g\n", DENSITY);
+    printf("\t         Gravity (m/s^2) : %g\n\n", GRAVITY);
+
+    printf("\t    Inlet Velocity (m/s) : %g\n", INLET_VEL);
+    printf("\t    Inlet Height (ratio) : %g\n\n", INLET_HEIGHT);
+
+    printf("\tAngular Velocity (Rev/s) : %g\n", (OBSTACLE_OMEGA*60.)/(2.*M_PI));
+    printf("\t Obstacle radius (ratio) : %g\n\n", OBSTACLE_RADIUS);
+
+    printf("\t        Window Size (px) : %dx%d\n", WINDOW_WIDTH, WINDOW_HEIGHT);
+    printf("\t          Num Cells X, Y : %dx%d\n", numX, numY);
 }
 
 static void initSimParam() {

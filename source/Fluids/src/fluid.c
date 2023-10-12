@@ -11,6 +11,14 @@ double findMax(double first, double second) {
     return (first > second) ? first : second;
 }
 
+double xDistConv(double index, double scaleH, double setX) {
+    return (index + .5) * scaleH - (DOMAIN_WIDTH/WINDOW_WIDTH)*setX;
+}
+
+double yDistConv(double index, double scaleH, double setY) {
+    return (index + .5) * scaleH - (DOMAIN_HEIGHT/WINDOW_HEIGHT)*setY;
+}
+
 Fluid* initFluid(double density, int numX, int numY, double h) {
     Fluid* out = (Fluid*)malloc(sizeof(Fluid));
 
@@ -99,13 +107,16 @@ static double* initArray(int size, double elem) {
 static void integrate(Fluid* fluid, double dt, double gravity, Obstacle* obstacle) {
     int n = fluid->numY;
     double h = fluid->h;
+    double obsX = (double)obstacle->x;
+    double obsY = (double)obstacle->y;
     for (int i = 1; i < fluid->numX; i++) {
         for (int j = 1; j < fluid->numY-1; j++) {
             if (fluid->s[i*n + j] != 0. && fluid->s[i*n + j-1] != 0.) {
                 fluid->v[i*n + j] += gravity*dt;
 
-                double dx = ((double)i + .5) * fluid->h - ((double)obstacle->x/WINDOW_WIDTH)*domainWidth;
-                double dy = ((double)j + .5) * fluid->h - ((double)obstacle->y/WINDOW_HEIGHT)*domainHeight;
+                // coordinate difference between current cell and obstacle
+                double dx = xDistConv((double)i, h, obsX);
+                double dy = yDistConv((double)j, h, obsY);
                 double rad2 = (double)(obstacle->radius * obstacle->radius);
 
                 if (dx*dx + dy*dy < rad2+h && dx*dx + dy*dy > rad2-h) {

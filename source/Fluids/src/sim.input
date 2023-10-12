@@ -40,9 +40,9 @@
 #define PRESSURE        1
 
 /* Other sim params */
-#define simHeight      1.1
-#define cScale         (WINDOW_HEIGHT / simHeight)
-#define simWidth       (WINDOW_WIDTH / cScale)
+#define SIM_HEIGHT      1.1
+#define C_SCALE         (WINDOW_HEIGHT / SIM_HEIGHT)
+#define SIM_WIDTH       (WINDOW_WIDTH / C_SCALE)
 
-#define domainHeight   1.
-#define domainWidth    (domainHeight / simHeight * simWidth)
+#define DOMAIN_HEIGHT   1.
+#define DOMAIN_WIDTH    (DOMAIN_HEIGHT / SIM_HEIGHT * SIM_WIDTH)

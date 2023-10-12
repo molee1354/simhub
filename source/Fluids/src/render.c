@@ -46,10 +46,10 @@ static void initSimParam() {
     domainHeight = 1.;
     domainWidth = domainHeight / simHeight * simWidth; */
 
-    double h = domainHeight / RESOLUTION;
+    double h = DOMAIN_HEIGHT / RESOLUTION;
     
-    int numX = floor(domainWidth/h);
-    int numY = floor(domainHeight/h);
+    int numX = floor(DOMAIN_WIDTH/h);
+    int numY = floor(DOMAIN_HEIGHT/h);
 
     cellSize = WINDOW_WIDTH / numX;
 
@@ -71,13 +71,14 @@ static void setObstacle(int x, int y, bool reset) {
     }
 
     int n = fluid->numY;
+    double h = fluid->h;
 
     for (int i = 1; i < fluid->numX-2; i++) {
         for (int j = 1; j < fluid->numY-2; j++) {
             fluid->s[i*n + j] = 1.;
 
-            double dx = ((double)i + .5) * fluid->h - ((double)x/WINDOW_WIDTH)*domainWidth;
-            double dy = ((double)j + .5) * fluid->h - ((double)y/WINDOW_HEIGHT)*domainHeight;
+            double dx = xDistConv((double)i, h, x);
+            double dy = yDistConv((double)j, h, y);
             double rad2 = (double)(obstacle->radius * obstacle->radius);
 
             if (dx*dx + dy*dy < rad2) {
@@ -204,7 +205,7 @@ static void drawFluid() {
 
 static void drawObstacle() {
     // draw obstacle
-    double obsRad = (OBSTACLE_RADIUS + fluid->h) * cScale;
+    double obsRad = (OBSTACLE_RADIUS + fluid->h) * C_SCALE;
     int numSegments = 100;
     glBegin(GL_TRIANGLE_FAN);
     glColor3f(OBSTACLE_COLOR);
@@ -280,7 +281,7 @@ void render(int argc, char** argv) {
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
-    glutInitWindowSize(windowWidth, windowHeight);
+    glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     glutCreateWindow("Eulerian Fluid Simulation");
     
     glClearColor(1.0, 1.0, 1.0, 1.0); // White background

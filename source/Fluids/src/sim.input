@@ -1,7 +1,7 @@
 
 
 /* Physical parameters */
-#define DENSITY               1.25
+#define DENSITY               1.29
     // fluid density in units of kg/m^3
 
 #define GRAVITY               0.
@@ -14,21 +14,23 @@
 #define INLET_VEL             5.
     // inlet velocity in m/s
 
-#define INLET_HEIGHT          1.
+#define INLET_HEIGHT          .3
     // inlet height--1.0 is window height
 
 /* Obstacle Parameters */
 #define OBSTACLE_RADIUS       .1
     // obstacle radius--1.0 is window height
 
-#define OBSTACLE_OMEGA        100.
+#define OBSTACLE_OMEGA        200.
     // obstacle angular velocity Rev/s
 
 /* Other simulation parameters */
-#define DT            (1./60.)
+#define FPS            120.
+
+#define DT            (1./FPS)
     // dt parameter for integration
 
-#define NUM_ITER       100
+#define NUM_ITER       60
     // number of iterations per each calculation cycle
 
 /* Simulation mode */
@@ -39,9 +41,9 @@
     // Shows the pressure field in color (Red: high, Blue: low)
 
 /* Window size */
-#define WINDOW_WIDTH    800
+#define WINDOW_WIDTH    1200
 #define WINDOW_HEIGHT   600
-#define RESOLUTION      200
+#define RESOLUTION      300
 
 /* Simulation size and scale */
 #define SIM_HEIGHT      1.1

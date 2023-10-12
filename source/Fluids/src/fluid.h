@@ -6,7 +6,13 @@
  *
  */
 #include "sim.input"
+
+/* Name mangling */
+#ifdef NAME_MANGLE
+#include "Fluids_obstacle.h"
+#else
 #include "obstacle.h"
+#endif
 
 /**
  * @class Fluid
@@ -57,6 +63,28 @@ double findMin(double first, double second);
  * @return double Maximul value
  */
 double findMax(double first, double second);
+
+/**
+ * @brief Utility function to find the scaled X distance between a cell index
+ * and a set X position
+ *
+ * @param index Vertical cell index
+ * @param scaleH Scale height
+ * @param setX Set X position
+ * @return double The scaled distance value
+ */
+double xDistConv(double index, double scaleH, double setX);
+
+/**
+ * @brief Utility function to find the scaled Y distance between a cell index
+ * and a set Y position
+ *
+ * @param index Vertical cell index
+ * @param scaleH Scale height
+ * @param setY Set Y position
+ * @return double The scaled distance value
+ */
+double yDistConv(double index, double scaleH, double setY);
 
 /**
  * @brief Constructor to initialize the fluid object

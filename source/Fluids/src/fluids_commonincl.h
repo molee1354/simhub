@@ -10,13 +10,11 @@
 
 #include "Fluids_fluid.h"
 #include "Fluids_deps.h"
-#include "Fluids_obstacle.h"
 
 #else
 
 #include "fluid.h"
 #include "deps.h"
-#include "obstacle.h"
 
 #endif
 

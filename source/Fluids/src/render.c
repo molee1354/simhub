@@ -4,8 +4,6 @@
 static int windowWidth = WINDOW_WIDTH;
 static int windowHeight = WINDOW_HEIGHT;
 
-#define FPS 60
-
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif

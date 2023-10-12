@@ -37,7 +37,7 @@ static void simPrompt(int numX, int numY) {
     printf("\t    Inlet Velocity (m/s) : %g\n", INLET_VEL);
     printf("\t    Inlet Height (ratio) : %g\n\n", INLET_HEIGHT);
 
-    printf("\tAngular Velocity (Rev/s) : %g\n", (OBSTACLE_OMEGA*60.)/(2.*M_PI));
+    printf("\tAngular Velocity (Rev/s) : %g\n",  OBSTACLE_OMEGA );
     printf("\t Obstacle radius (ratio) : %g\n\n", OBSTACLE_RADIUS);
 
     printf("\t        Window Size (px) : %dx%d\n", WINDOW_WIDTH, WINDOW_HEIGHT);

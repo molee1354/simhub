@@ -120,9 +120,9 @@ static void integrate(Fluid* fluid, double dt, double gravity, Obstacle* obstacl
                 double rad2 = (double)(obstacle->radius * obstacle->radius);
 
                 if (dx*dx + dy*dy < rad2+h && dx*dx + dy*dy > rad2-h) {
-                    // DT to convert units
-                    double vx = (OBSTACLE_OMEGA * 1.) * fabs(dx);
-                    double vy = (OBSTACLE_OMEGA * 1.) * fabs(dy);
+                    // Convert units from Rev/s to radians / (1/60) sec
+                    double vx = ( OBSTACLE_OMEGA*(2.*M_PI)*dt ) * fabs(dx);
+                    double vy = ( OBSTACLE_OMEGA*(2.*M_PI)*dt ) * fabs(dy);
                     fluid->u[i*n + j]     += vx;
                     fluid->u[(i+1)*n + j] += vx;
                     fluid->v[i*n + j]     += vy;

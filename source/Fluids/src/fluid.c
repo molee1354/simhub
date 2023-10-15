@@ -184,7 +184,7 @@ static void extrapolate(Fluid* fluid) {
     }
 }
 
-static double sampleField(Fluid* fluid, double x, double y, FieldType field) {
+double sampleField(Fluid* fluid, double x, double y, FieldType field) {
     int n = fluid->numY;
     double h = fluid->h;
     double h1 = 1. / h;

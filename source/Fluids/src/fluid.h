@@ -120,6 +120,17 @@ void initialState(Fluid* fluid, double inletVel, double inletHeight);
 void freeFluid(Fluid* fluid);
 
 /**
+ * @brief Function to sample the given fluid field
+ *
+ * @param fluid Pointer to fluid to sample
+ * @param x X coordinate
+ * @param y Y coordinate
+ * @param field Enum of the field that will be sampled
+ * @return double Velocity component of the fluid field at coordinate x,y
+ */
+double sampleField(Fluid* fluid, double x, double y, FieldType field);
+
+/**
  * @brief Function to calculate the fluid simulations
  *
  * @param dt 

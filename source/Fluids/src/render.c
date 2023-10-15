@@ -8,11 +8,6 @@ static int windowHeight = WINDOW_HEIGHT;
 #define M_PI 3.14159265358979323846
 #endif
 
-/* static double domainHeight;
-static double domainWidth;
-static double simHeight;
-static double cScale;
-static double simWidth; */
 static int cellSize;
 
 Fluid* fluid = NULL;
@@ -43,13 +38,6 @@ static void simPrompt(int numX, int numY) {
 }
 
 static void initSimParam() {
-    /* simHeight = 1.1;
-    cScale = WINDOW_HEIGHT / simHeight;
-    simWidth = WINDOW_WIDTH / cScale;
-
-    domainHeight = 1.;
-    domainWidth = domainHeight / simHeight * simWidth; */
-
     double h = DOMAIN_HEIGHT / RESOLUTION;
     
     int numX = floor(DOMAIN_WIDTH/h);
@@ -231,6 +219,34 @@ static void drawObstacle() {
         glVertex2f(x + obstacle->x, y + obstacle->y);
     }
     glEnd();
+}
+
+static void drawStreamlines() {
+    int numSegments = 15;
+
+    for (int i = 1; i < fluid->numX-1; i+=5) {
+        for (int j = 1; j < fluid->numY-1; j+=5) {
+            double x = ((double)i + .5) * fluid->h;
+            double y = ((double)j + .5) * fluid->h;
+
+            /**
+             * move streamline origin to (x, y)
+             */
+
+            for (int n = 0; n < numSegments; n++) {
+                double u = sampleField(fluid, x, y, U_FIELD);
+                double v = sampleField(fluid, x, y, V_FIELD);
+                x += u * .01;
+                y += v * .01;
+
+                if ( x > fluid->numX * fluid->h) break;
+
+                /**
+                 * move streamline end to new (x, y)
+                 */
+            }
+        }
+    }
 }
 
 static void display() {

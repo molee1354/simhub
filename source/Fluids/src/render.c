@@ -1,4 +1,6 @@
+#include <GL/gl.h>
 #include <GL/glut.h>
+#include <time.h>
 #include "fluids_commonincl.h"
 
 static int windowWidth = WINDOW_WIDTH;
@@ -192,7 +194,7 @@ static void drawFluid() {
         }
     }
     glEnd();
-    glFlush();
+    // glFlush();
 }
 
 static void drawObstacle() {
@@ -223,17 +225,19 @@ static void drawObstacle() {
 
 static void drawStreamlines() {
     int numSegments = 15;
+    int skip = 10;
 
-    for (int i = 1; i < fluid->numX-1; i+=5) {
-        for (int j = 1; j < fluid->numY-1; j+=5) {
+    for (int i = 1; i < fluid->numX-1; i+=skip) {
+        for (int j = 1; j < fluid->numY-1; j+=skip) {
             double x = ((double)i + .5) * fluid->h;
             double y = ((double)j + .5) * fluid->h;
 
-            /**
-             * move streamline origin to (x, y)
-             */
-
+            // move streamline origin here
+            glBegin(GL_LINES);
+            glColor4f(BLACK, 0.3f);
             for (int n = 0; n < numSegments; n++) {
+                glVertex2f(x*C_SCALE,y*C_SCALE);
+
                 double u = sampleField(fluid, x, y, U_FIELD);
                 double v = sampleField(fluid, x, y, V_FIELD);
                 x += u * .01;
@@ -241,10 +245,10 @@ static void drawStreamlines() {
 
                 if ( x > fluid->numX * fluid->h) break;
 
-                /**
-                 * move streamline end to new (x, y)
-                 */
+                // move streamline end to new (x, y)
+                glVertex2f(x*C_SCALE,y*C_SCALE);
             }
+            glEnd();
         }
     }
 }
@@ -255,7 +259,9 @@ static void display() {
     simulate(fluid, obstacle, DT, GRAVITY, NUM_ITER);
     setObstacle(obstacle->x, obstacle->y, false);
     drawFluid();
+    if (STREAMLINES) drawStreamlines();
     drawObstacle();
+    glFlush();
 
     free(fluid->p); // free fluid pressure every display
 

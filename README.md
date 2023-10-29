@@ -4,7 +4,8 @@
 
 `simhub` is a simple simulation program built in C.
 
-![fluid_demo](demo/fluid_demo.gif)
+![fluid_demo](demo/topspin.gif)
+*simulating the Magnus effect for a spinning 2D ball in a wind tunnel*
 
 ## Creating a Simulation
 

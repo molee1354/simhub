@@ -51,8 +51,18 @@ function sim() {
                     __call_simulation ${SIM_CALL} ${DEST}
                     __create_symlinks "src/sim.input"
                     ;;
-                fluids)
-                    DEST="${SRC_DIR}/Fluids"
+                fluids-2d-fvm)
+                    DEST="${SRC_DIR}/Fluids/2d/FVM"
+                    __call_simulation ${SIM_CALL} ${DEST}
+                    __create_symlinks "src/sim.input"
+                    ;;
+                fluids-2d-flip)
+                    DEST="${SRC_DIR}/Fluids/2d/FLIP"
+                    __call_simulation ${SIM_CALL} ${DEST}
+                    __create_symlinks "src/sim.input"
+                    ;;
+                fluids-3d-fvm)
+                    DEST="${SRC_DIR}/Fluids/3d/FVM"
                     __call_simulation ${SIM_CALL} ${DEST}
                     __create_symlinks "src/sim.input"
                     ;;

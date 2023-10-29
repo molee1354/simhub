@@ -8,8 +8,8 @@
 
 #ifdef NAME_MANGLE
 
-#include "Fluids_fluid.h"
-#include "Fluids_deps.h"
+#include "FVM_fluid.h"
+#include "FVM_deps.h"
 
 #else
 

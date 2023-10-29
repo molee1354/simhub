@@ -36,7 +36,7 @@ static void simPrompt(int numX, int numY) {
     printf("\t Obstacle radius (ratio) : %g\n\n", OBSTACLE_RADIUS);
 
     printf("\t        Window Size (px) : %dx%d\n", WINDOW_WIDTH, WINDOW_HEIGHT);
-    printf("\t          Num Cells X, Y : %dx%d\n", numX, numY);
+    printf("\t     Num Cells X,Y (X*Y) : %dx%d (%d)\n", numX, numY, numX*numY);
 }
 
 static void initSimParam() {

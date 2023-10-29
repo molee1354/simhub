@@ -4,6 +4,8 @@
 
 `simhub` is a simple simulation program built in C.
 
+![fluid_demo](demo/fluid_demo.gif)
+
 ## Creating a Simulation
 
 ### Setting up the necessary local environment

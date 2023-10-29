@@ -1,0 +1,57 @@
+
+
+/* Physical parameters */
+#define DENSITY               1.29
+    // fluid density in units of kg/m^3
+
+#define GRAVITY               0.
+    // gravity in units of m/s^2. Negative is down
+
+#define OVER_RELAX            1.9
+    // pressure unit
+
+/* Inlet parameters */
+#define INLET_VEL             5.
+    // inlet velocity in m/s
+
+#define INLET_HEIGHT          .99
+    // inlet height--1.0 is window height
+
+/* Obstacle Parameters */
+#define OBSTACLE_RADIUS       .1
+    // obstacle radius--1.0 is window height
+
+#define OBSTACLE_OMEGA        -100.
+    // obstacle angular velocity Rev/s
+
+/* Other simulation parameters */
+#define FPS            120.
+
+#define DT            (1./FPS)
+    // dt parameter for integration
+
+#define NUM_ITER       60
+    // number of iterations per each calculation cycle
+
+/* Simulation mode */
+#define SMOKE           1
+    // Shows the smoke effect of the inlet fluid
+
+#define PRESSURE        1
+    // Shows the pressure field in color (Red: high, Blue: low)
+
+#define STREAMLINES     0
+    // Shows the pressure field in color (Red: high, Blue: low)
+
+/* Window size */
+#define WINDOW_WIDTH    800
+#define WINDOW_HEIGHT   600
+#define RESOLUTION      300
+
+/* Simulation size and scale */
+#define SIM_HEIGHT      1.1
+#define C_SCALE         (WINDOW_HEIGHT / SIM_HEIGHT)
+#define SIM_WIDTH       (WINDOW_WIDTH / C_SCALE)
+
+#define DOMAIN_HEIGHT   1.
+#define DOMAIN_WIDTH    (DOMAIN_HEIGHT / SIM_HEIGHT * SIM_WIDTH)

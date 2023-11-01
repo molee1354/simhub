@@ -2,6 +2,10 @@
 
 Obstacle* initObstacle(int setX, int setY, double radius) {
     Obstacle* out = (Obstacle*)malloc(sizeof(Obstacle));
+    if (out==NULL) {
+        printf("Error: could not allocate memory for obstacle struct.");
+        return NULL;
+    }
     out->x = setX;
     out->y = setY;
     out->radius = radius;

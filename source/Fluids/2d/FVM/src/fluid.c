@@ -21,6 +21,11 @@ double yDistConv(double index, double scaleH, double setY) {
 
 Fluid* initFluid(double density, int numX, int numY, double h) {
     Fluid* out = (Fluid*)malloc(sizeof(Fluid));
+    if (out==NULL) {
+        printf("Error: could not allocate memory for fluid struct.");
+        return NULL;
+    }
+    Fluid
 
     out->density = density;
     out->numX = numX + 2;

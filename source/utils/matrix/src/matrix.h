@@ -19,12 +19,27 @@ typedef enum {
  *                       row 1 = [1 3]; row 2 = [2 4]
  */      
 
+/*
+ * Define vector struct
+ *      -> enums used to set direction
+ */
+typedef struct DoubleVector {
+    double* e;
+    int nEle;
+    vType direction;
+} Vector;
 
 /*
- * Declare matrix/vector struct
+ * Define matrix struct with double
+ * the length of a row is equal to the number of columns and vice versa
  */
-typedef struct DoubleMatrix Matrix;
-typedef struct DoubleVector Vector;
+typedef struct DoubleMatrix {
+    double** e;
+    int nRows;
+    int nCols;
+    int size[2];
+    int isSquare;
+} Matrix;
 
 /*
  * Make the matrix modifiable/accessible by index

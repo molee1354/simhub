@@ -1,5 +1,5 @@
-#ifndef simhub_fluid_h
-#define simhub_fluid_h
+#ifndef simhub_fvm_fluid_h
+#define simhub_fvm_fluid_h
 
 /**
  * @brief Define some scene things here for now

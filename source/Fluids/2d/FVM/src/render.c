@@ -3,8 +3,7 @@
 #include <time.h>
 #include "fluids_commonincl.h"
 
-static int windowWidth = WINDOW_WIDTH;
-static int windowHeight = WINDOW_HEIGHT;
+#define UNUSED(x) (void)(x)
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
@@ -269,15 +268,15 @@ static void display() {
 }
 
 static void reshape(int w, int h) {
-    glViewport(0, 0, w, h);
+    UNUSED(w);
+    UNUSED(h);
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0.0, (GLdouble)w, 0.0, (GLdouble)h);
+    gluOrtho2D(0.0, (GLdouble)WINDOW_WIDTH,
+               0.0, (GLdouble)WINDOW_HEIGHT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
-    windowWidth = w;
-    windowHeight = h;
 }
 
 static void mouse(int button, int state, int x, int y) {
@@ -291,6 +290,7 @@ static void mouse(int button, int state, int x, int y) {
 }
 
 static void timer(int value) {
+    UNUSED(value);
     glutPostRedisplay();
     glutTimerFunc(1000/FPS, timer, 0);
 }

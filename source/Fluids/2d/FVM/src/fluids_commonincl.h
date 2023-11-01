@@ -1,5 +1,5 @@
-#ifndef _fluids_commonincl_h
-#define _fluids_commonincl_h
+#ifndef simhub_fvm_fluids_commonincl_h
+#define simhub_fvm_fluids_commonincl_h
 
 #include "../rules.h"
 #include <stdlib.h>

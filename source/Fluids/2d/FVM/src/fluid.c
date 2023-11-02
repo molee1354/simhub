@@ -25,8 +25,6 @@ Fluid* initFluid(double density, int numX, int numY, double h) {
         printf("Error: could not allocate memory for fluid struct.");
         return NULL;
     }
-    Fluid
-
     out->density = density;
     out->numX = numX + 2;
     out->numY = numY + 2;

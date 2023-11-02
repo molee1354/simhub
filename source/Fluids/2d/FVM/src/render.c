@@ -11,6 +11,7 @@
 #endif
 
 static int cellSize;
+static bool buttonDown = false;
 
 Fluid* fluid = NULL;
 Obstacle* obstacle = NULL;
@@ -281,8 +282,19 @@ static void reshape(int w, int h) {
 }
 
 static void mouse(int button, int state, int x, int y) {
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        // Convert mouse coordinates to OpenGL coordinates
+    if (button == GLUT_LEFT_BUTTON) {
+        if (state == GLUT_DOWN) {
+            buttonDown = true;
+            moveObstacle(obstacle, x, WINDOW_HEIGHT-y); // manual move obstacle set
+            glutPostRedisplay(); // Trigger a redraw
+        } else {
+            buttonDown = false;
+        }
+    }
+}
+
+static void motion(int x, int y) {
+    if (buttonDown) {
         moveObstacle(obstacle, x, WINDOW_HEIGHT-y); // manual move obstacle set
         glutPostRedisplay(); // Trigger a redraw
     }
@@ -314,6 +326,7 @@ void render(int argc, char** argv) {
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutMouseFunc(mouse);
+    glutMotionFunc(motion);
     glutTimerFunc(0, timer, 0);
 
     atexit(cleanup);

@@ -3,11 +3,12 @@
 
 #include "sim.input"
 
-typedef struct {
-    float red;
-    float green;
-    float blue;
-} RGB;
+/* Name mangling */
+#ifdef NAME_MANGLE
+#include "FLIP_obstacle.h"
+#else
+#include "obstacle.h"
+#endif
 
 /*
  * @brief Enum to show cell type
@@ -43,11 +44,11 @@ typedef struct {
     double* p;
     double* s;
     CellType* cellType;
-    RGB* cellColor;
+    float* cellColor;
 
     int maxParticles;
     double* particlePos;
-    RGB* particleColor;
+    float* particleColor;
 
     double* particleVel;
     double* particleRho;

@@ -5,6 +5,9 @@
 #define GRAVITY               0.
     // gravity in units of m/s^2. Negative is down
 
+#define OVER_RELAX            1.9
+    // pressure unit
+ 
 /* Other simulation parameters */
 #define FPS            120.
 

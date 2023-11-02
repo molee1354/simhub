@@ -286,6 +286,7 @@ static void mouse(int button, int state, int x, int y) {
         if (state == GLUT_DOWN) {
             buttonDown = true;
             moveObstacle(obstacle, x, WINDOW_HEIGHT-y); // manual move obstacle set
+            setObstacle(x, WINDOW_HEIGHT-y, true);
             glutPostRedisplay(); // Trigger a redraw
         } else {
             buttonDown = false;
@@ -296,10 +297,11 @@ static void mouse(int button, int state, int x, int y) {
 static void motion(int x, int y) {
     if (buttonDown) {
         moveObstacle(obstacle, x, WINDOW_HEIGHT-y); // manual move obstacle set
-        /* double dx = obstacle->dx;
-        double dy = obstacle->dy;
-        printf("obstacle vx, vy : %g\r", sqrt(dx*dx + dy*dy));
+        /* double vx = obstacle->vx;
+        double vy = obstacle->vy;
+        printf("obstacle vx, vy : %g\r", sqrt(vx*vx + vy*vy));
         fflush(stdout); */
+        setObstacle(x, WINDOW_HEIGHT-y, false);
         glutPostRedisplay(); // Trigger a redraw
     }
 }

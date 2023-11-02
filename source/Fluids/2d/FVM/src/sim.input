@@ -21,7 +21,7 @@
 #define OBSTACLE_RADIUS       .1
     // obstacle radius--1.0 is window height
 
-#define OBSTACLE_OMEGA        -100.
+#define OBSTACLE_OMEGA         0.
     // obstacle angular velocity Rev/s
 
 /* Other simulation parameters */
@@ -46,7 +46,7 @@
 /* Window size */
 #define WINDOW_WIDTH    800
 #define WINDOW_HEIGHT   600
-#define RESOLUTION      300
+#define RESOLUTION      150
 
 /* Simulation size and scale */
 #define SIM_HEIGHT      1.1

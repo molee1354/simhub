@@ -8,6 +8,9 @@ typedef struct {
     double dx; // change in position. Can divide by dt to get velocity
     double dy;
 
+    double vx;
+    double vy;
+
     double radius; // set double because units in terms of radio
 
     double theta; // orientation of the obstacle

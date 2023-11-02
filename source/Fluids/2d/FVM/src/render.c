@@ -296,6 +296,10 @@ static void mouse(int button, int state, int x, int y) {
 static void motion(int x, int y) {
     if (buttonDown) {
         moveObstacle(obstacle, x, WINDOW_HEIGHT-y); // manual move obstacle set
+        /* double dx = obstacle->dx;
+        double dy = obstacle->dy;
+        printf("obstacle vx, vy : %g\r", sqrt(dx*dx + dy*dy)/DT);
+        fflush(stdout); */
         glutPostRedisplay(); // Trigger a redraw
     }
 }

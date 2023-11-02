@@ -298,7 +298,7 @@ static void motion(int x, int y) {
         moveObstacle(obstacle, x, WINDOW_HEIGHT-y); // manual move obstacle set
         /* double dx = obstacle->dx;
         double dy = obstacle->dy;
-        printf("obstacle vx, vy : %g\r", sqrt(dx*dx + dy*dy)/DT);
+        printf("obstacle vx, vy : %g\r", sqrt(dx*dx + dy*dy));
         fflush(stdout); */
         glutPostRedisplay(); // Trigger a redraw
     }

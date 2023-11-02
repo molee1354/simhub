@@ -8,6 +8,8 @@ Obstacle* initObstacle(int setX, int setY, double radius) {
     }
     out->x = setX;
     out->y = setY;
+    out->dx = 0.;
+    out->dy = 0.;
     out->radius = radius;
 
     out->theta = 0.;
@@ -17,6 +19,8 @@ Obstacle* initObstacle(int setX, int setY, double radius) {
 }
 
 void moveObstacle(Obstacle* obstacle, int newX, int newY) {
+    obstacle->dx = newX - obstacle->x;
+    obstacle->dy = newY - obstacle->y;
     obstacle->x = newX;
     obstacle->y = newY;
 }

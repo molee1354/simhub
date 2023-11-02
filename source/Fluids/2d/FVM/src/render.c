@@ -1,3 +1,4 @@
+#include <GL/freeglut_std.h>
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include <time.h>
@@ -282,9 +283,7 @@ static void reshape(int w, int h) {
 static void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         // Convert mouse coordinates to OpenGL coordinates
-        obstacle->x = x;
-        obstacle->y = WINDOW_HEIGHT - y;
-
+        moveObstacle(obstacle, x, WINDOW_HEIGHT-y); // manual move obstacle set
         glutPostRedisplay(); // Trigger a redraw
     }
 }

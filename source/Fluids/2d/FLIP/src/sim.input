@@ -1,0 +1,28 @@
+
+#define DENSITY               1.29
+    // fluid density in units of kg/m^3
+
+#define GRAVITY               0.
+    // gravity in units of m/s^2. Negative is down
+
+#define OVER_RELAX            1.9
+    // pressure unit
+ 
+/* Other simulation parameters */
+#define FPS            120.
+
+#define DT            (1./FPS)
+    // dt parameter for integration
+
+#define NUM_ITER       60
+    // number of iterations per each calculation cycle
+
+/* Window size */
+#define WINDOW_WIDTH    800
+#define WINDOW_HEIGHT   600
+#define RESOLUTION      300
+
+#define SPACING         .01
+
+#define PARTICLES_RAD   .05
+#define PARTICLES_MAX   100

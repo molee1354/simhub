@@ -1,16 +1,17 @@
+#include <GL/freeglut_std.h>
 #include <GL/gl.h>
 #include <GL/glut.h>
 #include <time.h>
 #include "fluids_commonincl.h"
 
-static int windowWidth = WINDOW_WIDTH;
-static int windowHeight = WINDOW_HEIGHT;
+#define UNUSED(x) (void)(x)
 
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
 
 static int cellSize;
+static bool buttonDown = false;
 
 Fluid* fluid = NULL;
 Obstacle* obstacle = NULL;
@@ -263,34 +264,50 @@ static void display() {
     drawObstacle();
     glFlush();
 
-    free(fluid->p); // free fluid pressure every display
+    FREE(fluid->p); // free fluid pressure every display
 
     glutSwapBuffers();
 }
 
 static void reshape(int w, int h) {
-    glViewport(0, 0, w, h);
+    UNUSED(w);
+    UNUSED(h);
+    glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0.0, (GLdouble)w, 0.0, (GLdouble)h);
+    gluOrtho2D(0.0, (GLdouble)WINDOW_WIDTH,
+               0.0, (GLdouble)WINDOW_HEIGHT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-    
-    windowWidth = w;
-    windowHeight = h;
 }
 
 static void mouse(int button, int state, int x, int y) {
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        // Convert mouse coordinates to OpenGL coordinates
-        obstacle->x = x;
-        obstacle->y = WINDOW_HEIGHT - y;
+    if (button == GLUT_LEFT_BUTTON) {
+        if (state == GLUT_DOWN) {
+            buttonDown = true;
+            moveObstacle(obstacle, x, WINDOW_HEIGHT-y); // manual move obstacle set
+            setObstacle(x, WINDOW_HEIGHT-y, true);
+            glutPostRedisplay(); // Trigger a redraw
+        } else {
+            buttonDown = false;
+        }
+    }
+}
 
+static void motion(int x, int y) {
+    if (buttonDown) {
+        moveObstacle(obstacle, x, WINDOW_HEIGHT-y); // manual move obstacle set
+        /* double vx = obstacle->vx;
+        double vy = obstacle->vy;
+        printf("obstacle vx, vy : %g\r", sqrt(vx*vx + vy*vy));
+        fflush(stdout); */
+        setObstacle(x, WINDOW_HEIGHT-y, false);
         glutPostRedisplay(); // Trigger a redraw
     }
 }
 
 static void timer(int value) {
+    UNUSED(value);
     glutPostRedisplay();
     glutTimerFunc(1000/FPS, timer, 0);
 }
@@ -315,6 +332,7 @@ void render(int argc, char** argv) {
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutMouseFunc(mouse);
+    glutMotionFunc(motion);
     glutTimerFunc(0, timer, 0);
 
     atexit(cleanup);

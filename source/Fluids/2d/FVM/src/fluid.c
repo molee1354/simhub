@@ -3,14 +3,6 @@
 
 static double* initArray(int size, double elem);
 
-double findMin(double first, double second) {
-    return (first < second) ? first : second;
-}
-
-double findMax(double first, double second) {
-    return (first > second) ? first : second;
-}
-
 double xDistConv(double index, double scaleH, double setX) {
     return (index + .5) * scaleH - (DOMAIN_WIDTH/WINDOW_WIDTH)*setX;
 }
@@ -21,7 +13,10 @@ double yDistConv(double index, double scaleH, double setY) {
 
 Fluid* initFluid(double density, int numX, int numY, double h) {
     Fluid* out = (Fluid*)malloc(sizeof(Fluid));
-
+    if (out==NULL) {
+        printf("Error: could not allocate memory for fluid struct.");
+        return NULL;
+    }
     out->density = density;
     out->numX = numX + 2;
     out->numY = numY + 2;
@@ -80,18 +75,18 @@ void initialState(Fluid* fluid, double inletVel, double inletHeight) {
 }
 
 void freeFluid(Fluid* fluid) {
-    free(fluid->u);
-    free(fluid->v);
-    free(fluid->s);
-    free(fluid->m);
-    free(fluid->newU);
-    free(fluid->newV);
-    free(fluid->newM);
-    free(fluid);
+    FREE(fluid->u);
+    FREE(fluid->v);
+    FREE(fluid->s);
+    FREE(fluid->m);
+    FREE(fluid->newU);
+    FREE(fluid->newV);
+    FREE(fluid->newM);
+    FREE(fluid);
 }
 
 static double* initArray(int size, double elem) {
-    double* out = (double*)malloc(sizeof(double) * size);
+    double* out = ALLOCATE(double, size);
     for (int i = 0; i < size; i++) {
         out[i] = elem;
     }

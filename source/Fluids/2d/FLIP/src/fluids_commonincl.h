@@ -1,5 +1,5 @@
-#ifndef simhub_fvm_fluids_commonincl_h
-#define simhub_fvm_fluids_commonincl_h
+#ifndef simhub_flip_fluids_commonincl_h
+#define simhub_flip_fluids_commonincl_h
 
 #include "../rules.h"
 #include <stdlib.h>
@@ -8,8 +8,8 @@
 
 #ifdef NAME_MANGLE
 
-#include "FVM_fluid.h"
-#include "FVM_deps.h"
+#include "FLIP_fluid.h"
+#include "FLIP_deps.h"
 #include "helper_helper.h"
 #include "c_array_c_array.h"
 

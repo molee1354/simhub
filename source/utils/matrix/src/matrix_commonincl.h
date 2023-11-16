@@ -7,10 +7,8 @@
 
 #ifdef NAME_MANGLE
 #include "matrix_matrix.h"
-#include "matrix__matrix.h"
 #else
 #include "matrix.h"
-#include "_matrix.h"
 #endif
 
 #endif

@@ -200,7 +200,7 @@ static void drawFluid() {
 
 static void drawObstacle() {
     // draw obstacle
-    double obsRad = (OBSTACLE_RADIUS + fluid->h) * C_SCALE;
+    double obsRad = (obstacle->radius + fluid->h) * C_SCALE;
     int numSegments = 100;
     glBegin(GL_TRIANGLE_FAN);
     glColor3f(OBSTACLE_COLOR);
@@ -222,6 +222,18 @@ static void drawObstacle() {
         glVertex2f(x + obstacle->x, y + obstacle->y);
     }
     glEnd();
+}
+
+static void drawSpinner() {
+    glLineWidth(3.0f);
+    glBegin(GL_LINES);
+    double obsRad = (obstacle->radius+fluid->h) * C_SCALE;
+    double theta = obstacle->theta;
+    glVertex2f(obstacle->x, obstacle->y);
+    glVertex2f(obsRad * cosf(theta) + obstacle->x,
+               obsRad * sinf(theta) + obstacle->y);
+    glEnd();
+    glLineWidth(1.0f);
 }
 
 static void drawStreamlines() {
@@ -262,6 +274,17 @@ static void display() {
     drawFluid();
     if (STREAMLINES) drawStreamlines();
     drawObstacle();
+    
+    // spinning obstacle
+    if (OBSTACLE_OMEGA != 0.) {
+        glPushMatrix();
+        glTranslatef(obstacle->x, obstacle->y, 0.0f);
+        glRotatef(obstacle->theta, 0.0f, 0.0f, 1.0f);
+        glTranslatef(-obstacle->x, -obstacle->y, 0.0f);
+        drawSpinner();
+        glPopMatrix();
+    }
+
     glFlush();
 
     FREE(fluid->p); // free fluid pressure every display

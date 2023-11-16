@@ -325,6 +325,9 @@ static void advectSmoke(Fluid* fluid, double dt) {
 void simulate(Fluid* fluid, Obstacle* obstacle, double dt, double gravity, int numIters) {
     integrate(fluid, dt, gravity, obstacle);
 
+    // update obstacle for each dt
+    updateObstacleTheta(obstacle);
+
     // initialize P each time.
     fluid->p = initArray(fluid->numCells, 0.);
 

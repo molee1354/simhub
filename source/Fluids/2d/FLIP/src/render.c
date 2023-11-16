@@ -43,7 +43,7 @@ static void initSimParam() {
     cellSize = WINDOW_WIDTH / numX;
     double particleRad = 0.3*h;
 
-    fluid = initFluid(DENSITY, numX, numY, h);
+    fluid = initFluid(DENSITY, numX, numY, h, particleRad);
     obstacle = initObstacle( WINDOW_WIDTH/2,
                              WINDOW_HEIGHT/2,
                              OBSTACLE_RADIUS );
@@ -163,7 +163,7 @@ static void cleanup() {
 void render(int argc, char** argv) {
     initSimParam();
 
-    initialState(fluid, INLET_VEL, INLET_HEIGHT);
+    initialState(fluid);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);

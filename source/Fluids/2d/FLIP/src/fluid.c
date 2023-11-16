@@ -1,3 +1,4 @@
+#include "fluid.h"
 #include "fluids_commonincl.h"
  
 static int* initArray_i(int size, int elem);
@@ -257,8 +258,122 @@ static void updateParticleDensity(Fluid* fluid) {
     }
 }
 
-// TODO
-static void transferVelocity(bool toGrid, double flipRatio) {}
+static void transferVelocity(Fluid* fluid, bool toGrid, double flipRatio) {
+    int n = fluid->numY;
+    double h = fluid->h;
+    double h1 = fluid->invSpacing;
+    double h2 = fluid->h * .5;
+
+    if (toGrid) {
+        memcpy(fluid->prevU, fluid->u, sizeof(double)*fluid->numCells);
+        memcpy(fluid->prevV, fluid->v, sizeof(double)*fluid->numCells);
+
+        for (int i = 0; i < fluid->numCells; i++)
+            fluid->cellType[i] = fluid->s[i] == 0. ? SOLID_CELL : AIR_CELL;
+
+        for (int i = 0; i < fluid->numParticles; i++) {
+            double x = fluid->particlePos[2*i];
+            double y = fluid->particlePos[2*i + 1];
+            double xi = clamp(floor(x * h1), 0, fluid->numX-1);
+            double yi = clamp(floor(y * h1), 0, fluid->numY-1);
+            int cellNr = (int)xi * n + (int)yi;
+            if (fluid->cellType[cellNr] == AIR_CELL)
+                fluid->cellType[cellNr] = FLUID_CELL;
+        }
+    }
+
+    // looping over both u and v components
+    for (int component = 0; component < 2; component++) {
+        double dx = component == 0 ? 0. : h2;
+        double dy = component == 0 ? h2 : 0.;
+        
+        double* f     = component == 0 ? fluid->u : fluid->v;
+        double* prevF = component == 0 ? fluid->prevU : fluid->prevV;
+        double* d     = component == 0 ? fluid->du : fluid->dv;
+
+        for (int i = 0; i < fluid->numParticles; i++) {
+            double x = fluid->particlePos[2*i];
+            double y = fluid->particlePos[2*i + 1];
+
+            x = clamp(x, h, (fluid->numX-1) * h);
+            y = clamp(y, h, (fluid->numY-1) * h);
+
+            double x0 = findMin( floor((x-dx)*h1), fluid->numX - 2);
+            double tx = ( (x - dx) - x0*h) * h1;
+            double x1 = findMin( x0+1, fluid->numX - 2);
+
+            double y0 = findMin( floor((y-dy)*h1), fluid->numY - 2);
+            double ty = ( (y - dy) - y0*h) * h1;
+            double y1 = findMin( y0+1, fluid->numY - 2);
+
+            double sx = 1. - tx;
+            double sy = 1. - ty;
+
+            double d0 = sx*sy;
+            double d1 = tx*sy;
+            double d2 = tx*ty;
+            double d3 = sx*ty;
+
+            int nr0 = (int)x0*n + (int)y0;
+            int nr1 = (int)x1*n + (int)y0;
+            int nr2 = (int)x1*n + (int)y1;
+            int nr3 = (int)x0*n + (int)y1;
+
+            if (toGrid) {
+                double pv = fluid->particleVel[2*i + component];
+                f[nr0] += pv*d0;
+                d[nr0] += d0;
+                f[nr1] += pv*d1;
+                d[nr1] += d1;
+                f[nr2] += pv*d2;
+                d[nr2] += d2;
+                f[nr3] += pv*d3;
+                d[nr3] += d3;
+            } else {
+                int offset = component == 0 ? n : 1;
+
+                double valid0 = fluid->cellType[nr0] != AIR_CELL || fluid->cellType[nr0 - offset] != AIR_CELL ? 1.0 : 0.0;
+                double valid1 = fluid->cellType[nr1] != AIR_CELL || fluid->cellType[nr1 - offset] != AIR_CELL ? 1.0 : 0.0;
+                double valid2 = fluid->cellType[nr2] != AIR_CELL || fluid->cellType[nr2 - offset] != AIR_CELL ? 1.0 : 0.0;
+                double valid3 = fluid->cellType[nr3] != AIR_CELL || fluid->cellType[nr3 - offset] != AIR_CELL ? 1.0 : 0.0;
+
+                double v = fluid->particleVel[2*i + component];
+                double d = valid0*d0 + valid1*d1 + valid2*d2 + valid3*d3;
+
+                if (d > 0.) {
+                    double picV = ( valid0 * d0 * f[nr0] +
+                                    valid1 * d1 * f[nr1] +
+                                    valid2 * d2 * f[nr2] +
+                                    valid3 * d3 * f[nr3] ) / d;
+                    double corr = ( valid0 * d0 * (f[nr0] - prevF[nr0]) +
+                                    valid1 * d1 * (f[nr1] - prevF[nr1]) +
+                                    valid2 * d2 * (f[nr2] - prevF[nr2]) +
+                                    valid3 * d3 * (f[nr3] - prevF[nr3]) ) / d;
+                    double flipV = v + corr;
+
+                    fluid->particleVel[2 * i + component] = (1.0 - flipRatio) * picV + flipRatio * flipV;
+                }
+            }
+        }
+        if (toGrid) {
+            for (int i = 0; i < fluid->numCells; i++) {
+                if (d[i] > 0.0) 
+                    f[i] /= d[i];
+            }
+
+            // restoring solid cells
+            for (int i = 0; i < fluid->numX; i++) {
+                for (int j = 0; j < fluid->numY; j++) {
+                    bool solid = fluid->cellType[i*n + j] == SOLID_CELL;
+                    if (solid || (i > 0 && fluid->cellType[(i - 1)*n + j] == SOLID_CELL))
+                        fluid->u[i*n + j] = fluid->prevU[i*n + j];
+                    if (solid || (j > 0 && fluid->cellType[i*n + j - 1] == SOLID_CELL))
+                        fluid->v[i*n + j] = fluid->prevV[i*n + j];
+                }
+            }
+        }
+    }
+}
 
 // TODO
 static void solveIncompressibility(Fluid* fluid, int numIters, double dt) {}

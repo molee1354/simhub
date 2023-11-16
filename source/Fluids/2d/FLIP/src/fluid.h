@@ -69,22 +69,26 @@ typedef struct {
 } Fluid;
  
 /**
- * @brief Utility function to find the minimum value between two values
+ * @brief Utility function to find the scaled X distance between a cell index
+ * and a set X position
  *
- * @param first 
- * @param second 
- * @return double Minimum value
+ * @param index Vertical cell index
+ * @param scaleH Scale height
+ * @param setX Set X position
+ * @return double The scaled distance value
  */
-double findMin(double first, double second);
+double xDistConv(double index, double scaleH, double setX);
 
 /**
- * @brief Utility function to find the maximum value between two values
+ * @brief Utility function to find the scaled Y distance between a cell index
+ * and a set Y position
  *
- * @param first 
- * @param second 
- * @return double Maximul value
+ * @param index Vertical cell index
+ * @param scaleH Scale height
+ * @param setY Set Y position
+ * @return double The scaled distance value
  */
-double findMax(double first, double second);
+double yDistConv(double index, double scaleH, double setY);
 
 /**
  * @brief Function to initialize the fluid struct
@@ -93,9 +97,19 @@ double findMax(double first, double second);
  * @param numX Number of cells X
  * @param numY Number of cells Y
  * @param h Side length of cell
+ * @param particleRad Particle radius
  * @return Fluid* Pointer to new fluid struct
  */
-Fluid* initFluid(double density, int numX, int numY, double h);
+Fluid* initFluid(double density, int numX, int numY, double h, double particleRad);
+
+/**
+ * @brief Function to set the initial state of the fluid
+ *
+ * @param fluid Pointer to fluid object to set
+ * @param inletVel Inlet velocity
+ * @param inletHeight Inlet height
+ */
+void initialState(Fluid* fluid);
 
 /**
  * @brief Function to free the pointer to the fluid instance

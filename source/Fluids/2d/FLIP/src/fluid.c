@@ -5,7 +5,7 @@ static double* initArray_d(int size, double elem);
 static CellType* initArray_t(int size, CellType type);
 static float* initArray_f(int size, float elem);
 
-Fluid* initFluid(double density, int numX, int numY, double h) {
+Fluid* initFluid(double density, int numX, int numY, double h, double particleRad) {
     Fluid* out             = (Fluid*)malloc(sizeof(Fluid));
     out->density           = density;
     out->numX              = (int)floor( (double)WINDOW_WIDTH/(double)SPACING )+1;
@@ -37,8 +37,8 @@ Fluid* initFluid(double density, int numX, int numY, double h) {
     out->particleRho       = ZEROS(1);
     out->particleRho0      = 0.;
 
-    out->particleRad       = PARTICLES_RAD;
-    out->pInvSpacing       = 1. / (2.2*PARTICLES_RAD);
+    out->particleRad       = particleRad;
+    out->pInvSpacing       = 1. / (2.2*particleRad);
     out->numX_p            = (int)floor(WINDOW_WIDTH * out->pInvSpacing)+1;
     out->numY_p            = (int)floor(WINDOW_HEIGHT * out->pInvSpacing)+1;
     out->numCells_p        = out->numX_p * out->numY_p;
@@ -517,11 +517,32 @@ static void updateCellColors(Fluid* fluid) {
     }
 }
 
+void initialState(Fluid* fluid) {
+    int n = fluid->numY;
+    for (int i = 0; i < fluid->numX; i++) {
+        for (int j = 0; j < fluid->numY; j++) {
+            double s = 1.; // fluid
+            
+            // setting boundaries
+            if (
+                    i == 0 ||             // left bound
+                    // i == fluid->numX-1 || // right bound
+                    j == 0 ||             // top bound
+                    j == fluid->numY-1    // bottom bound
+                ) {
+                s = 0.; // solid
+            }
+        }
+    }
+}
+
 void simulate(Fluid* fluid, Obstacle* obstacle, double dt, double gravity, int numIters) {
     double substeps = 1;
     double dt_sub = dt/substeps;
 
     for (int step = 0; step < substeps; step++) {
+        fluid->p = initArray_d(fluid->numCells, 0.);
+
         integrate(fluid, dt_sub, gravity);
         if (PARTICLES_SEP == 1) 
             pushParticles(fluid, numIters);

@@ -304,6 +304,14 @@ static void reshape(int w, int h) {
     glLoadIdentity();
 }
 
+/**
+ * @brief Function to handle mouse clicks
+ *
+ * @param button 
+ * @param state 
+ * @param x 
+ * @param y 
+ */
 static void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON) {
         if (state == GLUT_DOWN) {
@@ -317,6 +325,12 @@ static void mouse(int button, int state, int x, int y) {
     }
 }
 
+/**
+ * @brief Function to handle mouse drags
+ *
+ * @param x 
+ * @param y 
+ */
 static void motion(int x, int y) {
     if (buttonDown) {
         moveObstacle(obstacle, x, WINDOW_HEIGHT-y); // manual move obstacle set
@@ -348,7 +362,7 @@ void render(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    glutCreateWindow("Eulerian Fluid Simulation");
+    glutCreateWindow("FLIP Fluid Simulation");
     
     glClearColor(1.0, 1.0, 1.0, 1.0); // White background
     

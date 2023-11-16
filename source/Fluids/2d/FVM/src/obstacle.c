@@ -15,11 +15,19 @@ Obstacle* initObstacle(int setX, int setY, double radius) {
     out->radius = radius;
 
     out->theta = 0.;
-    out->omega = 0.;
+    out->omega = OBSTACLE_OMEGA;
 
     return out;
 }
 
+void updateObstacleTheta(Obstacle* obstacle) {
+    double before = obstacle->theta;
+    obstacle->theta +=  obstacle->omega*(2.*M_PI)*DT;
+    double after = obstacle->theta;
+    if (obstacle->theta > 360.0f) {
+        obstacle->theta = 0.0f;
+    }
+}
 void moveObstacle(Obstacle* obstacle, int newX, int newY) {
     obstacle->dx = newX - obstacle->x;
     obstacle->dy = newY - obstacle->y;

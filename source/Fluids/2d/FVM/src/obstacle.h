@@ -29,6 +29,14 @@ Obstacle* initObstacle(int setX, int setY, double radius);
 
 
 /**
+ * @brief Function to update the obstacle's angle orientation
+ *
+ * @param obstacle 
+ */
+void updateObstacleTheta(Obstacle* obstacle);
+
+
+/**
  * @brief Function to move the obstacle to a specific coordinate
  *
  * @param obstacle Pointer to the obstacle being moved

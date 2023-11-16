@@ -30,7 +30,7 @@
 #define DT            (1./FPS)
     // dt parameter for integration
 
-#define NUM_ITER       60
+#define NUM_ITER       50
     // number of iterations per each calculation cycle
 
 /* Simulation mode */

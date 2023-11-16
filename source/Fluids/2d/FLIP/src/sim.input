@@ -1,5 +1,5 @@
 
-#define DENSITY               1.29
+#define DENSITY               1000.
     // fluid density in units of kg/m^3
 
 #define GRAVITY               0.
@@ -17,12 +17,25 @@
 #define NUM_ITER       60
     // number of iterations per each calculation cycle
 
+#define PARTICLES_SEP   1
+#define PARTICLES_RAD   .05
+#define PARTICLES_MAX   100
+
+#define SPACING         .01
+#define DRIFT           1
+#define FLIP_RATIO      .9
+#define OBSTACLE_RADIUS .15
+
 /* Window size */
 #define WINDOW_WIDTH    800
 #define WINDOW_HEIGHT   600
-#define RESOLUTION      300
+#define RESOLUTION      150
 
-#define SPACING         .01
+/* Simulation size and scale */
+#define SIM_HEIGHT      1.1
+#define C_SCALE         (WINDOW_HEIGHT / SIM_HEIGHT)
+#define SIM_WIDTH       (WINDOW_WIDTH / C_SCALE)
 
-#define PARTICLES_RAD   .05
-#define PARTICLES_MAX   100
+#define DOMAIN_HEIGHT   1.
+#define DOMAIN_WIDTH    (DOMAIN_HEIGHT / SIM_HEIGHT * SIM_WIDTH)
+

@@ -1,19 +1,9 @@
-#include "fluid.h"
 #include "fluids_commonincl.h"
  
 static int* initArray_i(int size, int elem);
 static double* initArray_d(int size, double elem);
 static CellType* initArray_t(int size, CellType type);
 static float* initArray_f(int size, float elem);
-static double clamp(double x, double min, double max);
-
-double findMin(double first, double second) {
-    return (first < second) ? first : second;
-}
-
-double findMax(double first, double second) {
-    return (first > second) ? first : second;
-}
 
 Fluid* initFluid(double density, int numX, int numY, double h) {
     Fluid* out             = (Fluid*)malloc(sizeof(Fluid));
@@ -221,8 +211,51 @@ static void handleParticleCollisions(Fluid* fluid, Obstacle* obstacle, double ob
     }
 }
 
-// TODO
-static void updateParticleDensity(Fluid* fluid) {}
+static void updateParticleDensity(Fluid* fluid) {
+    int n = fluid->numY;
+    double h = fluid->h;
+    double h1 = fluid->invSpacing;
+    double h2 = fluid->h*.5;
+    double* d = fluid->particleRho;
+
+    for (int i = 0; i < fluid->numParticles; i++) {
+        double x = fluid->particlePos[2*i];
+        double y = fluid->particlePos[2*i+1];
+
+        x = clamp(x, h, (fluid->numX - 1)*h);
+        y = clamp(y, h, (fluid->numY - 1)*h);
+
+        double x0 = floor( (x-h2) * h1 );
+        double tx = ( (x-h2) - x0*h ) * h1;
+        double x1 = findMin(x0+1, fluid->numX-2);
+
+        double y0 = floor( (y-h2) * h1 );
+        double ty = ( (y-h2) - y0*h ) * h1;
+        double y1 = findMin(y0+1, fluid->numY-2);
+
+        double sx = 1. - tx;
+        double sy = 1. - ty;
+
+        if (x0 < fluid->numX && y0 < fluid->numY) d[(int)x0*n + (int)y0] += sx*sy;
+        if (x1 < fluid->numX && y0 < fluid->numY) d[(int)x1*n + (int)y0] += tx*sy;
+        if (x1 < fluid->numX && y1 < fluid->numY) d[(int)x1*n + (int)y1] += tx*ty;
+        if (x0 < fluid->numX && y1 < fluid->numY) d[(int)x0*n + (int)y1] += sx*ty;
+    }
+    if (fluid->particleRho0 == 0.) {
+        double sum = 0.;
+        int numFluidCells = 0;
+
+        for (int i = 0; i < fluid->numCells; i++) {
+            if (fluid->cellType[i] == FLUID_CELL) {
+                sum += d[i];
+                numFluidCells++;
+            }
+        }
+        if (numFluidCells > 0) {
+            fluid->particleRho0 = sum/numFluidCells;
+        }
+    }
+}
 
 // TODO
 static void transferVelocity(bool toGrid, double flipRatio) {}
@@ -243,7 +276,7 @@ static void updateCellColors(Fluid* fluid) {}
 void simulate();
 
 static int* initArray_i(int size, int elem) {
-    int* out = (int*)malloc(sizeof(int) * size);
+    int* out = ALLOCATE(int, size);
     for (int i = 0; i < size; i++) {
         out[i] = elem;
     }
@@ -251,7 +284,7 @@ static int* initArray_i(int size, int elem) {
 }
 
 static double* initArray_d(int size, double elem) {
-    double* out = (double*)malloc(sizeof(double) * size);
+    double* out = ALLOCATE(double, size);
     for (int i = 0; i < size; i++) {
         out[i] = elem;
     }
@@ -259,7 +292,7 @@ static double* initArray_d(int size, double elem) {
 }
 
 static CellType* initArray_t(int size, CellType elem) {
-    CellType* out = (CellType*)malloc(sizeof(CellType) * size);
+    CellType* out = ALLOCATE(CellType, size);
     for (int i = 0; i < size; i++) {
         out[i] = elem;
     }
@@ -267,16 +300,10 @@ static CellType* initArray_t(int size, CellType elem) {
 }
 
 static float* initArray_f(int size, float elem) {
-    float* out = (float*)malloc(sizeof(float)*size);
+    float* out = ALLOCATE(float, size);
     for (int i = 0; i < size; i++) {
         out[i] = elem;
     }
     return out;
-}
-
-static double clamp(double x, double min, double max) {
-    if (x<min) return min;
-    else if (x>max) return max;
-    else return x;
 }
 

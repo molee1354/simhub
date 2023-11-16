@@ -10,11 +10,15 @@
 
 #include "FVM_fluid.h"
 #include "FVM_deps.h"
+#include "helper_helper.h"
+#include "c_array_c_array.h"
 
 #else
 
 #include "fluid.h"
 #include "deps.h"
+#include "../../../../utils/helper/src/helper.h"
+#include "../../../../utils/c_array/src/c_array.h"
 
 #endif
 

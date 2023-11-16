@@ -264,7 +264,7 @@ static void display() {
     drawObstacle();
     glFlush();
 
-    free(fluid->p); // free fluid pressure every display
+    FREE(fluid->p); // free fluid pressure every display
 
     glutSwapBuffers();
 }

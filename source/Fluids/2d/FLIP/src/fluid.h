@@ -107,6 +107,6 @@ void freeFluid(Fluid* fluid);
 /**
  * @brief Function to simulate the simulation
  */
-void simulate();
+void simulate(Fluid* fluid, Obstacle* obstacle, double dt, double gravity, int numIters);
 
 #endif

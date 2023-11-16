@@ -1,4 +1,3 @@
-#include "fluid.h"
 #include "fluids_commonincl.h"
  
 static int* initArray_i(int size, int elem);
@@ -8,6 +7,7 @@ static float* initArray_f(int size, float elem);
 
 Fluid* initFluid(double density, int numX, int numY, double h) {
     Fluid* out             = (Fluid*)malloc(sizeof(Fluid));
+    out->density           = density;
     out->numX              = (int)floor( (double)WINDOW_WIDTH/(double)SPACING )+1;
     out->numY              = (int)floor( (double)WINDOW_HEIGHT/(double)SPACING )+1;
     out->h                 = findMax( (double)WINDOW_WIDTH/(double)out->numX,
@@ -375,20 +375,168 @@ static void transferVelocity(Fluid* fluid, bool toGrid, double flipRatio) {
     }
 }
 
-// TODO
-static void solveIncompressibility(Fluid* fluid, int numIters, double dt) {}
+static void solveIncompressibility(Fluid* fluid, int numIters, double dt, bool drift) {
+    memcpy(fluid->prevU, fluid->u, sizeof(double)*fluid->numCells);
+    memcpy(fluid->prevV, fluid->v, sizeof(double)*fluid->numCells);
 
-// TODO
-static void updateParticleColors(Fluid* fluid) {}
+    int n = fluid->numY;
+    double cp = fluid->density * fluid->h / dt;
 
-// TODO
-static void setSciColor(Fluid* fluid, double value, double minVal, double maxVal) {}
+    // REMOVE?
+    for (int i = 0; i < fluid->numCells; i++) {
+        double u = fluid->u[i];
+        double v = fluid->v[i];
+    }
+    
+    for (int iter = 0; i < NUM_ITER; iter++) {
+        for (int i = 1; i < fluid->numX-1; i++) {
+            for (int j = 1; j < fluid->numY-1; j++) {
+                if (fluid->cellType[i*n +j] != FLUID_CELL)
+                    continue;
 
-// TODO
-static void updateCellColors(Fluid* fluid) {}
+                int center = i*n + j;
+                int left   = (i-1) * n+j;
+                int right  = (i+1) * n+j;
+                int bottom = i*n + j-1;
+                int top    = i*n + j+1;
+                
+                double s   = fluid->s[center];
+                double sx0 = fluid->s[left];
+                double sx1 = fluid->s[right];
+                double sy0 = fluid->s[bottom];
+                double sy1 = fluid->s[top];
+                s = sx0 + sx1 + sy0 + sy1;
+                if (s == 0.)
+                    continue;
 
-// TODO
-void simulate();
+                double div = fluid->u[right] - fluid->u[center] +
+                             fluid->v[top] - fluid->v[center];
+                if (fluid->particleRho0 > 0. && drift == 1) {
+                    double k = 1.;
+                    double compression = fluid->particleRho[i*n + j] - fluid->particleRho0;
+                    if (compression > 0.)
+                        div = div - k*compression;
+                }
+
+                double p = -div/s;
+                p *= OVER_RELAX;
+                fluid->p[center] +=  cp * p;
+                fluid->u[center] -= sx0 * p;
+                fluid->u[right]  += sx1 * p;
+                fluid->v[center] -= sy0 * p;
+                fluid->v[top]    += sy1 * p;
+            }
+        }
+    }
+}
+
+static void updateParticleColors(Fluid* fluid) {
+    double h1 = fluid->invSpacing;
+    for (int i = 0; i < fluid->numParticles; i++) {
+        double s = .01;
+        fluid->particleColor[3*i]     = (float)clamp( fluid->particleColor[3*i]-s,
+                                               0., 1.);
+        fluid->particleColor[3*i + 1] = (float)clamp( fluid->particleColor[3*i + 1]-s,
+                                               0., 1.);
+        fluid->particleColor[3*i + 2] = (float)clamp( fluid->particleColor[3*i + 2]-s,
+                                               0., 1.);
+        double x = fluid->particlePos[2*i];
+        double y = fluid->particlePos[2*i + 1];
+        double xi = clamp( floor(x*h1), 1, fluid->numX-1 );
+        double yi = clamp( floor(y*h1), 1, fluid->numY-1 );
+        int cellNr = (int)xi + fluid->numY + (int)yi;
+
+        double d0 = fluid->particleRho0;
+
+        if (d0 > 0.) {
+            double relativeRho = fluid->particleRho[cellNr] / d0;
+            if (relativeRho < 0.7) {
+                double s = 0.8;
+                fluid->particleColor[3*i] = (float)s;
+                fluid->particleColor[3*i+1] = (float)s;
+                fluid->particleColor[3*i+2] = (float)1.;
+            }
+        }
+    }
+}
+
+static void setSciColor(Fluid* fluid, int cellNr, double value,
+                        double minVal,
+                        double maxVal) {
+    value = findMin(findMax(value, minVal), maxVal - .0001);
+    double d = maxVal - minVal;
+    value = d == 0. ? .5 : (value - minVal) / d;
+
+    double m = .25;
+    int num = (int)floor(value/m);
+    float s = (value - num*m) / m;
+    float red, green, blue;
+    switch (num) {
+        case 0: {
+            red   = 0.0f;
+            green = s;
+            blue  = 1.0f;
+            break;
+        }
+        case 1: {
+            red   = 0.0f;
+            green = 1.0f;
+            blue  = 1.0f - s;
+            break;
+        }
+        case 2: {
+            red   = s;
+            green = 1.0f;
+            blue  = 0.0f;
+            break;
+        }
+        case 3: {
+            red   = 1.0f;
+            green = 1.0f - s;
+            blue  = 0.0f;
+            break;
+        }
+    }
+    fluid->cellColor[3*cellNr] = red;
+    fluid->cellColor[3*cellNr+1] = green;
+    fluid->cellColor[3*cellNr+2] = blue;
+}
+
+static void updateCellColors(Fluid* fluid) {
+    for (int i = 0; i < fluid->numCells; i++) {
+        if (fluid->cellType[i] == SOLID_CELL) {
+            fluid->cellColor[3*i] = 0.5f;
+            fluid->cellColor[3*i+1] = 0.5f;
+            fluid->cellColor[3*i+2] = 0.5f;
+        } else if (fluid->cellType[i] == FLUID_CELL) {
+            double rho = fluid->particleRho[i];
+            if (fluid->particleRho0 > 0.)
+                rho /= fluid->particleRho0;
+            setSciColor(fluid, i, rho, 0.0, 2.0);
+        }
+    }
+}
+
+void simulate(Fluid* fluid, Obstacle* obstacle, double dt, double gravity, int numIters) {
+    double substeps = 1;
+    double dt_sub = dt/substeps;
+
+    for (int step = 0; step < substeps; step++) {
+        integrate(fluid, dt_sub, gravity);
+        if (PARTICLES_SEP == 1) 
+            pushParticles(fluid, numIters);
+        handleParticleCollisions(fluid, obstacle,
+                                 obstacle->x,
+                                 obstacle->y,
+                                 obstacle->radius);
+        transferVelocity(fluid, true, 0.);
+        updateParticleDensity(fluid);
+        solveIncompressibility(fluid, numIters, dt_sub, DRIFT);
+        transferVelocity(fluid, false, FLIP_RATIO);
+    }
+    updateParticleColors(fluid);
+    updateCellColors(fluid);
+}
 
 static int* initArray_i(int size, int elem) {
     int* out = ALLOCATE(int, size);

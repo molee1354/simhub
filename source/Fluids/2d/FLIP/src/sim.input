@@ -17,6 +17,10 @@
 #define NUM_ITER       60
     // number of iterations per each calculation cycle
 
+#define PARTICLES_SEP   1
+#define DRIFT           1
+#define FLIP_RATIO      .9
+
 /* Window size */
 #define WINDOW_WIDTH    800
 #define WINDOW_HEIGHT   600

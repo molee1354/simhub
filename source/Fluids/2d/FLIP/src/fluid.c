@@ -559,6 +559,26 @@ void simulate(Fluid* fluid, Obstacle* obstacle, double dt, double gravity, int n
     updateCellColors(fluid);
 }
 
+void freeFluid(Fluid* fluid) {
+    FREE(fluid->u);
+    FREE(fluid->v);
+    FREE(fluid->du);
+    FREE(fluid->dv);
+    FREE(fluid->prevU);
+    FREE(fluid->prevV);
+    FREE(fluid->s);
+    FREE(fluid->cellType);
+    FREE(fluid->cellColor);
+
+    FREE(fluid->particlePos);
+    FREE(fluid->particleColor);
+    FREE(fluid->particleVel);
+    FREE(fluid->particleRho);
+
+    FREE(fluid->numCellParticles);
+    FREE(fluid->firstCellParticle);
+}
+
 static int* initArray_i(int size, int elem) {
     int* out = ALLOCATE(int, size);
     for (int i = 0; i < size; i++) {

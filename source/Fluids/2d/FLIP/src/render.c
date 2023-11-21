@@ -16,9 +16,9 @@ static bool buttonDown = false;
 Fluid* fluid = NULL;
 Obstacle* obstacle = NULL;
 
-#define OBSTACLE_COLOR  0.8f, 0.8f, 0.8f
-#define WHITE           1.0f, 1.0f, 1.0f
-#define BLACK           0.0f, 0.0f, 0.0f
+#define OBSTACLE_COLOR    0.8f, 0.8f, 0.8f
+#define WHITE             1.0f, 1.0f, 1.0f
+#define BLACK             0.0f, 0.0f, 0.0f
 
 static void simPrompt(int numX, int numY) {
     printf("\t   Fluid Density (kg/m^3) : %g\n", DENSITY);

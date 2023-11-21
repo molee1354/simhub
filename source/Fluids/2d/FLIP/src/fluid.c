@@ -388,7 +388,7 @@ static void solveIncompressibility(Fluid* fluid, int numIters, double dt, bool d
         double v = fluid->v[i];
     }
     
-    for (int iter = 0; i < NUM_ITER; iter++) {
+    for (int iter = 0; iter < NUM_ITER; iter++) {
         for (int i = 1; i < fluid->numX-1; i++) {
             for (int j = 1; j < fluid->numY-1; j++) {
                 if (fluid->cellType[i*n +j] != FLUID_CELL)

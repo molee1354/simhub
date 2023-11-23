@@ -99,7 +99,6 @@ static void setObstacle(int x, int y, bool reset) {
 }
 
 static void drawPoint(double x, double y, double size) {
-    puts("drawPoint");
     glPointSize((float)size);
     glBegin(GL_POINTS);
     glVertex2f((float)x, (float)y);
@@ -113,7 +112,6 @@ static void drawParticles() {
     for (int p = 0; p < fluid->numParticles; p++) {
         double x = fluid->particlePos[2*p];
         double y = fluid->particlePos[2*p + 1];
-        printf("x, y: %g, %g\n", x,y);
         drawPoint(x, y, 10.0f);
     }
 }

@@ -54,6 +54,7 @@ static void initSimParam() {
                              OBSTACLE_RADIUS );
 
     simPrompt(numX, numY);
+    initialState(fluid, INLET_VEL, INLET_HEIGHT);
 }
 
 static void setObstacle(int x, int y, bool reset) {
@@ -357,7 +358,7 @@ static void cleanup() {
 void render(int argc, char** argv) {
     initSimParam();
 
-    initialState(fluid, INLET_VEL, INLET_HEIGHT);
+    // initialState(fluid, INLET_VEL, INLET_HEIGHT);
 
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);

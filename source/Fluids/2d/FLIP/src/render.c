@@ -1,6 +1,7 @@
-#include <GL/freeglut_std.h>
-#include <GL/gl.h>
+#include <GL/glew.h>
+#include <GL/gl.h> 
 #include <GL/glut.h>
+
 #include <time.h>
 #include "fluids_commonincl.h"
 
@@ -28,27 +29,41 @@ static void simPrompt(int numX, int numY) {
     printf("\t Particles Radius (ratio) : %g\n", PARTICLES_RAD);
     printf("\t Compensate drift (bools) : %d\n", DRIFT);
     printf("\tSeparate Particles (bool) : %d\n", PARTICLES_SEP);
-    printf("\t  Particles Count (count) : %d\n\n", PARTICLES_MAX);
+    printf("\t  Particles Count (count) : %d\n\n", numX*numY);
 
     printf("\t         Window Size (px) : %dx%d\n", WINDOW_WIDTH, WINDOW_HEIGHT);
     printf("\t      Num Cells X,Y (X*Y) : %dx%d (%d)\n", numX, numY, numX*numY);
 }
 
+/**
+ * @brief Function that reads in the simulation parameters from 'sim.input'
+ */
 static void initSimParam() {
     double h = DOMAIN_HEIGHT / RESOLUTION;
     
-    int numX = floor(DOMAIN_WIDTH/h);
-    int numY = floor(DOMAIN_HEIGHT/h);
+    double particleRad = PARTICLES_RAD*h;
+    double dx = 2. * particleRad;
+    double dy = dx * sqrt(3.) / 2.; 
+
+    int numX = floor( (FLUID_WIDTH*DOMAIN_WIDTH - 2. * h - 2. * particleRad)/dx );
+    int numY = floor( (FLUID_HEIGHT*DOMAIN_HEIGHT - 2. * h - 2. * particleRad)/dy );
 
     cellSize = WINDOW_WIDTH / numX;
-    double particleRad = 0.3*h;
 
-    fluid = initFluid(DENSITY, numX, numY, h, particleRad);
+    // initialize fluid and obstacle
+    fluid = initFluid(DENSITY, h, particleRad, DOMAIN_WIDTH, DOMAIN_HEIGHT, numX*numY);
     obstacle = initObstacle( WINDOW_WIDTH/2,
                              WINDOW_HEIGHT/2,
                              OBSTACLE_RADIUS );
-
+    int p = 0; // particle index
+    for (int i = 0; i < numX; i++) {
+        for (int j = 0; j < numY; j ++) {
+            fluid->particlePos[p++] = h + particleRad + dx*(double)i + (j % 2 == 0 ? 0. : particleRad);
+            fluid->particlePos[p++] = h + particleRad + dy*(double)j;
+        }
+    }
     simPrompt(numX, numY);
+    initialState(fluid);
 }
 
 static void setObstacle(int x, int y, bool reset) {
@@ -83,18 +98,34 @@ static void setObstacle(int x, int y, bool reset) {
     }
 }
 
+static void drawPoint(double x, double y, double size) {
+    puts("drawPoint");
+    glPointSize((float)size);
+    glBegin(GL_POINTS);
+    glVertex2f((float)x, (float)y);
+    glEnd();
+    glPointSize(1.0f);
+}
+
+static void drawParticles() {
+    double r = fluid->particleRad;
+    puts("here");
+    for (int p = 0; p < fluid->numParticles; p++) {
+        double x = fluid->particlePos[2*p];
+        double y = fluid->particlePos[2*p + 1];
+        printf("x, y: %g, %g\n", x,y);
+        drawPoint(x, y, 10.0f);
+    }
+}
+
 static void display() {
     glClear(GL_COLOR_BUFFER_BIT);
 
     simulate(fluid, obstacle, DT, GRAVITY, NUM_ITER);
     setObstacle(obstacle->x, obstacle->y, false);
 
-/*  Drawing stuff
-    drawFluid();
-    drawObstacle();
-*/
-    // spinning obstacle
-
+    /*  Drawing stuff */
+    drawParticles();
     glFlush();
 
     FREE(fluid->p); // free fluid pressure every display
@@ -163,12 +194,10 @@ static void cleanup() {
 void render(int argc, char** argv) {
     initSimParam();
 
-    initialState(fluid);
-
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-    glutCreateWindow("Eulerian Fluid Simulation");
+    glutCreateWindow("FLIP Fluid Simulation");
     
     glClearColor(1.0, 1.0, 1.0, 1.0); // White background
     

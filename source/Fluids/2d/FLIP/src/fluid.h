@@ -100,7 +100,8 @@ double yDistConv(double index, double scaleH, double setY);
  * @param particleRad Particle radius
  * @return Fluid* Pointer to new fluid struct
  */
-Fluid* initFluid(double density, int numX, int numY, double h, double particleRad);
+Fluid* initFluid(double density, double spacing, double particleRad,
+                 int width, int height, int maxParticles);
 
 /**
  * @brief Function to set the initial state of the fluid

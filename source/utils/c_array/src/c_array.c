@@ -6,7 +6,6 @@ void* resize(void* pointer, size_t newSize) {
         free(pointer);
         return NULL;
     }
-
     void* out = realloc(pointer, newSize);
     if (out == NULL) {
         fprintf(stderr, "Failed to reallocate memory in 'resize()'.");

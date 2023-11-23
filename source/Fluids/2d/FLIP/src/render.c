@@ -108,7 +108,6 @@ static void drawPoint(double x, double y, double size) {
 
 static void drawParticles() {
     double r = fluid->particleRad;
-    puts("here");
     for (int p = 0; p < fluid->numParticles; p++) {
         double x = fluid->particlePos[2*p];
         double y = fluid->particlePos[2*p + 1];

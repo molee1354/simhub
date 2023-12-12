@@ -1,8 +1,8 @@
-#include "array_commonincl.h"
+#include "list_commonincl.h"
 
-Array* makeArray(size_t dtype) {
-    Array* array = (Array*)malloc(sizeof(Array));
-    array->dtype = dtype;
+List* makeList(size_t dtype) {
+    List* list = (List*)malloc(sizeof(List));
+    list->dtype = dtype;
 
     if (dtype == sizeof(int)) {
         iNode* headNode = (iNode*)malloc(sizeof(iNode));
@@ -14,8 +14,8 @@ Array* makeArray(size_t dtype) {
         headNode->next = tailNode;
         tailNode->next = NULL;
 
-        array->head = headNode;
-        array->tail = tailNode;
+        list->head = headNode;
+        list->tail = tailNode;
 
     } else if (dtype == sizeof(double)) {
         dNode* headNode = (dNode*)malloc(sizeof(dNode));
@@ -27,8 +27,8 @@ Array* makeArray(size_t dtype) {
         headNode->next = tailNode;
         tailNode->next = NULL;
 
-        array->head = headNode;
-        array->tail = tailNode;
+        list->head = headNode;
+        list->tail = tailNode;
 
     } else if (dtype == sizeof(char)) {
         cNode* headNode = (cNode*)malloc(sizeof(cNode));
@@ -40,8 +40,8 @@ Array* makeArray(size_t dtype) {
         headNode->next = tailNode;
         tailNode->next = NULL;
 
-        array->head = headNode;
-        array->tail = tailNode;
+        list->head = headNode;
+        list->tail = tailNode;
     } else {
         printf("Unsupported datatype taken as argument in \
                 \"makeList( size_t dtype )\". Defaulting to \
@@ -55,10 +55,10 @@ Array* makeArray(size_t dtype) {
         headNode->next = tailNode;
         tailNode->next = NULL;
 
-        array->head = headNode;
-        array->tail = tailNode;
+        list->head = headNode;
+        list->tail = tailNode;
     }
 
-    return array;
+    return list;
 }
 

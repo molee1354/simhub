@@ -1,6 +1,6 @@
-#include "array_commonincl.h"
+#include "list_commonincl.h"
 
-void append_i( Array* list, int num ) {
+void append_i( List* list, int num ) {
     iNode* newNode = (iNode*)malloc(sizeof(iNode));
     newNode->data = -1.;
     newNode->next = NULL;
@@ -9,7 +9,7 @@ void append_i( Array* list, int num ) {
     ((iNode*)list->tail)->data = num;
     list->tail = newNode;
 }
-void append_d( Array* list, double num ) {
+void append_d( List* list, double num ) {
     dNode* newNode = (dNode*)malloc(sizeof(dNode));
     newNode->data = -1.;
     newNode->next = NULL;
@@ -18,7 +18,7 @@ void append_d( Array* list, double num ) {
     ((dNode*)list->tail)->data = num;
     list->tail = newNode;
 }
-void append_c( Array* list, char num ) {
+void append_c( List* list, char num ) {
     cNode* newNode = (cNode*)malloc(sizeof(cNode));
     newNode->data = '\0';
     newNode->next = NULL;

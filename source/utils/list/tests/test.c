@@ -11,9 +11,9 @@ static int testSuccess = 0;
 static int testFail = 0;
 
 // arrays for testing
-int    ref_testArray_i[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-double ref_testArray_d[] = {0., 1., 2., 3., 4., 5., 6., 7., 8., 9.};
-char   ref_testArray_c[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'};
+int    ref_testList_i[] = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+double ref_testList_d[] = {0., 1., 2., 3., 4., 5., 6., 7., 8., 9.};
+char   ref_testList_c[] = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'};
 const int    ref_len = 10;
 
 // item to add to array
@@ -39,179 +39,179 @@ const double swap_targ_d = 99.;
 const char   swap_targ_c = '*';
 
 
-int TEST_makeArray_i(void) {
-    puts("testing makeArray_i(sizeof(int))...");
-    Array* testArray = makeArray(sizeof(int));
-    if (testArray == NULL) {
-        TEST_FAIL("testArray is NULL!");
+int TEST_makeList_i(void) {
+    puts("testing makeList_i(sizeof(int))...");
+    List* testList = makeList(sizeof(int));
+    if (testList == NULL) {
+        TEST_FAIL("testList is NULL!");
         return 1;
     } 
     else {
         TEST_SUCCESS();
-        freeArray(testArray);
+        freeList(testList);
     }
     return 0;
 }
-int TEST_makeArray_d(void) {
-    puts("testing makeArray_d(sizeof(double))...");
-    Array* testArray = makeArray(sizeof(double));
-    if (testArray == NULL) {
-        TEST_FAIL("testArray is NULL!");
+int TEST_makeList_d(void) {
+    puts("testing makeList_d(sizeof(double))...");
+    List* testList = makeList(sizeof(double));
+    if (testList == NULL) {
+        TEST_FAIL("testList is NULL!");
         return 1;
     } 
     else {
         TEST_SUCCESS();
-        freeArray(testArray);
+        freeList(testList);
     }
     return 0;
 }
-int TEST_makeArray_c(void) {
-    puts("testing makeArray_c(sizeof(char))...");
-    Array* testArray = makeArray(sizeof(char));
-    if (testArray == NULL) {
-        TEST_FAIL("testArray is NULL!");
+int TEST_makeList_c(void) {
+    puts("testing makeList_c(sizeof(char))...");
+    List* testList = makeList(sizeof(char));
+    if (testList == NULL) {
+        TEST_FAIL("testList is NULL!");
         return 1;
     } 
     else {
         TEST_SUCCESS();
-        freeArray(testArray);
+        freeList(testList);
     }
     return 0;
 }
 
-int TEST_toArray_i(void) {
-    puts("testing toArray_i(sizeof(int))...");
-    Array* testArray = toArray_i( ref_testArray_i, ref_len );
-    printf("\t*   test Array : "); 
+int TEST_toList_i(void) {
+    puts("testing toList_i(sizeof(int))...");
+    List* testList = toList_i( ref_testList_i, ref_len );
+    printf("\t*   test List : "); 
     printf("[");
-    for (int i=0; i<ref_len-1; i++) {printf("%d, ", ref_testArray_i[i]);}
-    printf("%d]\n", ref_testArray_i[ref_len-1]);
-    printf("\t* normal Array : "); printArray(testArray);
-    if (testArray == NULL) {
-        TEST_FAIL("testArray is NULL!");
+    for (int i=0; i<ref_len-1; i++) {printf("%d, ", ref_testList_i[i]);}
+    printf("%d]\n", ref_testList_i[ref_len-1]);
+    printf("\t* normal List : "); printList(testList);
+    if (testList == NULL) {
+        TEST_FAIL("testList is NULL!");
         return 1;
     } 
     else {
         TEST_SUCCESS();
-        freeArray(testArray);
+        freeList(testList);
     }
     return 0;
 }
-int TEST_toArray_d(void) {
-    puts("testing toArray_d(sizeof(double))...");
-    Array* testArray = toArray_d( ref_testArray_d, ref_len );
-    printf("\t*   test Array : "); 
+int TEST_toList_d(void) {
+    puts("testing toList_d(sizeof(double))...");
+    List* testList = toList_d( ref_testList_d, ref_len );
+    printf("\t*   test List : "); 
     printf("[");
-    for (int i=0; i<ref_len-1; i++) {printf("%.2f, ", ref_testArray_d[i]);}
-    printf("%.2f]\n", ref_testArray_d[ref_len-1]);
-    printf("\t* normal Array : "); printArray(testArray);
-    if (testArray == NULL) {
-        TEST_FAIL("testArray is NULL!");
+    for (int i=0; i<ref_len-1; i++) {printf("%.2f, ", ref_testList_d[i]);}
+    printf("%.2f]\n", ref_testList_d[ref_len-1]);
+    printf("\t* normal List : "); printList(testList);
+    if (testList == NULL) {
+        TEST_FAIL("testList is NULL!");
         return 1;
     } 
     else {
         TEST_SUCCESS();
-        freeArray(testArray);
+        freeList(testList);
     }
     return 0;
 }
-int TEST_toArray_c(void) {
-    puts("testing toArray_c(sizeof(char))...");
-    Array* testArray = toArray_c( ref_testArray_c, ref_len );
-    printf("\t*   test Array : "); 
+int TEST_toList_c(void) {
+    puts("testing toList_c(sizeof(char))...");
+    List* testList = toList_c( ref_testList_c, ref_len );
+    printf("\t*   test List : "); 
     printf("[");
-    for (int i=0; i<ref_len-1; i++) {printf("%c, ", ref_testArray_c[i]);}
-    printf("%c]\n", ref_testArray_c[ref_len-1]);
-    printf("\t* normal Array : "); printArray(testArray);
-    if (testArray == NULL) {
-        TEST_FAIL("testArray is NULL!");
+    for (int i=0; i<ref_len-1; i++) {printf("%c, ", ref_testList_c[i]);}
+    printf("%c]\n", ref_testList_c[ref_len-1]);
+    printf("\t* normal List : "); printList(testList);
+    if (testList == NULL) {
+        TEST_FAIL("testList is NULL!");
         return 1;
     } 
     else {
         TEST_SUCCESS();
-        freeArray(testArray);
+        freeList(testList);
     }
     return 0;
 }
 
-int TEST_freeArray_i(Array* array, int num) {
-    puts("testing freeArray_i(Array* array)...");
-    if (!freeArray(array)) { TEST_SUCCESS(); } 
+int TEST_freeList_i(List* array, int num) {
+    puts("testing freeList_i(List* array)...");
+    if (!freeList(array)) { TEST_SUCCESS(); } 
     else {
-        TEST_FAIL("freeArray_c(Array* array) did not return 0");
+        TEST_FAIL("freeList_c(List* array) did not return 0");
         return 1;
     }
     return 0;
 }
-int TEST_freeArray_d(Array* array, double num) {
-    puts("testing freeArray_d(Array* array)...");
-    if (!freeArray(array)) { TEST_SUCCESS(); } 
+int TEST_freeList_d(List* array, double num) {
+    puts("testing freeList_d(List* array)...");
+    if (!freeList(array)) { TEST_SUCCESS(); } 
     else {
-        TEST_FAIL("freeArray_c(Array* array) did not return 0");
+        TEST_FAIL("freeList_c(List* array) did not return 0");
         return 1;
     }
     return 0;
 }
-int TEST_freeArray_c(Array* array, char num) {
-    puts("testing freeArray_c(Array* array)...");
-    if (!freeArray(array)) { TEST_SUCCESS(); } 
+int TEST_freeList_c(List* array, char num) {
+    puts("testing freeList_c(List* array)...");
+    if (!freeList(array)) { TEST_SUCCESS(); } 
     else {
-        TEST_FAIL("freeArray_c(Array* array) did not return 0");
+        TEST_FAIL("freeList_c(List* array) did not return 0");
         return 1;
     }
     return 0;
 }
 
 
-int TEST_getLength_i( Array* array, int dtype ) {
-    puts("testing getLength_i(Array* array)...");
-    printf("\t* Array : "); printArray(array);
+int TEST_getLength_i( List* array, int dtype ) {
+    puts("testing getLength_i(List* array)...");
+    printf("\t* List : "); printList(array);
     printf("\t* ref length (constant)   : %d\n", ref_len);
-    printf("\t* getLength(Array* array) : %d\n", getLength(array));
+    printf("\t* getLength(List* array) : %d\n", getLength(array));
     if (getLength(array)==ref_len) { TEST_SUCCESS(); }
     else {
-        TEST_FAIL("getLength(Array* array) did not return the correct length");
+        TEST_FAIL("getLength(List* array) did not return the correct length");
         return 1;
     }
     return 0;
 }
-int TEST_getLength_d( Array* array, double dtype ) {
-    puts("testing getLength_d(Array* array)...");
-    printf("\t* Array : "); printArray(array);
+int TEST_getLength_d( List* array, double dtype ) {
+    puts("testing getLength_d(List* array)...");
+    printf("\t* List : "); printList(array);
     printf("\t* ref length (constant)   : %d\n", ref_len);
-    printf("\t* getLength(Array* array) : %d\n", getLength(array));
+    printf("\t* getLength(List* array) : %d\n", getLength(array));
     if (getLength(array)==ref_len) { TEST_SUCCESS(); }
     else {
-        TEST_FAIL("getLength(Array* array) did not return the correct length");
+        TEST_FAIL("getLength(List* array) did not return the correct length");
         return 1;
     }
     return 0;
 }
-int TEST_getLength_c( Array* array, char dtype ) {
-    puts("testing getLength_c(Array* array)...");
-    printf("\t* Array : "); printArray(array);
+int TEST_getLength_c( List* array, char dtype ) {
+    puts("testing getLength_c(List* array)...");
+    printf("\t* List : "); printList(array);
     printf("\t* ref length (constant)   : %d\n", ref_len);
-    printf("\t* getLength(Array* array) : %d\n", getLength(array));
+    printf("\t* getLength(List* array) : %d\n", getLength(array));
     if (getLength(array)==ref_len) { TEST_SUCCESS(); }
     else {
-        TEST_FAIL("getLength(Array* array) did not return the correct length");
+        TEST_FAIL("getLength(List* array) did not return the correct length");
         return 1;
     }
     return 0;
 }
 
-int TEST_append_i( Array* array, int num ) {
-    printf("testing append_i(Array* array, int num) for num = %d...\n", num);
+int TEST_append_i( List* array, int num ) {
+    printf("testing append_i(List* array, int num) for num = %d...\n", num);
 
     const int pre = getLength(array);
     printf("\t* pre-append  (length : %d) : ", pre);
-    printArray(array);
+    printList(array);
 
     printf("\t* appending [%d]\n", num);
     append(array, num);
     const int post = getLength(array);
     printf("\t* post-append (length : %d) : ", post);
-    printArray(array);
+    printList(array);
 
     if ( post<=pre ) {
         TEST_FAIL("append did not change the length of the array");
@@ -222,18 +222,18 @@ int TEST_append_i( Array* array, int num ) {
     } else {TEST_SUCCESS();}
     return 0;
 }
-int TEST_append_d( Array* array, double num ) {
-    printf("testing append_i(Array* array, double num) for num = %.2f...\n", num);
+int TEST_append_d( List* array, double num ) {
+    printf("testing append_i(List* array, double num) for num = %.2f...\n", num);
 
     const int pre = getLength(array);
     printf("\t* pre-append  (length : %d) : ", pre);
-    printArray(array);
+    printList(array);
 
     printf("\t* appending [%.2f]\n", num);
     append(array, num);
     const int post = getLength(array);
     printf("\t* post-append (length : %d) : ", post);
-    printArray(array);
+    printList(array);
 
     if ( post<=pre ) {
         TEST_FAIL("append did not change the length of the array");
@@ -244,18 +244,18 @@ int TEST_append_d( Array* array, double num ) {
     } else {TEST_SUCCESS();}
     return 0;
 }
-int TEST_append_c( Array* array, char num ) {
-    printf("testing append_i(Array* array, char num) for num = %c...\n", num);
+int TEST_append_c( List* array, char num ) {
+    printf("testing append_i(List* array, char num) for num = %c...\n", num);
 
     const int pre = getLength(array);
     printf("\t* pre-append  (length : %d) : ", pre);
-    printArray(array);
+    printList(array);
 
     printf("\t* appending [%c]\n", num);
     append(array, num);
     const int post = getLength(array);
     printf("\t* post-append (length : %d) : ", post);
-    printArray(array);
+    printList(array);
 
     if ( post<=pre ) {
         TEST_FAIL("append did not change the length of the array");
@@ -267,18 +267,18 @@ int TEST_append_c( Array* array, char num ) {
     return 0;
 }
 
-int TEST_prepend_i( Array* array, int num ) {
-    printf("testing prepend_i(Array* array, int num) for num = %d...\n", num);
+int TEST_prepend_i( List* array, int num ) {
+    printf("testing prepend_i(List* array, int num) for num = %d...\n", num);
 
     const int pre = getLength(array);
     printf("\t* pre-prepend  (length : %d) : ", pre);
-    printArray(array);
+    printList(array);
 
     printf("\t* prepending [%d]\n", num);
     prepend(array, num);
     const int post = getLength(array);
     printf("\t* post-prepend (length : %d) : ", post);
-    printArray(array);
+    printList(array);
 
     if ( post<=pre ) {
         TEST_FAIL("prepend did not change the length of the array");
@@ -289,18 +289,18 @@ int TEST_prepend_i( Array* array, int num ) {
     } else {TEST_SUCCESS();}
     return 0;
 }
-int TEST_prepend_d( Array* array, double num ) {
-    printf("testing prepend_d(Array* array, double num) for num = %.2f...\n", num);
+int TEST_prepend_d( List* array, double num ) {
+    printf("testing prepend_d(List* array, double num) for num = %.2f...\n", num);
 
     const int pre = getLength(array);
     printf("\t* pre-prepend  (length : %d) : ", pre);
-    printArray(array);
+    printList(array);
 
     printf("\t* prepending [%.2f]\n", num);
     prepend(array, num);
     const int post = getLength(array);
     printf("\t* post-prepend (length : %d) : ", post);
-    printArray(array);
+    printList(array);
 
     if ( post<=pre ) {
         TEST_FAIL("prepend did not change the length of the array");
@@ -311,18 +311,18 @@ int TEST_prepend_d( Array* array, double num ) {
     } else {TEST_SUCCESS();}
     return 0;
 }
-int TEST_prepend_c( Array* array, char num ) {
-    printf("testing prepend_c(Array* array, char num) for num = %c...\n", num);
+int TEST_prepend_c( List* array, char num ) {
+    printf("testing prepend_c(List* array, char num) for num = %c...\n", num);
 
     const int pre = getLength(array);
     printf("\t* pre-prepend  (length : %d) : ", pre);
-    printArray(array);
+    printList(array);
 
     printf("\t* prepending [%c]\n", num);
     prepend(array, num);
     const int post = getLength(array);
     printf("\t* post-prepend (length : %d) : ", post);
-    printArray(array);
+    printList(array);
 
     if ( post<=pre ) {
         TEST_FAIL("prepend did not change the length of the array");
@@ -334,17 +334,17 @@ int TEST_prepend_c( Array* array, char num ) {
     return 0;
 }
 
-int TEST_getElement_i( Array* array, int index, int dtype ) {
-    printf("testing getElement_i(Array* array, int index) for index : %d...\n", index);
+int TEST_getElement_i( List* array, int index, int dtype ) {
+    printf("testing getElement_i(List* array, int index) for index : %d...\n", index);
     printf("\t* reference array : ");
     printf("{");
     int i;
     for (i=0; i<ref_len-1; i++) {
-        printf("%d, ", ref_testArray_i[i]);
-    } printf("%d}\n", ref_testArray_i[i]);
+        printf("%d, ", ref_testList_i[i]);
+    } printf("%d}\n", ref_testList_i[i]);
     printf("\t*      test array : ");
-    printArray(array);
-    int refEle = ref_testArray_i[index];
+    printList(array);
+    int refEle = ref_testList_i[index];
     int arrEle = getElement_i(array, index);
     printf("\t* reference array [%d] : %d\n", index, refEle);
     printf("\t*      test array [%d] : %d\n", index, arrEle);
@@ -354,17 +354,17 @@ int TEST_getElement_i( Array* array, int index, int dtype ) {
     } else { TEST_SUCCESS(); }
     return 0;
 }
-int TEST_getElement_d( Array* array, int index, double dtype ) {
-    printf("testing getElement_d(Array* array, int index) for index : %d...\n", index);
+int TEST_getElement_d( List* array, int index, double dtype ) {
+    printf("testing getElement_d(List* array, int index) for index : %d...\n", index);
     printf("\t* reference array : ");
     printf("{");
     int i;
     for (i=0; i<ref_len-1; i++) {
-        printf("%.2f, ", ref_testArray_d[i]);
-    } printf("%.2f}\n", ref_testArray_d[i]);
+        printf("%.2f, ", ref_testList_d[i]);
+    } printf("%.2f}\n", ref_testList_d[i]);
     printf("\t*      test array : ");
-    printArray(array);
-    double refEle = ref_testArray_d[index];
+    printList(array);
+    double refEle = ref_testList_d[index];
     double arrEle = getElement_d(array, index);
     printf("\t* reference array [%d] : %.2f\n", index, refEle);
     printf("\t*      test array [%d] : %.2f\n", index, arrEle);
@@ -374,17 +374,17 @@ int TEST_getElement_d( Array* array, int index, double dtype ) {
     } else { TEST_SUCCESS(); }
     return 0;
 }
-int TEST_getElement_c( Array* array, int index, char dtype ) {
-    printf("testing getElement_c(Array* array, int index) for index : %d...\n", index);
+int TEST_getElement_c( List* array, int index, char dtype ) {
+    printf("testing getElement_c(List* array, int index) for index : %d...\n", index);
     printf("\t* reference array : ");
     printf("{");
     int i;
     for (i=0; i<ref_len-1; i++) {
-        printf("%c, ", ref_testArray_c[i]);
-    } printf("%c}\n", ref_testArray_c[i]);
+        printf("%c, ", ref_testList_c[i]);
+    } printf("%c}\n", ref_testList_c[i]);
     printf("\t*      test array : ");
-    printArray(array);
-    char refEle = ref_testArray_c[index];
+    printList(array);
+    char refEle = ref_testList_c[index];
     char arrEle = getElement_c(array, index);
     printf("\t* reference array [%d] : %c\n", index, refEle);
     printf("\t*      test array [%d] : %c\n", index, arrEle);
@@ -395,14 +395,14 @@ int TEST_getElement_c( Array* array, int index, char dtype ) {
     return 0;
 }
 
-int TEST_getIndex_i( Array* array, int num ) {
-    printf("testing getIndex_i(Array* array, int num) for %d...\n", num);
+int TEST_getIndex_i( List* array, int num ) {
+    printf("testing getIndex_i(List* array, int num) for %d...\n", num);
     printf("\t*      test array : ");
-    printArray(array);
+    printList(array);
     int refIdx = 0;
     int arrIdx = getIndex(array, num);
     while (refIdx<ref_len) {
-        if ( ref_testArray_i[refIdx] == num ){ break; }
+        if ( ref_testList_i[refIdx] == num ){ break; }
         refIdx++;
     }
     printf("\t*          index of %d at ref : [%d]\n", num, refIdx);
@@ -413,14 +413,14 @@ int TEST_getIndex_i( Array* array, int num ) {
     } else { TEST_SUCCESS(); }
     return 0;
 }
-int TEST_getIndex_d( Array* array, double num ) {
-    printf("testing getIndex_i(Array* array, int num) for %.2f...\n", num);
+int TEST_getIndex_d( List* array, double num ) {
+    printf("testing getIndex_i(List* array, int num) for %.2f...\n", num);
     printf("\t*      test array : ");
-    printArray(array);
+    printList(array);
     int refIdx = 0;
     int arrIdx = getIndex(array, num);
     while (refIdx<ref_len) {
-        if ( ref_testArray_d[refIdx] == num ){ break; }
+        if ( ref_testList_d[refIdx] == num ){ break; }
         refIdx++;
     }
     printf("\t*          index of %.2f at ref : [%d]\n", num, refIdx);
@@ -431,14 +431,14 @@ int TEST_getIndex_d( Array* array, double num ) {
     } else { TEST_SUCCESS(); }
     return 0;
 }
-int TEST_getIndex_c( Array* array, char num ) {
-    printf("testing getIndex_i(Array* array, int num) for %c...\n", num);
+int TEST_getIndex_c( List* array, char num ) {
+    printf("testing getIndex_i(List* array, int num) for %c...\n", num);
     printf("\t*      test array : ");
-    printArray(array);
+    printList(array);
     int refIdx = 0;
     int arrIdx = getIndex(array, num);
     while (refIdx<ref_len) {
-        if ( ref_testArray_c[refIdx] == num ){ break; }
+        if ( ref_testList_c[refIdx] == num ){ break; }
         refIdx++;
     }
     printf("\t*          index of %c at ref : [%d]\n", num, refIdx);
@@ -450,15 +450,15 @@ int TEST_getIndex_c( Array* array, char num ) {
     return 0;
 }
 
-int TEST_setValue_i( Array* array, int num, int idx ) {
-    printf("testing setValue_i(Array* array, int num, int idx) for num %d at idx [%d]\n", num, idx);
+int TEST_setValue_i( List* array, int num, int idx ) {
+    printf("testing setValue_i(List* array, int num, int idx) for num %d at idx [%d]\n", num, idx);
     printf("\t*     test array : ");
-    printArray(array);
+    printList(array);
     int prevEle = getElement_i(array, idx);
     setValue_i(array, num, idx);
     int postEle = getElement_i(array, idx);
     printf("\t* modified array : ");
-    printArray(array);
+    printList(array);
 
     if ( prevEle == postEle ) {
         TEST_FAIL("setValue did not change the value");
@@ -469,15 +469,15 @@ int TEST_setValue_i( Array* array, int num, int idx ) {
     } else { TEST_SUCCESS(); }
     return 0;
 }
-int TEST_setValue_d( Array* array, double num, int idx ) {
-    printf("testing setValue_d(Array* array, double num, int idx) for num %.2f at idx [%d]\n", num, idx);
+int TEST_setValue_d( List* array, double num, int idx ) {
+    printf("testing setValue_d(List* array, double num, int idx) for num %.2f at idx [%d]\n", num, idx);
     printf("\t*     test array : ");
-    printArray(array);
+    printList(array);
     double prevEle = getElement_d(array, idx);
     setValue_d(array, num, idx);
     double postEle = getElement_d(array, idx);
     printf("\t* modified array : ");
-    printArray(array);
+    printList(array);
 
     if ( prevEle == postEle ) {
         TEST_FAIL("setValue did not change the value");
@@ -488,15 +488,15 @@ int TEST_setValue_d( Array* array, double num, int idx ) {
     } else { TEST_SUCCESS(); }
     return 0;
 }
-int TEST_setValue_c( Array* array, char num, int idx ) {
-    printf("testing setValue_c(Array* array, char num, int idx) for num %c at idx [%d]\n", num, idx);
+int TEST_setValue_c( List* array, char num, int idx ) {
+    printf("testing setValue_c(List* array, char num, int idx) for num %c at idx [%d]\n", num, idx);
     printf("\t*     test array : ");
-    printArray(array);
+    printList(array);
     char prevEle = getElement_c(array, idx);
     setValue_c(array, num, idx);
     char postEle = getElement_c(array, idx);
     printf("\t* modified array : ");
-    printArray(array);
+    printList(array);
 
     if ( prevEle == postEle ) {
         TEST_FAIL("setValue did not change the value");
@@ -508,20 +508,20 @@ int TEST_setValue_c( Array* array, char num, int idx ) {
     return 0;
 }
 
-int TEST_deleteHead_i( Array* array, int dtype ) {
-    puts("testing deleteHead_i(Array* array)...");
+int TEST_deleteHead_i( List* array, int dtype ) {
+    puts("testing deleteHead_i(List* array)...");
 
     const int pre = getLength(array);
     const int prevHead = getElement_i(array, 0);
     printf("\t* pre-delete  (length : %d) : ", pre);
-    printArray(array);
+    printList(array);
 
     printf("\t* deleting Head [%d]\n", getElement_i(array, 0));
     deleteHead(array);
     const int post = getLength(array);
     const int postHead = getElement_i(array, 0);
     printf("\t* post-delete (length : %d) : ", post);
-    printArray(array);
+    printList(array);
 
     if ( post>=pre ) {
         TEST_FAIL("deleteHead did not change the length of the array");
@@ -533,20 +533,20 @@ int TEST_deleteHead_i( Array* array, int dtype ) {
     return 0;
 
 }
-int TEST_deleteHead_d( Array* array, double dtype ) {
-    puts("testing deleteHead_i(Array* array)...");
+int TEST_deleteHead_d( List* array, double dtype ) {
+    puts("testing deleteHead_i(List* array)...");
 
     const int pre = getLength(array);
     const double prevHead = getElement_d(array, 0);
     printf("\t* pre-delete  (length : %d) : ", pre);
-    printArray(array);
+    printList(array);
 
     printf("\t* deleting Head [%.2f]\n", getElement_d(array, 0));
     deleteHead(array);
     const int post = getLength(array);
     const double postHead = getElement_d(array, 0);
     printf("\t* post-delete (length : %d) : ", post);
-    printArray(array);
+    printList(array);
 
     if ( post>=pre ) {
         TEST_FAIL("deleteHead did not change the length of the array");
@@ -557,20 +557,20 @@ int TEST_deleteHead_d( Array* array, double dtype ) {
     } else {TEST_SUCCESS();}
     return 0;
 }
-int TEST_deleteHead_c( Array* array, char dtype ) {
-    puts("testing deleteHead_i(Array* array)...");
+int TEST_deleteHead_c( List* array, char dtype ) {
+    puts("testing deleteHead_i(List* array)...");
 
     const int pre = getLength(array);
     const char prevHead = getElement_c(array, 0);
     printf("\t* pre-delete  (length : %d) : ", pre);
-    printArray(array);
+    printList(array);
 
     printf("\t* deleting Head [%c]\n", getElement_c(array, 0));
     deleteHead(array);
     const int post = getLength(array);
     const char postHead = getElement_c(array, 0);
     printf("\t* post-delete (length : %d) : ", post);
-    printArray(array);
+    printList(array);
 
     if ( post>=pre ) {
         TEST_FAIL("deleteHead did not change the length of the array");
@@ -582,20 +582,20 @@ int TEST_deleteHead_c( Array* array, char dtype ) {
     return 0;
 }
 
-int TEST_deleteTail_i( Array* array, int dtype ) {
-    puts("testing deleteTail_i(Array* array)...");
+int TEST_deleteTail_i( List* array, int dtype ) {
+    puts("testing deleteTail_i(List* array)...");
 
     const int pre = getLength(array);
     const int prevTail = getElement_i(array, pre-1);
     printf("\t* pre-delete  (length : %d) : ", pre);
-    printArray(array);
+    printList(array);
 
     printf("\t* deleting Tail [%d]\n", prevTail);
     deleteTail(array);
     const int post = getLength(array);
     const int postTail = getElement_i(array, post-1);
     printf("\t* post-delete (length : %d) : ", post);
-    printArray(array);
+    printList(array);
 
     if ( post>=pre ) {
         TEST_FAIL("deleteTail did not change the length of the array");
@@ -606,20 +606,20 @@ int TEST_deleteTail_i( Array* array, int dtype ) {
     } else {TEST_SUCCESS();}
     return 0;
 }
-int TEST_deleteTail_d( Array* array, double dtype ) {
-    puts("testing deleteTail_i(Array* array)...");
+int TEST_deleteTail_d( List* array, double dtype ) {
+    puts("testing deleteTail_i(List* array)...");
 
     const int pre = getLength(array);
     const double prevTail = getElement_d(array, pre-1);
     printf("\t* pre-delete  (length : %d) : ", pre);
-    printArray(array);
+    printList(array);
 
     printf("\t* deleting Tail [%.2f]\n", prevTail);
     deleteTail(array);
     const int post = getLength(array);
     const double postTail = getElement_d(array, post-1);
     printf("\t* post-delete (length : %d) : ", post);
-    printArray(array);
+    printList(array);
 
     if ( post>=pre ) {
         TEST_FAIL("deleteTail did not change the length of the array");
@@ -630,20 +630,20 @@ int TEST_deleteTail_d( Array* array, double dtype ) {
     } else {TEST_SUCCESS();}
     return 0;
 }
-int TEST_deleteTail_c( Array* array, char dtype ) {
-    puts("testing deleteTail_i(Array* array)...");
+int TEST_deleteTail_c( List* array, char dtype ) {
+    puts("testing deleteTail_i(List* array)...");
 
     const int pre = getLength(array);
     const char prevTail = getElement_c(array, pre-1);
     printf("\t* pre-delete  (length : %d) : ", pre);
-    printArray(array);
+    printList(array);
 
     printf("\t* deleting Tail [%c]\n", prevTail);
     deleteTail(array);
     const int post = getLength(array);
     const char postTail = getElement_c(array, post-1);
     printf("\t* post-delete (length : %d) : ", post);
-    printArray(array);
+    printList(array);
 
     if ( post>=pre ) {
         TEST_FAIL("deleteTail did not change the length of the array");
@@ -655,9 +655,9 @@ int TEST_deleteTail_c( Array* array, char dtype ) {
     return 0;
 }
 
-int TEST_listRepr_i( Array* array, int dtype ) {
-    puts("testing listRepr_i(Array* array)...");
-    printf("\t*       array representation : "); printArray(array);
+int TEST_listRepr_i( List* array, int dtype ) {
+    puts("testing listRepr_i(List* array)...");
+    printf("\t*       array representation : "); printList(array);
     printf("\t* linked list representation : ");
     if (!listRepr(array)) { TEST_SUCCESS(); }
     else {
@@ -666,9 +666,9 @@ int TEST_listRepr_i( Array* array, int dtype ) {
     }
     return 0;
 }
-int TEST_listRepr_d( Array* array, double dtype ) {
-    puts("testing listRepr_d(Array* array)...");
-    printf("\t*       array representation : "); printArray(array);
+int TEST_listRepr_d( List* array, double dtype ) {
+    puts("testing listRepr_d(List* array)...");
+    printf("\t*       array representation : "); printList(array);
     printf("\t* linked list representation : ");
     if (!listRepr(array)) { TEST_SUCCESS(); }
     else {
@@ -677,9 +677,9 @@ int TEST_listRepr_d( Array* array, double dtype ) {
     }
     return 0;
 }
-int TEST_listRepr_c( Array* array, char dtype ) {
-    puts("testing listRepr_c(Array* array)...");
-    printf("\t*       array representation : "); printArray(array);
+int TEST_listRepr_c( List* array, char dtype ) {
+    puts("testing listRepr_c(List* array)...");
+    printf("\t*       array representation : "); printList(array);
     printf("\t* linked list representation : ");
     if (!listRepr(array)) { TEST_SUCCESS(); }
     else {
@@ -689,131 +689,131 @@ int TEST_listRepr_c( Array* array, char dtype ) {
     return 0;
 }
 /* int TEST_tests(void) {
-    Array* myArray = makeArray(sizeof(TYPE));
+    List* myList = makeList(sizeof(TYPE));
     puts("array created");
 
-    int length = getLength( myArray );
-    printArray( myArray );
+    int length = getLength( myList );
+    printList( myList );
     printf("length %d\n", length);
 
     for (int i = 65; i<80; i++) {
-        append(myArray, (TYPE)i);
-        printArray( myArray );
+        append(myList, (TYPE)i);
+        printList( myList );
     }
 
-    printf("Array length : %d\n", getLength( myArray ));
+    printf("List length : %d\n", getLength( myList ));
 
     puts("\ndeleteTail()");
-    deleteTail( myArray );
-    printf("Array length : %d\n", getLength( myArray ));
-    listRepr( myArray );
+    deleteTail( myList );
+    printf("List length : %d\n", getLength( myList ));
+    listRepr( myList );
 
     puts("\ndeleteTail()");
-    deleteTail( myArray );
-    printf("Array length : %d\n", getLength( myArray ));
-    listRepr( myArray );
+    deleteTail( myList );
+    printf("List length : %d\n", getLength( myList ));
+    listRepr( myList );
 
     puts("\ndeleteHead()");
-    deleteHead( myArray );
-    printf("Array length : %d\n", getLength( myArray ));
-    listRepr( myArray );
+    deleteHead( myList );
+    printf("List length : %d\n", getLength( myList ));
+    listRepr( myList );
 
     TYPE num = 88;
     printf("\nprepend() %d\n", num);
-    prepend(myArray, num);
-    printf("Array length : %d\n", getLength( myArray ));
-    listRepr( myArray );
+    prepend(myList, num);
+    printf("List length : %d\n", getLength( myList ));
+    listRepr( myList );
 
     TYPE bis = 88;
     printf("\nappend() %d\n", bis);
-    append(myArray, bis);
-    printf("Array length : %d\n", getLength( myArray ));
-    listRepr( myArray );
+    append(myList, bis);
+    printf("List length : %d\n", getLength( myList ));
+    listRepr( myList );
 
     const int pos = 3;
-    printf("\ngetElement() at %d: %d\n", pos, getElement( myArray, pos ));
-    printArray( myArray );
+    printf("\ngetElement() at %d: %d\n", pos, getElement( myList, pos ));
+    printList( myList );
 
     const int target = 71;
-    printf("\nfindIndex() of %d: %d\n", target, findIndex( myArray, target ));
-    printArray( myArray );
+    printf("\nfindIndex() of %d: %d\n", target, findIndex( myList, target ));
+    printList( myList );
 
-    puts("\nfreeArray()");
-    freeArray( myArray );
+    puts("\nfreeList()");
+    freeList( myList );
 } */
 
-Array* makeTestArray_i() {
-    Array* testArray_i = makeArray(sizeof(ref_addItem_i));
-    for (int i=0; i<ref_len; i++) append(testArray_i, ref_testArray_i[i]);
-    return testArray_i;
+List* makeTestList_i() {
+    List* testList_i = makeList(sizeof(ref_addItem_i));
+    for (int i=0; i<ref_len; i++) append(testList_i, ref_testList_i[i]);
+    return testList_i;
 }
-Array* makeTestArray_d() {
-    Array* testArray_d = makeArray(sizeof(ref_addItem_d));
-    for (int i=0; i<ref_len; i++) append(testArray_d, ref_testArray_d[i]);
-    return testArray_d;
+List* makeTestList_d() {
+    List* testList_d = makeList(sizeof(ref_addItem_d));
+    for (int i=0; i<ref_len; i++) append(testList_d, ref_testList_d[i]);
+    return testList_d;
 }
-Array* makeTestArray_c() {
-    Array* testArray_c = makeArray(sizeof(ref_addItem_c));
-    for (int i=0; i<ref_len; i++) append(testArray_c, ref_testArray_c[i]);
-    return testArray_c;
+List* makeTestList_c() {
+    List* testList_c = makeList(sizeof(ref_addItem_c));
+    for (int i=0; i<ref_len; i++) append(testList_c, ref_testList_c[i]);
+    return testList_c;
 }
 
 int main() {
     /* The failure in one of these tests won't stop the program */
-    TEST_makeArray(INT);
-    TEST_makeArray(DOUBLE);
-    TEST_makeArray(CHAR);
+    TEST_makeList(INT);
+    TEST_makeList(DOUBLE);
+    TEST_makeList(CHAR);
 
-    TEST_toArray(INT);
-    TEST_toArray(DOUBLE);
-    TEST_toArray(CHAR);
+    TEST_toList(INT);
+    TEST_toList(DOUBLE);
+    TEST_toList(CHAR);
 
     /* Initializing arrays to do the tests on */
-    Array* testArray_i = makeTestArray(INT);
-    Array* testArray_d = makeTestArray(DOUBLE);
-    Array* testArray_c = makeTestArray(CHAR);
+    List* testList_i = makeTestList(INT);
+    List* testList_d = makeTestList(DOUBLE);
+    List* testList_c = makeTestList(CHAR);
 
     /* the `get` type functions must be tested before any append/prepend
     function tests are done */
-    TEST_getLength(testArray_i, INT);
-    TEST_getLength(testArray_d, DOUBLE);
-    TEST_getLength(testArray_c, CHAR);
+    TEST_getLength(testList_i, INT);
+    TEST_getLength(testList_d, DOUBLE);
+    TEST_getLength(testList_c, CHAR);
 
-    TEST_getElement(testArray_i, targ_idx, INT);
-    TEST_getElement(testArray_d, targ_idx, DOUBLE);
-    TEST_getElement(testArray_c, targ_idx, CHAR);
+    TEST_getElement(testList_i, targ_idx, INT);
+    TEST_getElement(testList_d, targ_idx, DOUBLE);
+    TEST_getElement(testList_c, targ_idx, CHAR);
 
-    TEST_setValue(testArray_i, swap_targ_i, swap_idx);
-    TEST_setValue(testArray_d, swap_targ_d, swap_idx);
-    TEST_setValue(testArray_c, swap_targ_c, swap_idx);
+    TEST_setValue(testList_i, swap_targ_i, swap_idx);
+    TEST_setValue(testList_d, swap_targ_d, swap_idx);
+    TEST_setValue(testList_c, swap_targ_c, swap_idx);
 
-    TEST_getIndex(testArray_i, targ_i);
-    TEST_getIndex(testArray_d, targ_d);
-    TEST_getIndex(testArray_c, targ_c);
+    TEST_getIndex(testList_i, targ_i);
+    TEST_getIndex(testList_d, targ_d);
+    TEST_getIndex(testList_c, targ_c);
 
-    TEST_append(testArray_i, ref_addItem_i);
-    TEST_append(testArray_d, ref_addItem_d);
-    TEST_append(testArray_c, ref_addItem_c);
+    TEST_append(testList_i, ref_addItem_i);
+    TEST_append(testList_d, ref_addItem_d);
+    TEST_append(testList_c, ref_addItem_c);
 
-    TEST_prepend(testArray_i, ref_addItem_i);
-    TEST_prepend(testArray_d, ref_addItem_d);
-    TEST_prepend(testArray_c, ref_addItem_c);
+    TEST_prepend(testList_i, ref_addItem_i);
+    TEST_prepend(testList_d, ref_addItem_d);
+    TEST_prepend(testList_c, ref_addItem_c);
 
-    TEST_deleteHead(testArray_i, INT);
-    TEST_deleteHead(testArray_d, DOUBLE);
-    TEST_deleteHead(testArray_c, CHAR);
+    TEST_deleteHead(testList_i, INT);
+    TEST_deleteHead(testList_d, DOUBLE);
+    TEST_deleteHead(testList_c, CHAR);
 
-    TEST_deleteTail(testArray_i, INT);
-    TEST_deleteTail(testArray_d, DOUBLE);
-    TEST_deleteTail(testArray_c, CHAR);
+    TEST_deleteTail(testList_i, INT);
+    TEST_deleteTail(testList_d, DOUBLE);
+    TEST_deleteTail(testList_c, CHAR);
 
-    TEST_listRepr(testArray_i, INT);
-    TEST_listRepr(testArray_d, DOUBLE);
-    TEST_listRepr(testArray_c, CHAR);
+    TEST_listRepr(testList_i, INT);
+    TEST_listRepr(testList_d, DOUBLE);
+    TEST_listRepr(testList_c, CHAR);
 
-    TEST_freeArray(testArray_i, INT);
-    TEST_freeArray(testArray_d, DOUBLE);
-    TEST_freeArray(testArray_c, CHAR);
+    TEST_freeList(testList_i, INT);
+    TEST_freeList(testList_d, DOUBLE);
+    TEST_freeList(testList_c, CHAR);
 
     printf("[RESULT] : %d out of %d tests passed.\n\n", testSuccess, testSuccess+testFail);
 

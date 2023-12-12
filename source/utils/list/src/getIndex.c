@@ -1,33 +1,33 @@
-#include "array_commonincl.h"
+#include "list_commonincl.h"
 
-int getIndex_i( Array* array, int num ) {
-    iNode* currentNode = ((iNode*)array->head)->next;
+int getIndex_i( List* list, int num ) {
+    iNode* currentNode = ((iNode*)list->head)->next;
     int idx = 0;
     while (currentNode->data != num || currentNode->next != NULL) {
         if (currentNode->data == num) return idx;
         currentNode = currentNode->next;
         idx++;
     }
-    return getLength(array)-1;
+    return getLength(list)-1;
 }
-int getIndex_d( Array* array, double num ) {
-    dNode* currentNode = ((dNode*)array->head)->next;
+int getIndex_d( List* list, double num ) {
+    dNode* currentNode = ((dNode*)list->head)->next;
     int idx = 0;
     while (currentNode->data != num || currentNode->next != NULL) {
         if (currentNode->data == num) return idx;
         currentNode = currentNode->next;
         idx++;
     }
-    return getLength(array)-1;
+    return getLength(list)-1;
 }
-int getIndex_c( Array* array, char num ) {
-    cNode* currentNode = ((cNode*)array->head)->next;
+int getIndex_c( List* list, char num ) {
+    cNode* currentNode = ((cNode*)list->head)->next;
     int idx = 0;
     while (currentNode->data != num || currentNode->next != NULL) {
         if (currentNode->data == num) return idx;
         currentNode = currentNode->next;
         idx++;
     }
-    return getLength(array)-1;
+    return getLength(list)-1;
 }
 

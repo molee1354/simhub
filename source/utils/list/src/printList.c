@@ -1,9 +1,9 @@
-#include "array_commonincl.h"
+#include "list_commonincl.h"
 
-void printArray_i( Array* array ) {
-    iNode* currentNode = ((iNode*)array->head)->next;
+void printList_i( List* list ) {
+    iNode* currentNode = ((iNode*)list->head)->next;
     printf("[");
-    if (currentNode == array->tail) {
+    if (currentNode == list->tail) {
         puts("]");
         return;
     }
@@ -13,10 +13,10 @@ void printArray_i( Array* array ) {
     }
     printf("%d]\n", currentNode->data);
 }
-void printArray_d( Array* array ) {
-    dNode* currentNode = ((dNode*)array->head)->next;
+void printList_d( List* list ) {
+    dNode* currentNode = ((dNode*)list->head)->next;
     printf("[");
-    if (currentNode == array->tail) {
+    if (currentNode == list->tail) {
         puts("]");
         return;
     }
@@ -26,10 +26,10 @@ void printArray_d( Array* array ) {
     }
     printf("%.2f]\n", currentNode->data);
 }
-void printArray_c( Array* array ) {
-    cNode* currentNode = ((cNode*)array->head)->next;
+void printList_c( List* list ) {
+    cNode* currentNode = ((cNode*)list->head)->next;
     printf("[");
-    if (currentNode == array->tail) {
+    if (currentNode == list->tail) {
         puts("]");
         return;
     }
@@ -39,8 +39,8 @@ void printArray_c( Array* array ) {
     }
     printf("%c]\n", currentNode->data);
 }
-void printArray( Array* array ) {
-    if (array->dtype == sizeof(int))    printArray_i(array);
-    if (array->dtype == sizeof(double)) printArray_d(array);
-    if (array->dtype == sizeof(char))   printArray_c(array);
+void printList( List* list ) {
+    if (list->dtype == sizeof(int))    printList_i(list);
+    if (list->dtype == sizeof(double)) printList_d(list);
+    if (list->dtype == sizeof(char))   printList_c(list);
 }

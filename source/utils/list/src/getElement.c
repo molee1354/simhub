@@ -1,26 +1,26 @@
-#include "array_commonincl.h"
+#include "list_commonincl.h"
 
-int getElement_i( Array* array, int index ) {
+int getElement_i( List* list, int index ) {
     int count = 0;
-    iNode* currentNode = (iNode*)array->head;
+    iNode* currentNode = (iNode*)list->head;
     while (count <= index) {
         currentNode = currentNode->next;
         count++;
     }
     return currentNode->data;
 }   
-double getElement_d( Array* array, int index ) {
+double getElement_d( List* list, int index ) {
     int count = 0;
-    dNode* currentNode = (dNode*)array->head;
+    dNode* currentNode = (dNode*)list->head;
     while (count <= index) {
         currentNode = currentNode->next;
         count++;
     }
     return currentNode->data;
 }   
-char getElement_c( Array* array, int index ) {
+char getElement_c( List* list, int index ) {
     int count = 0;
-    cNode* currentNode = (cNode*)array->head;
+    cNode* currentNode = (cNode*)list->head;
     while (count <= index) {
         currentNode = currentNode->next;
         count++;

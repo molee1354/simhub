@@ -1,9 +1,9 @@
-#include "array_commonincl.h"
+#include "list_commonincl.h"
 
-int listRepr_i( Array* array ) {
-    iNode* currentNode = ((iNode*)array->head)->next;
+int listRepr_i( List* list ) {
+    iNode* currentNode = ((iNode*)list->head)->next;
     printf("Head->");
-    if (currentNode == array->tail) {
+    if (currentNode == list->tail) {
         puts("Tail");
         return 0;
     }
@@ -14,10 +14,10 @@ int listRepr_i( Array* array ) {
     puts("Tail");
     return 0;
 }
-int listRepr_d( Array* array ) {
-    dNode* currentNode = ((dNode*)array->head)->next;
+int listRepr_d( List* list ) {
+    dNode* currentNode = ((dNode*)list->head)->next;
     printf("Head->");
-    if (currentNode == array->tail) {
+    if (currentNode == list->tail) {
         puts("Tail");
         return 0;
     }
@@ -28,10 +28,10 @@ int listRepr_d( Array* array ) {
     puts("Tail");
     return 0;
 }
-int listRepr_c( Array* array ) {
-    cNode* currentNode = ((cNode*)array->head)->next;
+int listRepr_c( List* list ) {
+    cNode* currentNode = ((cNode*)list->head)->next;
     printf("Head->");
-    if (currentNode == array->tail) {
+    if (currentNode == list->tail) {
         puts("Tail");
         return 0;
     }
@@ -42,9 +42,9 @@ int listRepr_c( Array* array ) {
     puts("Tail");
     return 0;
 }
-int listRepr( Array* array ) {
-    if (array->dtype == sizeof(int))    return listRepr_i(array);
-    if (array->dtype == sizeof(double)) return listRepr_d(array);
-    if (array->dtype == sizeof(char))   return listRepr_c(array);
+int listRepr( List* list ) {
+    if (list->dtype == sizeof(int))    return listRepr_i(list);
+    if (list->dtype == sizeof(double)) return listRepr_d(list);
+    if (list->dtype == sizeof(char))   return listRepr_c(list);
     return 1;
 }

@@ -2,9 +2,9 @@
 #define _guard_h
 
 #ifdef NAME_MANGLE
-#include "array_array.h"
+#include "list_list.h"
 #else
-#include "array.h"
+#include "list.h"
 #endif
 
 /*
@@ -15,10 +15,10 @@ typedef struct DoubleNode { double data; struct DoubleNode* next; } dNode;
 typedef struct CharNode   { char   data; struct CharNode*   next; } cNode;
 
 /*
- * struct to hold the array
+ * struct to hold the list
  * the `head` and `tail` pointers will be cast to its types later.
  */
-typedef struct LinkedList { void* head; void* tail; size_t dtype; } Array;
+typedef struct LinkedList { void* head; void* tail; size_t dtype; } List;
 
 #endif
 

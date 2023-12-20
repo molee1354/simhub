@@ -6,14 +6,20 @@
 typedef struct {
     int capacity;
     int count;
-    union {
-        int* Int;
-        float* Float;
-        double* Double;
-        char* Char;
-        char** String;
-    };
-} Array;
+    int* values;
+} array_int;
+
+typedef struct {
+    int capacity;
+    int count;
+    double* values;
+} array_double;
+
+typedef struct {
+    int capacity;
+    int count;
+    char* values;
+} array_char;
 
 #define ALLOCATE(type, count) \
     (type*)reallocate(NULL, 0, sizeof(type)*(count) )
@@ -31,11 +37,8 @@ typedef struct {
 #define FREE_ARRAY(type, pointer, oldCount ) \
     reallocate(pointer, sizeof(type) * (oldCount), 0)
 
-Array* initArray();
-
-void append(Array* array, int element);
-void prepend(Array* arr);
-
-void printArray(Array* array);
+array_int* makeArray_int(int size);
+array_double* makeArray_double(int size);
+array_char* makeArray_char(int size);
 
 #endif

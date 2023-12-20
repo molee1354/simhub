@@ -1,6 +1,5 @@
 #include "array_commonincl.h"
 
-
 void* reallocate(void* pointer, size_t oldSize, size_t newSize) {
     if (newSize > oldSize) {
     }
@@ -15,8 +14,3 @@ void* reallocate(void* pointer, size_t oldSize, size_t newSize) {
     return result;
 }
 
-Array* initArray() {
-    Array* out = (Array*)malloc(sizeof(Array*));
-    out->values = ALLOCATE(int, 0);
-    return out;
-}

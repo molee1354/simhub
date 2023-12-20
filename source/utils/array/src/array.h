@@ -12,7 +12,7 @@ typedef struct {
         double* Double;
         char* Char;
         char** String;
-    } as;
+    };
 } Array;
 
 #define ALLOCATE(type, count) \

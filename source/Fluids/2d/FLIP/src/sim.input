@@ -17,25 +17,28 @@
 #define NUM_ITER       60
     // number of iterations per each calculation cycle
 
-#define PARTICLES_SEP   1
-#define PARTICLES_RAD   .05
-#define PARTICLES_MAX   100
+#define PARTICLES_SEP   1  // 1 is true
+#define PARTICLES_RAD   .3 // with respect to cell size
 
-#define SPACING         .01
+// #define SPACING         .01
 #define DRIFT           1
 #define FLIP_RATIO      .9
 #define OBSTACLE_RADIUS .15
 
+/* Fluid Geometry */
+#define FLUID_WIDTH     .6
+#define FLUID_HEIGHT    .8
+
 /* Window size */
 #define WINDOW_WIDTH    800
 #define WINDOW_HEIGHT   600
-#define RESOLUTION      150
+#define RESOLUTION      100
 
 /* Simulation size and scale */
-#define SIM_HEIGHT      1.1
+#define SIM_HEIGHT      3.
 #define C_SCALE         (WINDOW_HEIGHT / SIM_HEIGHT)
 #define SIM_WIDTH       (WINDOW_WIDTH / C_SCALE)
 
-#define DOMAIN_HEIGHT   1.
-#define DOMAIN_WIDTH    (DOMAIN_HEIGHT / SIM_HEIGHT * SIM_WIDTH)
+#define DOMAIN_HEIGHT   (SIM_HEIGHT * 1.)
+#define DOMAIN_WIDTH    (SIM_WIDTH * 1.)
 

@@ -21,6 +21,7 @@ Fluid* initFluid(double density, int numX, int numY, double h) {
     out->numX = numX + 2;
     out->numY = numY + 2;
     out->numCells = out->numX * out->numY;
+    printf("numcells : %d\n",out->numCells);
     out->h = h;
 
 #define ZEROS() initArray(out->numCells, 0.)

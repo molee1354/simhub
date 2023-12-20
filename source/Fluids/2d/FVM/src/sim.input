@@ -46,7 +46,7 @@
 /* Window size */
 #define WINDOW_WIDTH    800
 #define WINDOW_HEIGHT   600
-#define RESOLUTION      150
+#define RESOLUTION      300
 
 /* Simulation size and scale */
 #define SIM_HEIGHT      1.1

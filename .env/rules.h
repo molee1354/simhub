@@ -1,5 +1,5 @@
-#ifndef _deps_namemangle_rules_h
-#define _deps_namemangle_rules_h
+#ifndef simhub_deps_namemangle_rules_h
+#define simhub_deps_namemangle_rules_h
 
 #define NAME_MANGLE
 

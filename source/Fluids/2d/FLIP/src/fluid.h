@@ -100,7 +100,8 @@ double yDistConv(double index, double scaleH, double setY);
  * @param particleRad Particle radius
  * @return Fluid* Pointer to new fluid struct
  */
-Fluid* initFluid(double density, int numX, int numY, double h, double particleRad);
+Fluid* initFluid(double density, double spacing, double particleRad,
+                 int width, int height, int maxParticles);
 
 /**
  * @brief Function to set the initial state of the fluid
@@ -122,5 +123,10 @@ void freeFluid(Fluid* fluid);
  * @brief Function to simulate the simulation
  */
 void simulate(Fluid* fluid, Obstacle* obstacle, double dt, double gravity, int numIters);
+
+/**
+ * @brief Function to render the simulation
+ */
+void render(int argc, char* argv[]);
 
 #endif

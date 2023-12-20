@@ -1,4 +1,3 @@
-#include "array.h"
 #include "array_commonincl.h"
 #include <stdlib.h>
 

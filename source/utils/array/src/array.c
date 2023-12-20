@@ -1,6 +1,4 @@
-#include "array.h"
 #include "array_commonincl.h"
-#include <stdlib.h>
 
 void* reallocate(void* pointer, size_t oldSize, size_t newSize) {
     if (newSize > oldSize) {

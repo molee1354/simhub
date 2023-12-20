@@ -1,5 +1,5 @@
-#ifndef simhub_array_h
-#define simhub_array_h
+#ifndef simhub_array_commonincl_h
+#define simhub_array_commonincl_h
 
 #include "../rules.h"
 

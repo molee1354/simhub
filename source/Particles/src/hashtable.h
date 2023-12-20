@@ -3,13 +3,23 @@
 
 #include <stdlib.h>
 #include "sim.input"
+#include "../rules.h"
+
+#ifdef NAME_MANGLE
+#include "helper_helper.h"
+#include "array_array.h"
+#else
+#include "../../utils/helper/src/helper.h"
+#include "../../utils/array/src/array.h"
+#endif
+
 
 typedef struct {
     double spacing;
     int tableSize;
-    int* cellStart;
-    int* cellEntries;
-    int* queryIds;
+    array_int* cellStart;
+    array_int* cellEntries;
+    array_int* queryIds;
     int querySize;
 } Table;
 
@@ -19,6 +29,13 @@ typedef struct {
  * @return Hashtable* Pointer to a hash table
  */
 Table* makeTable(double spacing, int numObj);
+
+/**
+ * @brief Function the table memory
+ *
+ * @param table 
+ */
+void freeTable(Table* table);
 
 /**
  * @brief Function to compute the hashed coordinates of a particle
@@ -45,10 +62,10 @@ int intCoord(Table* table, double coord);
  * @param nr Integer index of particle
  * @return Int hashed coordinate of a particle
  */
-int hashPos(Table* table, int* positions, int nr);
+int hashPos(Table* table, array_double* pos, int nr);
 
-void create(Table* table, int* positions);
+void create(Table* table, array_double* pos);
 
-void query(Table* table, int* pos, int nr, double maxDist);
+void query(Table* table, array_double* pos, int nr, double maxDist);
 
 #endif

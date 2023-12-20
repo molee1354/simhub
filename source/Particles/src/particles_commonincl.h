@@ -5,17 +5,19 @@
 
 #ifdef NAME_MANGLE
 
-#include "Collisions_collisions.h"
-#include "Collisions_hashtable.h"
+#include "Particles_collisions.h"
+#include "Particles_hashtable.h"
+#include "Particles_vector.h"
 #include "helper_helper.h"
-#include "c_array_c_array.h"
+#include "array_array.h"
 
 #else
 
-#include "collisions.h"
+#include "particles.h"
 #include "hashtable.h"
+#include "vector.h"
 #include "../../utils/helper/src/helper.h"
-#include "../../utils/c_array/src/c_array.h"
+#include "../../utils/array/src/array.h"
 
 #endif
 

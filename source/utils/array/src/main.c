@@ -5,7 +5,10 @@
 #endif
 
 int main(int argc, char** argv) {
-    Array* out = initArray();
-    free(out);
+    array_int* array = makeArray_int(5);
+    printArray(array);
+    append(array, 15);
+    printArray(array);
+    freeArray(array);
     return 0;
 }

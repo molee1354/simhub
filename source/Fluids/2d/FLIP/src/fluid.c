@@ -76,9 +76,9 @@ Fluid* initFluid(double density, double spacing, double particleRad,
  */
 static void integrate(Fluid* fluid, double dt, double gravity) {
     for (int i = 0; i < fluid->numParticles; i++) {
-        fluid->particleVel[2*i+1] += dt*gravity; // changing V by gravity
-        fluid->particlePos[2*i] += fluid->particleVel[2*i] * dt;
-        fluid->particlePos[2*i+1] += fluid->particleVel[2*i+1]*dt;
+        fluid->particleVel[2*i+1] += (dt*gravity); // changing V by gravity
+        fluid->particlePos[2*i] += (fluid->particleVel[2*i] * dt);
+        fluid->particlePos[2*i+1] += (fluid->particleVel[2*i+1]*dt);
     }
 }
 
@@ -138,7 +138,22 @@ static void pushParticles(Fluid* fluid, int numIters) {
                     int first = fluid->firstCellParticle[cellNr];
                     int last = fluid->firstCellParticle[cellNr+1];
                     for (int j = first; j < last; j++) {
+
                         int id = fluid->cellParticleID[j];
+                        /* right now id becomes larger (way larger) than 
+                         * fluid->maxParticles. 
+                         * 
+                         * Notes
+                         *  - improper initialization of cellParticleID
+                         *      - cellParticleID sizeof maxParticles
+                         *      - ==> indexing (j) cellParticleId cannot be larger
+                         *            than maxParticles
+                         *  - j comes from `first` and `last`, which come from 
+                         *    firstCellParticle
+                         *  - firstCellParticle has
+                         *
+                         */
+
                         if (id == 1)
                             continue;
                         double qx = fluid->particlePos[2*id];

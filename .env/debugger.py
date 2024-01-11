@@ -7,6 +7,7 @@ def debugger(filename: str) -> None:
     gdb.execute("set print pretty on")
     gdb.execute("set verbose off")
     # gdb.execute("break src/FLIP_fluid.c:159")
+
     gdb.execute("run")
 
     # while True:

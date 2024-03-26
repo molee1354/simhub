@@ -22,9 +22,9 @@ def debugger(filename: str) -> None:
     qx = gdb.parse_and_eval('qx')
     max_p = gdb.parse_and_eval('fluid->maxParticles')
     print("id larger than max_p")
-    print(f"max_p = {max_p}")
-    print(f"id    = {id}")
-    print(f"qx    = {qx}")
+    print(f"\tmax_p = {max_p}")
+    print(f"\tid    = {id}")
+    print(f"\tqx    = {qx}\n")
 
 def main() -> None:
     path = "simulation/bin/main"

@@ -1,21 +1,25 @@
-#ifndef simhub_c_array_h
-#define simhub_c_array_h
+#ifndef simhub_nrutil_h
+#define simhub_nrutil_h
 
-#include <stdlib.h>
-    
-#define ALLOCATE(type, count) \
-    (type*)resize( NULL, sizeof(type)*(count) )
+#define NR_END   1
+#define FREE_ARG char*
 
-#define FREE(pointer) \
-    resize(pointer, 0)
+typedef double*   vector;
+typedef double**  matrix;
 
-/**
- * @brief Function to reallocate memory from oldSize to newSize
- *
- * @param pointer 
- * @param oldSize 
- * @param newSize 
- */
-void* resize(void* pointer, size_t newSize);
+vector newVector(unsigned int size);
+matrix newMatrix(unsigned int row, unsigned int col);
+
+void printVector(vector vec);
+void printMatrix(matrix mat);
+#define printObj(obj) _Generic( (obj) ,\
+                       vector : printVector,\
+                       matrix : printMatrix) (obj)
+
+void freeVector(vector vec);
+void freeMatrix(matrix mat);
+#define freeObj(obj) _Generic( (obj) ,\
+                       vector : freeVector,\
+                       matrix : freeMatrix) (obj)
 
 #endif

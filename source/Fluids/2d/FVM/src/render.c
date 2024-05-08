@@ -288,7 +288,7 @@ static void display() {
 
     glFlush();
 
-    FREE(fluid->p); // free fluid pressure every display
+    free_vector(fluid->p); // free fluid pressure every display
 
     glutSwapBuffers();
 }

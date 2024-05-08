@@ -1,7 +1,6 @@
 #include <omp.h>
 #include "fluids_commonincl.h"
 
-static double* initArray(int size, double elem);
 
 double xDistConv(double index, double scaleH, double setX) {
     return (index + .5) * scaleH - (DOMAIN_WIDTH/WINDOW_WIDTH)*setX;
@@ -24,22 +23,19 @@ Fluid* initFluid(double density, int numX, int numY, double h) {
     printf("numcells : %d\n",out->numCells);
     out->h = h;
 
-#define ZEROS() initArray(out->numCells, 0.)
-#define  ONES() initArray(out->numCells, 1.)
+    out->u = new_vector(out->numCells);
+    out->v = new_vector(out->numCells);
+    out->newU = new_vector(out->numCells);
+    out->newV = new_vector(out->numCells);
 
-    out->u = ZEROS();
-    out->v = ZEROS();
-    out->newU = ZEROS();
-    out->newV = ZEROS();
-
-    out->s = ZEROS();
-    out->m = ONES();
-    out->newM = ZEROS();
+    out->s = new_vector(out->numCells);
+    out->m = new_vector(out->numCells);
+    for (int i=1; i <= out->numCells; i++)
+        out->m[i] = 1.;
+    out->newM = new_vector(out->numCells);
 
     out->num = numX * numY;
 
-#undef ZEROS
-#undef ONES
     return out;
 }
 
@@ -76,22 +72,14 @@ void initialState(Fluid* fluid, double inletVel, double inletHeight) {
 }
 
 void freeFluid(Fluid* fluid) {
-    FREE(fluid->u);
-    FREE(fluid->v);
-    FREE(fluid->s);
-    FREE(fluid->m);
-    FREE(fluid->newU);
-    FREE(fluid->newV);
-    FREE(fluid->newM);
-    FREE(fluid);
-}
-
-static double* initArray(int size, double elem) {
-    double* out = ALLOCATE(double, size);
-    for (int i = 0; i < size; i++) {
-        out[i] = elem;
-    }
-    return out;
+    free_vector(fluid->u);
+    free_vector(fluid->v);
+    free_vector(fluid->s);
+    free_vector(fluid->m);
+    free_vector(fluid->newU);
+    free_vector(fluid->newV);
+    free_vector(fluid->newM);
+    free(fluid);
 }
 
 /**
@@ -192,7 +180,7 @@ double sampleField(Fluid* fluid, double x, double y, FieldType field) {
     double dx = 0.;
     double dy = 0.;
 
-    double* f;
+    vector f;
 
     switch(field) {
         case U_FIELD: {
@@ -330,7 +318,7 @@ void simulate(Fluid* fluid, Obstacle* obstacle, double dt, double gravity, int n
     updateObstacleTheta(obstacle);
 
     // initialize P each time.
-    fluid->p = initArray(fluid->numCells, 0.);
+    fluid->p = new_vector(fluid->numCells);
 
     solveIncompress(fluid, numIters, dt);
     extrapolate(fluid);

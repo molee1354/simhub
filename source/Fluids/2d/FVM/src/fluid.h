@@ -6,6 +6,7 @@
  *
  */
 #include "sim.input"
+#include "simutil/vector.h"
 
 /* Name mangling */
 #ifdef NAME_MANGLE
@@ -27,15 +28,15 @@ typedef struct {
 
     double h;
 
-    double* u;
-    double* v;
-    double* newU;
-    double* newV;
+    vector u;
+    vector v;
+    vector newU;
+    vector newV;
 
-    double* p;
-    double* s;
-    double* m;
-    double* newM;
+    vector p;
+    vector s;
+    vector m;
+    vector newM;
 
     int num;
 } Fluid;

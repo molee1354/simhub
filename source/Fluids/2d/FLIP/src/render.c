@@ -1,10 +1,8 @@
 #include <GL/glew.h>
-#include <GL/gl.h> 
 #include <GL/glut.h>
 
-#include <simutil/vector.h>
-#include <time.h>
 #include "fluids_commonincl.h"
+#include <time.h>
 
 #define UNUSED(x) (void)(x)
 
@@ -18,9 +16,10 @@ static bool buttonDown = false;
 Fluid* fluid = NULL;
 Obstacle* obstacle = NULL;
 
-#define OBSTACLE_COLOR    0.8f, 0.8f, 0.8f
-#define WHITE             1.0f, 1.0f, 1.0f
-#define BLACK             0.0f, 0.0f, 0.0f
+#define OBSTACLE_COLOR 0.8f, 0.8f, 0.8f
+#define WHITE 1.0f, 1.0f, 1.0f
+#define BLACK 0.0f, 0.0f, 0.0f
+#define BACKGROUND 0.2f, 0.2f, 0.2f
 
 static void simPrompt(int numX, int numY) {
     printf("\t   Fluid Density (kg/m^3) : %g\n", DENSITY);
@@ -30,10 +29,12 @@ static void simPrompt(int numX, int numY) {
     printf("\t Particles Radius (ratio) : %g\n", PARTICLES_RAD);
     printf("\t Compensate drift (bools) : %d\n", DRIFT);
     printf("\tSeparate Particles (bool) : %d\n", PARTICLES_SEP);
-    printf("\t  Particles Count (count) : %d\n\n", numX*numY);
+    printf("\t  Particles Count (count) : %d\n\n", numX * numY);
 
-    printf("\t         Window Size (px) : %dx%d\n", WINDOW_WIDTH, WINDOW_HEIGHT);
-    printf("\t      Num Cells X,Y (X*Y) : %dx%d (%d)\n", numX, numY, numX*numY);
+    printf("\t         Window Size (px) : %dx%d\n", WINDOW_WIDTH,
+           WINDOW_HEIGHT);
+    printf("\t      Num Cells X,Y (X*Y) : %dx%d (%d)\n", numX, numY,
+           numX * numY);
 }
 
 /**
@@ -41,26 +42,29 @@ static void simPrompt(int numX, int numY) {
  */
 static void initSimParam() {
     double h = DOMAIN_HEIGHT / RESOLUTION;
-    
-    double particleRad = PARTICLES_RAD*h;
-    double dx = 2. * particleRad;
-    double dy = dx * sqrt(3.) / 2.; 
 
-    int numX = floor( (FLUID_WIDTH*DOMAIN_WIDTH - 2. * h - 2. * particleRad)/dx );
-    int numY = floor( (FLUID_HEIGHT*DOMAIN_HEIGHT - 2. * h - 2. * particleRad)/dy );
+    double particleRad = PARTICLES_RAD * h;
+    double dx = 2. * particleRad;
+    double dy = dx * sqrt(3.) / 2.;
+
+    int numX =
+        floor((FLUID_WIDTH * DOMAIN_WIDTH - 2. * h - 2. * particleRad) / dx);
+    int numY =
+        floor((FLUID_HEIGHT * DOMAIN_HEIGHT - 2. * h - 2. * particleRad) / dy);
 
     cellSize = WINDOW_WIDTH / numX;
 
     // initialize fluid and obstacle
-    fluid = initFluid(DENSITY, h, particleRad, DOMAIN_WIDTH, DOMAIN_HEIGHT, numX*numY);
-    obstacle = initObstacle( WINDOW_WIDTH/2,
-                             WINDOW_HEIGHT/2,
-                             OBSTACLE_RADIUS );
+    fluid = initFluid(DENSITY, h, particleRad, DOMAIN_WIDTH, DOMAIN_HEIGHT,
+                      numX * numY);
+    obstacle =
+        initObstacle(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, OBSTACLE_RADIUS);
     int p = 0; // particle index
     for (int i = 0; i < numX; i++) {
-        for (int j = 0; j < numY; j ++) {
-            fluid->particlePos[p++] = h + particleRad + dx*(double)i + (j % 2 == 0 ? 0. : particleRad);
-            fluid->particlePos[p++] = h + particleRad + dy*(double)j;
+        for (int j = 0; j < numY; j++) {
+            fluid->particlePos[p++] = h + particleRad + dx * (double)i +
+                                      (j % 2 == 0 ? 0. : particleRad);
+            fluid->particlePos[p++] = h + particleRad + dy * (double)j;
         }
     }
     simPrompt(numX, numY);
@@ -79,28 +83,27 @@ static void setObstacle(int x, int y, bool reset) {
     int n = fluid->fNumY;
     double h = fluid->h;
 
-    for (int i = 1; i < fluid->fNumX-2; i++) {
-        for (int j = 1; j < fluid->fNumY-2; j++) {
-            fluid->s[i*n + j] = 1.;
+    for (int i = 1; i < fluid->fNumX - 2; i++) {
+        for (int j = 1; j < fluid->fNumY - 2; j++) {
+            fluid->s[i * n + j] = 1.;
 
             double dx = xDistConv((double)i, h, x);
             double dy = yDistConv((double)j, h, y);
             double rad2 = (double)(obstacle->radius * obstacle->radius);
 
-            if (dx*dx + dy*dy < rad2) {
-                fluid->s[i*n + j+1] = 0.;
+            if (dx * dx + dy * dy < rad2) {
+                fluid->s[i * n + j] = 0.;
 
-                fluid->u[i*n + j+1] = vx;
-                fluid->u[(i+1)*n + j+1] = vx;
-                fluid->v[i*n + j+1] = vy;
-                fluid->v[i*n + j+1+1] = vy;
+                fluid->u[i * n + j] = vx;
+                fluid->u[(i + 1) * n + j] = vx;
+                fluid->v[i * n + j] = vy;
+                fluid->v[i * n + j + 1] = vy;
             }
         }
     }
 }
 
 static void drawPoint(double x, double y, double size) {
-    glColor3f(BLACK);
     glPointSize((float)size);
     glBegin(GL_POINTS);
     glVertex2f((float)x, (float)y);
@@ -112,13 +115,18 @@ static void drawParticles() {
     double r = fluid->particleRadius;
     double h = fluid->h;
     for (int p = 0; p < fluid->numParticles; p++) {
-        double x = fluid->particlePos[2*p+1];
-        double y = fluid->particlePos[2*p + 1+1];
-        
-        double scale = 150.;
-        x = x*(scale * (double)((double)WINDOW_WIDTH/(double)WINDOW_HEIGHT));
-        y = y*(scale);
+        double x = fluid->particlePos[2 * p];
+        double y = fluid->particlePos[2 * p + 1];
 
+        double scale = 150.;
+        x = x *
+            (scale * (double)((double)WINDOW_WIDTH / (double)WINDOW_HEIGHT));
+        y = y * (scale) + 50.;
+
+        float red = fluid->particleColor[3 * p];
+        float green = fluid->particleColor[3 * p + 1];
+        float blue = fluid->particleColor[3 * p + 2];
+        glColor3f(red, green, blue);
         drawPoint(x, y, 5.0f);
     }
 }
@@ -144,8 +152,7 @@ static void reshape(int w, int h) {
     glViewport(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(0.0, (GLdouble)WINDOW_WIDTH,
-               0.0, (GLdouble)WINDOW_HEIGHT);
+    gluOrtho2D(0.0, (GLdouble)WINDOW_WIDTH, 0.0, (GLdouble)WINDOW_HEIGHT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
@@ -153,17 +160,18 @@ static void reshape(int w, int h) {
 /**
  * @brief Function to handle mouse clicks
  *
- * @param button 
- * @param state 
- * @param x 
- * @param y 
+ * @param button
+ * @param state
+ * @param x
+ * @param y
  */
 static void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON) {
         if (state == GLUT_DOWN) {
             buttonDown = true;
-            moveObstacle(obstacle, x, WINDOW_HEIGHT-y); // manual move obstacle set
-            setObstacle(x, WINDOW_HEIGHT-y, true);
+            moveObstacle(obstacle, x,
+                         WINDOW_HEIGHT - y); // manual move obstacle set
+            setObstacle(x, WINDOW_HEIGHT - y, true);
             glutPostRedisplay(); // Trigger a redraw
         } else {
             buttonDown = false;
@@ -174,13 +182,14 @@ static void mouse(int button, int state, int x, int y) {
 /**
  * @brief Function to handle mouse drags
  *
- * @param x 
- * @param y 
+ * @param x
+ * @param y
  */
 static void motion(int x, int y) {
     if (buttonDown) {
-        moveObstacle(obstacle, x, WINDOW_HEIGHT-y); // manual move obstacle set
-        setObstacle(x, WINDOW_HEIGHT-y, false);
+        moveObstacle(obstacle, x,
+                     WINDOW_HEIGHT - y); // manual move obstacle set
+        setObstacle(x, WINDOW_HEIGHT - y, false);
         glutPostRedisplay(); // Trigger a redraw
     }
 }
@@ -188,7 +197,7 @@ static void motion(int x, int y) {
 static void timer(int value) {
     UNUSED(value);
     glutPostRedisplay();
-    glutTimerFunc(1000/FPS, timer, 0);
+    glutTimerFunc(1000 / FPS, timer, 0);
 }
 
 static void cleanup() {
@@ -203,9 +212,9 @@ void render(int argc, char** argv) {
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
     glutInitWindowSize(WINDOW_WIDTH, WINDOW_HEIGHT);
     glutCreateWindow("FLIP Fluid Simulation");
-    
-    glClearColor(1.0, 1.0, 1.0, 1.0); // White background
-    
+
+    glClearColor(BACKGROUND, 1.0); // White background
+
     glutDisplayFunc(display);
     glutReshapeFunc(reshape);
     glutMouseFunc(mouse);
@@ -215,4 +224,3 @@ void render(int argc, char** argv) {
     atexit(cleanup);
     glutMainLoop();
 }
-

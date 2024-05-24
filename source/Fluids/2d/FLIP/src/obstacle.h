@@ -27,7 +27,6 @@ typedef struct {
  */
 Obstacle* initObstacle(int setX, int setY, double radius);
 
-
 /**
  * @brief Function to move the obstacle to a specific coordinate
  *

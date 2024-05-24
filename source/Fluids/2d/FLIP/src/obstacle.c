@@ -2,7 +2,7 @@
 
 Obstacle* initObstacle(int setX, int setY, double radius) {
     Obstacle* out = (Obstacle*)malloc(sizeof(Obstacle));
-    if (out==NULL) {
+    if (out == NULL) {
         printf("Error: could not allocate memory for obstacle struct.");
         return NULL;
     }
@@ -29,6 +29,4 @@ void moveObstacle(Obstacle* obstacle, int newX, int newY) {
     obstacle->y = newY;
 }
 
-void freeObstacle(Obstacle* obstacle) {
-    free(obstacle);
-}
+void freeObstacle(Obstacle* obstacle) { free(obstacle); }

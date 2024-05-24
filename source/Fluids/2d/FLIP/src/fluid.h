@@ -2,6 +2,8 @@
 #define simhub_flip_fluid_h
 
 #include "sim.input"
+#include "simutil/vector.h"
+#include "simutil/matrix.h"
 
 /* Name mangling */
 #ifdef NAME_MANGLE
@@ -21,49 +23,51 @@ typedef enum {
     SOLID_CELL
 } CellType;
 
+#define NULL_CELL     (double)0.
+#define FLUID_CELL    (double)1.
+#define AIR_CELL      (double)2.
+#define SOLID_CELL    (double)3.
+
 /*
  * @brief Struct to hold the fluid properties
  *
  */
 typedef struct {
     double density;
-    int numX;
-    int numY;
+    int fNumX;
+    int fNumY;
+    double h; // side length
+    double fInvSpacing; // overh
+    int fNumCells;
 
-    double h;
-    double invSpacing;
+    vector u;
+    vector v;
+    vector du;
+    vector dv;
+    vector prevU;
+    vector prevV;
+    vector p;
+    vector s;
+    vector cellType;
+    vector cellColor;
 
-    int numCells;
-
-    double* u;
-    double* v;
-    double* du;
-    double* dv;
-    double* prevU;
-    double* prevV;
-    double* p;
-    double* s;
-    CellType* cellType;
-    float* cellColor;
-
+    // Particles
     int maxParticles;
-    double* particlePos;
-    float* particleColor;
+    vector particlePos;
+    vector particleColor;
+    vector particleVel;
+    vector particleDensity;
+    double particleRestDensity;
 
-    double* particleVel;
-    double* particleRho;
-    double particleRho0;
-
-    double particleRad;
+    double particleRadius;
     double pInvSpacing;
+    int pNumX; 
+    int pNumY; 
+    int pNumCells;
 
-    int numX_p;
-    int numY_p;
-    int numCells_p;
-
-    int* numCellParticles;
-    int* firstCellParticle;
-    int* cellParticleID;
+    vector numCellParticles; // int
+    vector firstCellParticle; // int
+    vector cellParticleIds;
 
     int numParticles;
 } Fluid;

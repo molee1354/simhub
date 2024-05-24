@@ -2,7 +2,7 @@
 #define simhub_helper_h
 
 /**
- * @brief Function to find the maximum number between two numbers
+ * @brief Function to find the minimum number between two numbers
  *
  * @param first 
  * @param second 
@@ -11,7 +11,7 @@
 double findMin(double first, double second);
 
 /**
- * @brief Function to find the minimum number between two numbers
+ * @brief Function to find the maximum number between two numbers
  *
  * @param first 
  * @param second 

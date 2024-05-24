@@ -2,6 +2,7 @@
 #include <GL/gl.h> 
 #include <GL/glut.h>
 
+#include <simutil/vector.h>
 #include <time.h>
 #include "fluids_commonincl.h"
 
@@ -75,11 +76,11 @@ static void setObstacle(int x, int y, bool reset) {
         vy = (y - obstacle->y) / DT;
     }
 
-    int n = fluid->numY;
+    int n = fluid->fNumY;
     double h = fluid->h;
 
-    for (int i = 1; i < fluid->numX-2; i++) {
-        for (int j = 1; j < fluid->numY-2; j++) {
+    for (int i = 1; i < fluid->fNumX-2; i++) {
+        for (int j = 1; j < fluid->fNumY-2; j++) {
             fluid->s[i*n + j] = 1.;
 
             double dx = xDistConv((double)i, h, x);
@@ -87,31 +88,38 @@ static void setObstacle(int x, int y, bool reset) {
             double rad2 = (double)(obstacle->radius * obstacle->radius);
 
             if (dx*dx + dy*dy < rad2) {
-                fluid->s[i*n + j] = 0.;
+                fluid->s[i*n + j+1] = 0.;
 
-                fluid->u[i*n + j] = vx;
-                fluid->u[(i+1)*n + j] = vx;
-                fluid->v[i*n + j] = vy;
+                fluid->u[i*n + j+1] = vx;
+                fluid->u[(i+1)*n + j+1] = vx;
                 fluid->v[i*n + j+1] = vy;
+                fluid->v[i*n + j+1+1] = vy;
             }
         }
     }
 }
 
 static void drawPoint(double x, double y, double size) {
+    glColor3f(BLACK);
     glPointSize((float)size);
     glBegin(GL_POINTS);
     glVertex2f((float)x, (float)y);
     glEnd();
-    glPointSize(1.0f);
+    glPointSize(10.0f);
 }
 
 static void drawParticles() {
-    double r = fluid->particleRad;
+    double r = fluid->particleRadius;
+    double h = fluid->h;
     for (int p = 0; p < fluid->numParticles; p++) {
-        double x = fluid->particlePos[2*p];
-        double y = fluid->particlePos[2*p + 1];
-        drawPoint(x, y, 10.0f);
+        double x = fluid->particlePos[2*p+1];
+        double y = fluid->particlePos[2*p + 1+1];
+        
+        double scale = 150.;
+        x = x*(scale * (double)((double)WINDOW_WIDTH/(double)WINDOW_HEIGHT));
+        y = y*(scale);
+
+        drawPoint(x, y, 5.0f);
     }
 }
 
@@ -125,7 +133,7 @@ static void display() {
     drawParticles();
     glFlush();
 
-    FREE(fluid->p); // free fluid pressure every display
+    free_vector(fluid->p); // free fluid pressure every display
 
     glutSwapBuffers();
 }

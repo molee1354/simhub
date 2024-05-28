@@ -2,10 +2,16 @@
 #define simhub_flip_fluid_h
 
 #include "sim.input"
-#include "stdio.h"
-#include "stdlib.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 typedef double* vector;
+
+/*
+ * The 'vector' type used here is different from the simutils vector. While the
+ * size checking is the same, the vector is 0-indexed instead of 1.
+ */
+
 
 #define VECTOR_SIZE_BYTE (size_t)(sizeof(unsigned int) * 1)
 
@@ -47,6 +53,29 @@ static void free_vector(vector vec) {
     vec_mem = NULL;
 }
 
+#define SET_ZERO(_vec) \
+    do {\
+        vector vec = (vector)(_vec);\
+        const int len = LENGTH(vec);\
+        for (int i = 0; i < len; i++) {\
+            vec[i] = 0;\
+        }\
+    } while (0)
+
+#define COPY_VECTOR(_targ, _source) \
+    do {\
+        vector targ = (vector)(_targ);\
+        vector source = (vector)(_source);\
+        if (LENGTH(targ) != LENGTH(source)) {\
+            fprintf(stderr, "@ 'copy_vector()' : unmatching vector lengths...");\
+            exit(EXIT_FAILURE);\
+        }\
+        const int len = (int)LENGTH(targ);\
+        for (int i = 0; i < len; i++) {\
+            targ[i] = source[i];\
+        }\
+    } while (0)
+
 /* Name mangling */
 #ifdef NAME_MANGLE
 #include "FLIP_obstacle.h"
@@ -60,10 +89,10 @@ static void free_vector(vector vec) {
  */
 typedef enum { NULL_CELL, FLUID_CELL, AIR_CELL, SOLID_CELL } CellType;
 
-#define NULL_CELL (double)0.
-#define FLUID_CELL (double)1.
-#define AIR_CELL (double)2.
-#define SOLID_CELL (double)3.
+#define FLUID_CELL (double)0.
+#define AIR_CELL (double)1.
+#define SOLID_CELL (double)2.
+#define NULL_CELL (double)-1.
 
 /*
  * @brief Struct to hold the fluid properties

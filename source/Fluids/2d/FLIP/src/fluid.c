@@ -62,7 +62,8 @@ Fluid* initFluid(double density, double spacing, double particleRad, int width,
 }
 
 /**
- * @brief Function to integrate the particle's position and velocity
+ * @brief Function to integrate the particle's position and velocity. Changing
+ * particle position and velocity with gravity.
  *
  * @param fluid Pointer to fluid
  * @param dt Delta t
@@ -71,7 +72,7 @@ Fluid* initFluid(double density, double spacing, double particleRad, int width,
 static void integrateParticles(Fluid* fluid, double dt, double gravity) {
     for (int i = 0; i < fluid->numParticles; i++) {
         fluid->particleVel[2 * i + 1] += dt * gravity;
-        fluid->particlePos[2 * i] += fluid->particleVel[2 * i] * dt;
+        fluid->particlePos[2 * i]     += fluid->particleVel[2 * i] * dt;
         fluid->particlePos[2 * i + 1] += fluid->particleVel[2 * i + 1] * dt;
     }
 }
@@ -79,8 +80,10 @@ static void integrateParticles(Fluid* fluid, double dt, double gravity) {
 static void pushParticles(Fluid* fluid, int numIters) {
     double colorDiffusionCoeff = .001;
 
-    for (int i = 0; i < LENGTH(fluid->numCellParticles); i++)
-        fluid->numCellParticles[i] = 0.;
+    // filling numCellParticles with 0 (may be redundant)
+    /* for (int i = 0; i < LENGTH(fluid->numCellParticles); i++)
+        fluid->numCellParticles[i] = 0.; */
+    SET_ZERO(fluid->numCellParticles);
 
     for (int i = 0; i < fluid->numParticles; i++) {
         double x = fluid->particlePos[2 * i];
@@ -91,6 +94,7 @@ static void pushParticles(Fluid* fluid, int numIters) {
         int cellNr = (int)xi * fluid->pNumY + (int)yi;
         fluid->numCellParticles[cellNr]++;
     }
+
     // partial sums
     int first = 0;
     for (int i = 0; i < fluid->pNumCells; i++) {
@@ -155,9 +159,9 @@ static void pushParticles(Fluid* fluid, int numIters) {
                         double s = .5 * (minDist - d) / d;
                         dx *= s;
                         dy *= s;
-                        fluid->particlePos[2 * i] -= dx;
-                        fluid->particlePos[2 * i + 1] -= dy;
-                        fluid->particlePos[2 * id] += dx;
+                        fluid->particlePos[2 * i]      -= dx;
+                        fluid->particlePos[2 * i + 1]  -= dy;
+                        fluid->particlePos[2 * id]     += dx;
                         fluid->particlePos[2 * id + 1] += dy;
 
                         // diffusing colors
@@ -232,7 +236,7 @@ static void updateParticleDensity(Fluid* fluid) {
     double h = fluid->h;
     double h1 = fluid->fInvSpacing;
     double h2 = fluid->h * .5;
-    double* d = fluid->particleDensity;
+    vector d = fluid->particleDensity;
 
     for (int i = 0; i < fluid->numParticles; i++) {
         double x = fluid->particlePos[2 * i];
@@ -285,11 +289,13 @@ static void transferVelocity(Fluid* fluid, bool toGrid, double flipRatio) {
     double h2 = fluid->h * .5;
 
     if (toGrid) {
-        memcpy(fluid->prevU, fluid->u, sizeof(double) * fluid->fNumCells);
-        memcpy(fluid->prevV, fluid->v, sizeof(double) * fluid->fNumCells);
+        /* memcpy(fluid->prevU, fluid->u, sizeof(double) * fluid->fNumCells);
+        memcpy(fluid->prevV, fluid->v, sizeof(double) * fluid->fNumCells); */
+        COPY_VECTOR(fluid->prevU, fluid->u);
+        COPY_VECTOR(fluid->prevV, fluid->v);
 
         for (int i = 0; i < fluid->fNumCells; i++)
-            fluid->cellType[i] = fluid->s[i] == 0. ? SOLID_CELL : AIR_CELL;
+            fluid->cellType[i] = (fluid->s[i] == 0. ? SOLID_CELL : AIR_CELL);
 
         for (int i = 0; i < fluid->numParticles; i++) {
             double x = fluid->particlePos[2 * i];
@@ -395,7 +401,7 @@ static void transferVelocity(Fluid* fluid, bool toGrid, double flipRatio) {
             }
         }
         if (toGrid) {
-            for (int i = 0; i < fluid->fNumCells; i++) {
+            for (int i = 0; i < LENGTH(f); i++) {
                 if (d[i] > 0.0)
                     f[i] /= d[i];
             }
@@ -418,8 +424,11 @@ static void transferVelocity(Fluid* fluid, bool toGrid, double flipRatio) {
 
 static void solveIncompressibility(Fluid* fluid, int numIters, double dt,
                                    bool drift) {
-    memcpy(fluid->prevU, fluid->u, sizeof(double) * fluid->fNumCells);
-    memcpy(fluid->prevV, fluid->v, sizeof(double) * fluid->fNumCells);
+    /* memcpy(fluid->prevU, fluid->u, sizeof(double) * fluid->fNumCells);
+    memcpy(fluid->prevV, fluid->v, sizeof(double) * fluid->fNumCells); */
+    SET_ZERO(fluid->p);
+    COPY_VECTOR(fluid->prevU, fluid->u);
+    COPY_VECTOR(fluid->prevV, fluid->v);
 
     int n = fluid->fNumY;
     double cp = fluid->density * fluid->h / dt;
@@ -453,7 +462,7 @@ static void solveIncompressibility(Fluid* fluid, int numIters, double dt,
 
                 double div = fluid->u[right] - fluid->u[center] +
                              fluid->v[top] - fluid->v[center];
-                if (fluid->particleRestDensity > 0. && drift == 1) {
+                if (fluid->particleRestDensity > 0. && drift) {
                     double k = 1.;
                     double compression = fluid->particleDensity[i * n + j] -
                                          fluid->particleRestDensity;
@@ -462,8 +471,9 @@ static void solveIncompressibility(Fluid* fluid, int numIters, double dt,
                 }
 
                 double p = -div / s;
-                p *= OVER_RELAX;
+                p *= (double)(OVER_RELAX);
                 fluid->p[center] += cp * p;
+
                 fluid->u[center] -= sx0 * p;
                 fluid->u[right] += sx1 * p;
                 fluid->v[center] -= sy0 * p;
@@ -578,7 +588,7 @@ void simulate(Fluid* fluid, Obstacle* obstacle, double dt, double gravity,
     double dt_sub = dt / substeps;
 
     for (int step = 0; step < substeps; step++) {
-        fluid->p = new_vector(fluid->fNumCells);
+        // fluid->p = new_vector(fluid->fNumCells);
 
         integrateParticles(fluid, dt_sub, gravity);
         if (PARTICLES_SEP == 1)
@@ -597,6 +607,7 @@ void simulate(Fluid* fluid, Obstacle* obstacle, double dt, double gravity,
 void freeFluid(Fluid* fluid) {
     free_vector(fluid->u);
     free_vector(fluid->v);
+    free_vector(fluid->p);
     free_vector(fluid->du);
     free_vector(fluid->dv);
     free_vector(fluid->prevU);
